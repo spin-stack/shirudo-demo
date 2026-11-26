@@ -11,27 +11,22 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"path"
 	"path/filepath"
 
 	"github.com/spin-stack/go-tools/sigcheck"
 	"github.com/spin-stack/go-tools/versions"
 )
 
-// The workflow that signs a spin-machine release, at the ref its runs
-// publish from (spin-stack/machine docs/releasing.md, "Verify a release file").
 const (
 	machineWorkflow = "https://github.com/spin-stack/machine/.github/workflows/release.yml"
 	machineRef      = "refs/heads/main"
 )
 
-// releaseName is the tarball's top directory, and the name it is unpacked under.
 func releaseName(e versions.Entry) string {
 	return "spin-machine-" + e.Version + "-linux-x86_64"
 }
 
-// fetchRelease downloads the release versions.yaml pins, checks it against
-// the pin and against its Sigstore bundle, and unpacks it in work/machine.
-// The tree appears only whole and checked, so its presence is the proof.
 func (d *demo) fetchRelease() error {
 	e := d.pins.machine
 	name := releaseName(e)
@@ -40,11 +35,30 @@ func (d *demo) fetchRelease() error {
 		say("release %s: unpacked in %s", e.Version, dir)
 		return nil
 	}
-	if err := os.MkdirAll(filepath.Dir(dir), 0o755); err != nil {
+	tmp := dir + ".unpacking"
+	if err := os.RemoveAll(tmp); err != nil {
 		return err
 	}
-	tarball := dir + ".tar.gz"
-	say("release %s: downloading %s", e.Version, e.URL())
+	if err := os.MkdirAll(tmp, 0o755); err != nil {
+		return err
+	}
+	for _, t := range []versions.Entry{e, d.pins.operator} {
+		if err := fetch(t, tmp); err != nil {
+			return err
+		}
+	}
+	if err := os.RemoveAll(dir); err != nil {
+		return err
+	}
+	if err := os.Rename(filepath.Join(tmp, name), dir); err != nil {
+		return err
+	}
+	return os.RemoveAll(tmp)
+}
+
+func fetch(e versions.Entry, dir string) error {
+	tarball := filepath.Join(dir, path.Base(e.URL()))
+	say("%s %s: downloading %s", e.Name, e.Version, e.URL())
 	sum, err := download(e.URL(), tarball)
 	if err != nil {
 		return err
@@ -52,7 +66,7 @@ func (d *demo) fetchRelease() error {
 	if got := hex.EncodeToString(sum); got != e.Pin {
 		return fmt.Errorf("%s: sha256 %s, versions.yaml pins %s", e.URL(), got, e.Pin)
 	}
-	say("release %s: sha256 %s, as pinned", e.Version, e.Pin)
+	say("%s %s: sha256 %s, as pinned", e.Name, e.Version, e.Pin)
 	var bundle bytes.Buffer
 	if err := get(e.URL()+".sigstore.json", &bundle); err != nil {
 		return err
@@ -64,30 +78,13 @@ func (d *demo) fetchRelease() error {
 	if err := policy.Check(bundle.Bytes(), sum); err != nil {
 		return fmt.Errorf("%s.sigstore.json: %w", e.URL(), err)
 	}
-	say("release %s: signed by %s@%s", e.Version, machineWorkflow, machineRef)
-	tmp := dir + ".unpacking"
-	if err := os.RemoveAll(tmp); err != nil {
-		return err
-	}
-	if err := os.MkdirAll(tmp, 0o755); err != nil {
-		return err
-	}
-	if err := cmd("", "tar", "-xzf", tarball, "-C", tmp); err != nil {
-		return err
-	}
-	if err := os.RemoveAll(dir); err != nil {
-		return err
-	}
-	if err := os.Rename(filepath.Join(tmp, name), dir); err != nil {
-		return err
-	}
-	if err := os.RemoveAll(tmp); err != nil {
+	say("%s %s: signed by %s@%s", e.Name, e.Version, machineWorkflow, machineRef)
+	if err := cmd("", "tar", "-xzf", tarball, "-C", dir); err != nil {
 		return err
 	}
 	return os.Remove(tarball)
 }
 
-// download writes url to path and returns its sha256.
 func download(url, path string) ([]byte, error) {
 	f, err := os.Create(path)
 	if err != nil {

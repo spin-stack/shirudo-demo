@@ -1,8 +1,5 @@
 // SPDX-License-Identifier: BSD-2-Clause
 
-// Package console runs commands at a root shell on a guest's serial console,
-// a QEMU chardev on a Unix socket: the machine boots with agetty logging root
-// in, so the console is an interactive bash.
 package console
 
 import (
@@ -18,22 +15,16 @@ import (
 	"time"
 )
 
-// ANSI matches the escape sequences a console prints around output: OSC
-// titles, CSI colors and cursor moves, charset selection, and carriage returns.
 var ANSI = regexp.MustCompile(`\x1b\][^\x07\x1b]*(?:\x07|\x1b\\)|\x1b\[[0-9;?]*[A-Za-z]|\x1b[()][A-Z0-9]|\r`)
 
-// maxLine is what one typed line may hold: a tty in canonical mode keeps 4095
-// bytes of a line, and the markers around the command take some of them.
+// A canonical-mode tty line holds 4095 bytes; leave room for the markers.
 const maxLine = 3072
 
-// Console is one connection to a guest's console.
 type Console struct {
 	conn net.Conn
 	buf  []byte
 }
 
-// Dial connects to the console's socket, retrying until the deadline while
-// QEMU has not made it yet.
 func Dial(path string, deadline time.Time) (*Console, error) {
 	for {
 		conn, err := net.Dial("unix", path)
@@ -47,11 +38,8 @@ func Dial(path string, deadline time.Time) (*Console, error) {
 	}
 }
 
-// Close closes the connection; the guest's shell stays.
 func (c *Console) Close() error { return c.conn.Close() }
 
-// WaitLogin waits until the shell answers, then turns its echo and the
-// kernel's console messages off, so only a command's output comes back.
 func (c *Console) WaitLogin(deadline time.Time) error {
 	for {
 		try := time.Now().Add(5 * time.Second)
@@ -68,10 +56,8 @@ func (c *Console) WaitLogin(deadline time.Time) error {
 	}
 }
 
-// Run types one command line at the shell and returns its exit status and
-// what it printed. The command is one line with no tab: a tab typed at an
-// interactive bash is completion, and a newline an early Enter.
 func (c *Console) Run(command string, deadline time.Time) (int, string, error) {
+	// Interactive bash takes a tab as completion and a newline as Enter.
 	if strings.ContainsAny(command, "\n\t") || len(command) > maxLine {
 		return 0, "", fmt.Errorf("a console command is one line under %d bytes with no tab: %q", maxLine, command)
 	}
@@ -81,8 +67,7 @@ func (c *Console) Run(command string, deadline time.Time) (int, string, error) {
 	}
 	t := hex.EncodeToString(tag)
 	begin, end := "@@B"+t+"@@", "@@E"+t+"@@"
-	// The markers are typed split by quotes, so the echoed command line never
-	// matches them; only the output does.
+	// Quote-split markers: the tty echo of the line never matches, only the output does.
 	line := fmt.Sprintf("printf '%%s\\n' '@@B''%s@@'; %s; printf '%%s%%s\\n' '@@E''%s@@' \"$?\"\n", t, command, t)
 	if err := c.conn.SetDeadline(deadline); err != nil {
 		return 0, "", err

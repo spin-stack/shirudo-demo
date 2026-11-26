@@ -1,13 +1,5 @@
 // SPDX-License-Identifier: BSD-2-Clause
 
-// demo runs the demo: `demo run` every step in order, `demo STEP` one of
-// them. It does a step whenever it is asked to; Taskfile.yml runs the same
-// steps and skips the ones whose results are already there. demo-guest, the
-// guest's half, is the file beside it. Its environment:
-//
-//	WORK             where everything is built and kept (default: ./work)
-//	EVIDENCE         where what the guest printed is kept (default: ./evidence)
-//	MEMORY_MB, CPUS  the guest's size (default: 4096, 4)
 package main
 
 import (
@@ -19,41 +11,32 @@ import (
 )
 
 type demo struct {
-	release    string // the unpacked release tree versions.yaml pins (release.go)
-	machineCmd string // its bin/spin-machine
-	guestCmd   string // demo-guest, beside this program
+	release    string
+	machineCmd string
+	guestCmd   string
 	memoryMB   int
 	cpus       int
 
 	work     string
 	evidence string
-	build    string // shirudo's checkout
-	registry string // upatch-registry's checkout
+	registry string
 	keyDir   string
 	out      string
-	run      string // the running machine's sockets, pid and logs
+	run      string
 	pins     pins
-	name     string // the running boot: provision or shirudo
+	name     string
 }
 
 type step struct {
-	name string
-	do   func(*demo) error
-	// byName: run when asked for alone, and not by run. pins is check's
-	// first part; running is Taskfile.yml's question.
+	name   string
+	do     func(*demo) error
 	byName bool
 }
 
-// steps, in the order run runs them.
 var steps = []step{
 	{name: "machine", do: (*demo).fetchRelease},
-	{name: "pins", do: (*demo).pinsAgree, byName: true},
 	{name: "check", do: (*demo).check},
-	{name: "shirudo", do: (*demo).shirudo},
-	{name: "keys", do: (*demo).keys},
-	{name: "images", do: (*demo).images},
-	{name: "initrd", do: (*demo).initrd},
-	{name: "packages", do: (*demo).packages},
+	{name: "operator", do: (*demo).operator},
 	{name: "stage", do: (*demo).stage},
 	{name: "provision", do: (*demo).provision},
 	{name: "boot", do: (*demo).boot},
@@ -139,20 +122,14 @@ func load() (*demo, error) {
 	}
 	d.release = filepath.Join(d.work, "machine", releaseName(d.pins.machine), "usr/share/spin-stack")
 	d.machineCmd = filepath.Join(d.release, "bin/spin-machine")
-	d.build = filepath.Join(d.work, "src/shirudo")
 	d.registry = filepath.Join(d.work, "src/upatch-registry")
-	d.keyDir = filepath.Join(d.work, "keys")
 	d.out = filepath.Join(d.work, "out")
+	d.keyDir = filepath.Join(d.out, "keys")
 	d.run = filepath.Join(d.work, "run")
-	for _, dir := range []string{d.work, d.out, d.run, d.evidence, filepath.Join(d.work, "tmp")} {
+	for _, dir := range []string{d.work, d.out, d.run, d.evidence} {
 		if err := os.MkdirAll(dir, 0o755); err != nil {
 			return nil, err
 		}
-	}
-	// Docker's and mkfs's temporary files go to the work disk, not a /tmp
-	// that may be RAM.
-	if os.Getenv("TMPDIR") == "" {
-		os.Setenv("TMPDIR", filepath.Join(d.work, "tmp"))
 	}
 	return d, nil
 }

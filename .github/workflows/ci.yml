@@ -1,5 +1,3 @@
-# The gate a commit here passes, as `go tool task test` runs it by hand. The demo itself needs KVM,
-# Docker and a spin-machine release, so a run of it is the evidence/ a change commits.
 name: CI
 
 on:
@@ -14,13 +12,13 @@ concurrency:
 permissions:
   contents: read
 
-# go tool task downloads Task with this: anonymous requests are the first GitHub sheds.
+# go tool task downloads Task; unauthenticated GitHub API calls get rate-limited.
 env:
   GITHUB_TOKEN: ${{ github.token }}
 
 jobs:
   gate:
-    # The check main's ruleset requires, named Gate in every spin-stack repository.
+    # Required by main's ruleset under this name.
     name: Gate
     runs-on: ubuntu-latest
     timeout-minutes: 10

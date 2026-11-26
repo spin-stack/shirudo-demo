@@ -1,6 +1,6 @@
 ## setup, the registry's, unchanged
 Selecting previously unselected package ca-certificates-java.
-(Reading database… (Reading database… 5%(Reading database… 10%(Reading database… 15%(Reading database… 20%(Reading database… 25%(Reading database… 30%(Reading database… 35%(Reading database… 40%(Reading database… 45%(Reading database… 50%(Reading database… 55%(Reading database… 60%(Reading database… 65%(Reading database… 70%(Reading database… 75%(Reading database… 80%(Reading database… 85%(Reading database… 90%(Reading database… 95%(Reading database… 100%(Reading database… 13881 files and directories currently installed.)
+(Reading database… (Reading database… 5%(Reading database… 10%(Reading database… 15%(Reading database… 20%(Reading database… 25%(Reading database… 30%(Reading database… 35%(Reading database… 40%(Reading database… 45%(Reading database… 50%(Reading database… 55%(Reading database… 60%(Reading database… 65%(Reading database… 70%(Reading database… 75%(Reading database… 80%(Reading database… 85%(Reading database… 90%(Reading database… 95%(Reading database… 100%(Reading database… 14055 files and directories currently installed.)
 Preparing to unpack …/0-ca-certificates-java_20260311ubuntu0.26.04.2_all.deb…
 Unpacking ca-certificates-java (20260311ubuntu0.26.04.2)…
 Selecting previously unselected package java-common.
@@ -169,29 +169,29 @@ Tomcat started.
 TOMCAT_URL=http://127.0.0.1:8080
 TOMCAT_APP_WORK=/opt/upatch-payload/cve-2025-24813/apache-tomcat-9.0.98/work/Catalina/localhost/ROOT
 ## payload, before the upatch
-reached: the partial PUT wrote .upatch-probe-84da0c46f31e.session in the work directory (HTTP 409); removed it
+reached: the partial PUT wrote .upatch-probe-3f5d368423b6.session in the work directory (HTTP 409); removed it
 payload exit 0
 ## shirudo upatch load cve-2025-24813-tomcat-block.upatch
-upatch load: signed loader accepted, keyring 77679458, 226 instructions
+upatch load: signed loader accepted, keyring 1053397742, 226 instructions
 upatch load: loader ran, 1 maps and 2 programs
 upatch load: program 0 (lsm) pinned at /run/shirudo/bpffs/upatches/cve-2025-24813-tomcat-block/link_0
 upatch load: program 1 (lsm) pinned at /run/shirudo/bpffs/upatches/cve-2025-24813-tomcat-block/link_1
 upatch load: map 0 (refused) pinned at /run/shirudo/bpffs/upatches/cve-2025-24813-tomcat-block/maps/refused
-upatch load: cve-2025-24813-tomcat-block loaded, 2 programs, keyring 77679458
-upatch load: cve-2025-24813-tomcat-block measured, register 4a0f47fb32d2aa217fa1ba5e4712effaf41edbe54d249b6694c91db0d9632fc1
+upatch load: cve-2025-24813-tomcat-block loaded, 2 programs, keyring 1053397742
+upatch load: cve-2025-24813-tomcat-block measured, register 618382f3a3d57cd530a3232218e94760e6c97ae23556d64cabd77ce55172a342
 ## shirudo upatch list
 Archived upatches (/var/lib/shirudo/upatches):
   NAME                         LOADED  TYPE    KIND  PAYLOAD
-  cve-2025-24813-tomcat-block  yes     load    bpf   5009c16639f2b627..
+  cve-2025-24813-tomcat-block  yes     load    bpf   75df267fbcbf3008..
 ## payload, upatch loaded
 blocked: the partial PUT failed with HTTP 500 and wrote no file
 payload exit 10
 ## shirudo upatch unload cve-2025-24813-tomcat-block.unload.upatch
-upatch unload: signed loader accepted, keyring 77679458, 165 instructions
+upatch unload: signed loader accepted, keyring 1053397742, 165 instructions
 upatch unload: cve-2025-24813-tomcat-block carries the directive's payload
-upatch unload: cve-2025-24813-tomcat-block measured, register 7dda40960e47da069eff5325f50d7e012414fe794ac616383cdf346d131dc94d
+upatch unload: cve-2025-24813-tomcat-block measured, register 8565e1b92638f156fdc94ef48b7d8c3dcb51480e72f7991a90fee05e9ac3bb22
 upatch unload: cve-2025-24813-tomcat-block detached and unpinned
 ## payload, after the unload
-reached: the partial PUT wrote .upatch-probe-2197ed066b84.session in the work directory (HTTP 409); removed it
+reached: the partial PUT wrote .upatch-probe-baad3a7fbca3.session in the work directory (HTTP 409); removed it
 payload exit 0
 ## result: before=0 loaded=10 after=0

@@ -1,7 +1,7 @@
 ## kernel
 7.4.0-rc4
 ## /proc/cmdline
-console=ttyS0 quiet loglevel=3 root=/dev/vda rw rootfstype=ext4 pci=lastbus=0 panic=1 net.ifnames=0 biosdevname=0 systemd.unified_cgroup_hierarchy=1 cgroup_no_v1=all memhp_default_state=online no_timer_check tsc=reliable TERM=dumb bpf.keyring_unsealed=1 dm_verity.keyring_unsealed=1 systemd.set_credential_binary=tmpfiles.extra:ZCAvcnVuL3N5c3RlbWQvbmV0d29yayAwNzU1IC0gLSAtCmYrIC9ydW4vc3lzdGVtZC9uZXR3b3JrLzUwLXBhc3N0Lm5ldHdvcmsgMDY0NCAtIC0gLSBbTWF0Y2hdXG5OYW1lPWV0aDBcbltOZXR3b3JrXVxuQWRkcmVzcz0xMC4wLjIuMTUvMjRcbkdhdGV3YXk9MTAuMC4yLjJcbgpmKyAvZXRjL3Jlc29sdi5jb25mIDA2NDQgLSAtIC0gbmFtZXNlcnZlciAxMC4wLjIuM1xuCg== systemd.set_credential_binary=udev.rules.50-passt.rules:U1VCU1lTVEVNPT0ibmV0IiwgQUNUSU9OPT0iYWRkIiwgS0VSTkVMPT0iZXRoMCIsIFRBRys9InN5c3RlbWQiLCBFTlZ7U1lTVEVNRF9XQU5UU30rPSJzeXN0ZW1kLW5ldHdvcmtkLnNlcnZpY2UiCg== systemd.set_credential=agetty.autologin:root systemd.show_status=true
+console=ttyS0 quiet loglevel=3 root=/dev/vda rw rootfstype=ext4 pci=lastbus=0 panic=1 net.ifnames=0 biosdevname=0 systemd.unified_cgroup_hierarchy=1 cgroup_no_v1=all memhp_default_state=online no_timer_check tsc=reliable TERM=dumb bpf.keyring_unsealed=1 dm_verity.keyring_unsealed=1 systemd.tpm2_measured_os=1 systemd.set_credential_binary=tmpfiles.extra:ZCAvcnVuL3N5c3RlbWQvbmV0d29yayAwNzU1IC0gLSAtCmYrIC9ydW4vc3lzdGVtZC9uZXR3b3JrLzUwLXBhc3N0Lm5ldHdvcmsgMDY0NCAtIC0gLSBbTWF0Y2hdXG5OYW1lPWV0aDBcbltOZXR3b3JrXVxuQWRkcmVzcz0xMC4wLjIuMTUvMjRcbkdhdGV3YXk9MTAuMC4yLjJcbgpmKyAvZXRjL3Jlc29sdi5jb25mIDA2NDQgLSAtIC0gbmFtZXNlcnZlciAxMC4wLjIuM1xuCg== systemd.set_credential_binary=udev.rules.50-passt.rules:U1VCU1lTVEVNPT0ibmV0IiwgQUNUSU9OPT0iYWRkIiwgS0VSTkVMPT0iZXRoMCIsIFRBRys9InN5c3RlbWQiLCBFTlZ7U1lTVEVNRF9XQU5UU30rPSJzeXN0ZW1kLW5ldHdvcmtkLnNlcnZpY2UiCg== systemd.set_credential=agetty.autologin:root systemd.show_status=true
 ## lockdown
 none [integrity] confidentiality
 ## lsm
@@ -32,68 +32,67 @@ default via 10.0.2.2 dev eth0 proto static
 ## cat /etc/resolv.conf
 nameserver 10.0.2.3
 ## getent hosts upatch.dev
-216.150.16.193  upatch.dev
-216.150.16.65   upatch.dev
+216.150.16.129  upatch.dev
+216.150.1.193   upatch.dev
 ## journalctl -b -u shirudo-initrd.service -u shirudo.service
-[    2.008851] localhost systemd[1]: Starting shirudo-initrd.service - shirudo: bring up the BPF LSM and bind the register from the initrd...
-[    2.086448] localhost shirudo[232]: initrd: /sysroot/var/lib/shirudo bound writable at /var/lib/shirudo for config recovery
-[    2.088687] localhost shirudo[232]: mounted private bpffs at /run/shirudo/bpffs (mode=0700,nosuid,nodev,noexec)
-[    2.345972] localhost shirudo[232]: bpf keyring serial=77679458: /run/shirudo/runtime/keys/cert.der enrolled (key serial=143206731)
-[    2.346418] localhost shirudo[232]: bpf keyring serial=77679458: 1 certificate enrolled and sealed
-[    3.011944] localhost shirudo[232]: bpf2 and seal attached: lsm/bpf gate live, writable state sealed
-[    4.106264] localhost shirudo[232]: tpm: register bound in the initrd and extended (index 0x01818E00, PCR 9 anchored, 0 upatches in set)
-[    4.106672] localhost shirudo[232]: tpm: PCR 11 holds no phase measurement; systemd measures enter-initrd only for a measured UKI boot, so a verifier cannot pin this binding to the initrd by it
-[    4.175188] localhost shirudo[232]: init: complete (LSM active, writable state sealed)
-[    4.196572] localhost shirudo[232]: Pre-flight checks:
-[    4.196572] localhost shirudo[232]:   OK    root
-[    4.196572] localhost shirudo[232]:   OK    bpf_lsm_active
-[    4.196572] localhost shirudo[232]:   OK    bpffs_supported
-[    4.196572] localhost shirudo[232]:   OK    signed_loader_kernel_abi
-[    4.196572] localhost shirudo[232]:   OK    kernel_lsm_hooks
-[    4.196572] localhost shirudo[232]:   OK    module_signatures
-[    4.196572] localhost shirudo[232]:   OK    cert_on_disk
-[    4.196572] localhost shirudo[232]:   OK    cert_algorithm
-[    4.196572] localhost shirudo[232]:   OK    cert_kernel_support
-[    4.196572] localhost shirudo[232]:   OK    kernel_keyring
-[    4.196572] localhost shirudo[232]:   OK    embedded_loader
-[    4.196572] localhost shirudo[232]:   OK    tpm2_reachable
-[    4.196572] localhost shirudo[232]: 12 of 12 passed
-[    4.198898] localhost systemd[1]: Finished shirudo-initrd.service - shirudo: bring up the BPF LSM and bind the register from the initrd.
-[    4.299466] localhost systemd[1]: shirudo-initrd.service: Deactivated successfully.
-[    4.299759] localhost systemd[1]: Stopped shirudo-initrd.service - shirudo: bring up the BPF LSM and bind the register from the initrd.
-[    5.128701] localhost systemd[1]: Starting shirudo.service - shirudo: bring up the BPF LSM and re-apply signed upatches...
-[    5.509631] localhost shirudo[301]: bpf2 already attached (/run/shirudo/bpffs/lsm_link exists)
-[    5.940385] localhost shirudo[301]: tpm: register already bound this boot; chain unchanged (index 0x01818E00)
-[    5.985647] localhost shirudo[301]: init: complete (LSM active, writable state sealed)
-[    5.996821] localhost shirudo[301]: Pre-flight checks:
-[    5.996821] localhost shirudo[301]:   OK    root
-[    5.996821] localhost shirudo[301]:   OK    bpf_lsm_active
-[    5.996821] localhost shirudo[301]:   OK    bpffs_supported
-[    5.996821] localhost shirudo[301]:   OK    signed_loader_kernel_abi
-[    5.996821] localhost shirudo[301]:   OK    kernel_lsm_hooks
-[    5.996821] localhost shirudo[301]:   OK    module_signatures
-[    5.996821] localhost shirudo[301]:   OK    cert_on_disk
-[    5.996821] localhost shirudo[301]:   OK    cert_algorithm
-[    5.996821] localhost shirudo[301]:   OK    cert_kernel_support
-[    5.996821] localhost shirudo[301]:   OK    kernel_keyring
-[    5.996821] localhost shirudo[301]:   OK    embedded_loader
-[    5.996821] localhost shirudo[301]:   OK    tpm2_reachable: TCTI from the config: device:/dev/tpmrm0
-[    5.996821] localhost shirudo[301]: 12 of 12 passed
-[    5.998742] localhost systemd[1]: Finished shirudo.service - shirudo: bring up the BPF LSM and re-apply signed upatches.
+[    3.701709] localhost systemd[1]: Starting shirudo-initrd.service - shirudo: bring up the BPF LSM and bind the register from the initrd...
+[    3.795753] localhost shirudo[235]: initrd: /sysroot/var/lib/shirudo bound writable at /var/lib/shirudo for config recovery
+[    3.800841] localhost shirudo[235]: mounted private bpffs at /run/shirudo/bpffs (mode=0700,nosuid,nodev,noexec)
+[    4.259057] localhost shirudo[235]: bpf keyring serial=1053397742: /run/shirudo/runtime/keys/cert.der enrolled (key serial=49663112)
+[    4.259400] localhost shirudo[235]: bpf keyring serial=1053397742: 1 certificate enrolled and sealed
+[    5.154355] localhost shirudo[235]: bpf2 and seal attached: lsm/bpf gate live, writable state sealed
+[    6.302386] localhost shirudo[235]: tpm: register bound in the initrd and extended (index 0x01818E00, PCR 9 anchored, 0 upatches in set)
+[    6.391099] localhost shirudo[235]: init: complete (LSM active, writable state sealed)
+[    6.425912] localhost shirudo[235]: Pre-flight checks:
+[    6.425912] localhost shirudo[235]:   OK    root
+[    6.425912] localhost shirudo[235]:   OK    bpf_lsm_active
+[    6.425912] localhost shirudo[235]:   OK    bpffs_supported
+[    6.425912] localhost shirudo[235]:   OK    signed_loader_kernel_abi
+[    6.425912] localhost shirudo[235]:   OK    kernel_lsm_hooks
+[    6.425912] localhost shirudo[235]:   OK    module_signatures
+[    6.425912] localhost shirudo[235]:   OK    cert_on_disk
+[    6.425912] localhost shirudo[235]:   OK    cert_algorithm
+[    6.425912] localhost shirudo[235]:   OK    cert_kernel_support
+[    6.425912] localhost shirudo[235]:   OK    kernel_keyring
+[    6.425912] localhost shirudo[235]:   OK    embedded_loader
+[    6.425912] localhost shirudo[235]:   OK    tpm2_reachable
+[    6.425912] localhost shirudo[235]: 12 of 12 passed
+[    6.421827] localhost systemd[1]: Finished shirudo-initrd.service - shirudo: bring up the BPF LSM and bind the register from the initrd.
+[    6.536687] localhost systemd[1]: shirudo-initrd.service: Deactivated successfully.
+[    6.536877] localhost systemd[1]: Stopped shirudo-initrd.service - shirudo: bring up the BPF LSM and bind the register from the initrd.
+[    7.452598] localhost systemd[1]: Starting shirudo.service - shirudo: bring up the BPF LSM and re-apply signed upatches...
+[    7.725965] localhost shirudo[307]: bpf2 already attached (/run/shirudo/bpffs/lsm_link exists)
+[    8.092039] localhost shirudo[307]: tpm: register already bound this boot; chain unchanged (index 0x01818E00)
+[    8.153255] localhost shirudo[307]: init: complete (LSM active, writable state sealed)
+[    8.172265] localhost shirudo[307]: Pre-flight checks:
+[    8.172265] localhost shirudo[307]:   OK    root
+[    8.172265] localhost shirudo[307]:   OK    bpf_lsm_active
+[    8.172265] localhost shirudo[307]:   OK    bpffs_supported
+[    8.172265] localhost shirudo[307]:   OK    signed_loader_kernel_abi
+[    8.172265] localhost shirudo[307]:   OK    kernel_lsm_hooks
+[    8.172265] localhost shirudo[307]:   OK    module_signatures
+[    8.172265] localhost shirudo[307]:   OK    cert_on_disk
+[    8.172265] localhost shirudo[307]:   OK    cert_algorithm
+[    8.172265] localhost shirudo[307]:   OK    cert_kernel_support
+[    8.172265] localhost shirudo[307]:   OK    kernel_keyring
+[    8.172265] localhost shirudo[307]:   OK    embedded_loader
+[    8.172265] localhost shirudo[307]:   OK    tpm2_reachable: TCTI from the config: device:/dev/tpmrm0
+[    8.172265] localhost shirudo[307]: 12 of 12 passed
+[    8.174612] localhost systemd[1]: Finished shirudo.service - shirudo: bring up the BPF LSM and re-apply signed upatches.
 ## shirudo status --show-full
 Host:                  localhost
 Roles:                 target
 Status:                ok
-Version ID:            f023d5a629a185eee091d2930bb139a5db78f86e0b9bb2f6e9c256e470617fab
+Version ID:            112fb3e2caeec5b91ae22ca1032358b1dce79811795d4def6de9f4ed0cdd052f
 
 Conditions:
   TYPE               STATUS  DETAIL
   LsmAttached        OK      lsm/bpf link present and pinned
-  KeyringSealed      OK      bpf serial 77679458, dm-verity serial 431214356, pins match
+  KeyringSealed      OK      bpf serial 1053397742, dm-verity serial 783035355, pins match
   ChainIntact        OK      live register equals the eventlog replay
   UpatchesMeasured   OK      every pinned or archived upatch is in this boot's records
   TpmMeasured        OK      NV index 0x01818E00 readable
-  ConfigActive       OK      config 97b47dcbd2b4.. is active
+  ConfigActive       OK      config 11863582866d.. is active
   XdpCovered         OK      every device an XDP upatch selects runs it
 
 Tamper attempts (this boot):
@@ -107,36 +106,36 @@ Loaded upatches (0):
   none
 
 Keyring (.bpf):
-  Serial:                77679458
-  Frozen serial:         77679458  (matches)
+  Serial:                1053397742
+  Frozen serial:         1053397742  (matches)
   Certificates:          1 trusted, 0 revoked, 0 unvouched, 1 in the bpf keyring
-    262b2e682e815e98c67dc76d717429b86c33c3704d5b5b8518de71d69218a775  (primary)
+    4b93c5ac009197ca636cfb78dc42f514a4c84e5e14bf8c7d03374cc54a29b8b8  (primary)
       CN=shirudo, ML-DSA-87, issued 2026-11-26
-      key 143206731  shirudo: 35a7f89a5a26c18d5036cf1ad0b904d1f2c5bf82  (frozen)
+      key 49663112  shirudo: 689bb57c2f4c31b20b13d0710bc071e8c5cfdc20  (frozen)
 
 Keyring (.dm-verity):
-  Serial:                431214356
-  Frozen serial:         431214356  (matches)
+  Serial:                783035355
+  Frozen serial:         783035355  (matches)
   Certificates:          1 trusted, 1 in the dm-verity keyring
-    262b2e682e815e98c67dc76d717429b86c33c3704d5b5b8518de71d69218a775  (config)
+    4b93c5ac009197ca636cfb78dc42f514a4c84e5e14bf8c7d03374cc54a29b8b8  (config)
       CN=shirudo, ML-DSA-87, issued 2026-11-26
-      key 588455913  shirudo: 35a7f89a5a26c18d5036cf1ad0b904d1f2c5bf82  (frozen)
+      key 906125912  shirudo: 689bb57c2f4c31b20b13d0710bc071e8c5cfdc20  (frozen)
 
 TPM measurement:
   TPM:                   reachable (device:/dev/tpmrm0)
   NV index:              0x01818E00 (anchored in PCR 9)
-  Chain:                 f87866cac2df2b3e36dd1755d7f9e801904c2408c738d2e02b2459e2d80b48f3
-  Register name:         000bf6c9bab23ed7e285717f4b57c68570de6685bdfbd87a387747707b5640d05d87
+  Chain:                 a0ab46cce193b8b4773ad84591a14e9e7c4f0b074bc602209053f086da8515ed
+  Register name:         000bf45f5d442a4764149ba17f24c444eb225ba740a4a3476fc6f2c90ea33b4b8064
   Anchored:              yes, name on record
-  PCR before init:       0000000000000000000000000000000000000000000000000000000000000000
-  Phase at init:         0000000000000000000000000000000000000000000000000000000000000000 (PCR 11)
+  PCR before init:       7d1e4af81892c5e7a5207171535b5aa5b4c3639972ec1c7cfdfc87752d2b4bd0
+  Phase at init:         d15b0e8e244e65c40f024e95773f2347ce4ef3ffe6b597c9a14b50bbab6df319 (PCR 11)
   Bound in:              initrd
   Chain vs eventlog:     matches
   Eventlog:              /var/lib/shirudo/eventlog  (1 entries, 1908 bytes)
 
 Eventlog:
   TIME                 TYPE          DIGEST        DETAIL
-  2026-11-26T13:36:43Z init          da4074b5ff08  set_digest=e3b0c44298fc..
+  2026-11-26T21:55:10Z init          a87b21e4441a  set_digest=e3b0c44298fc..
 
 Assets (/var/lib/shirudo):
   keys/cert.der          present
@@ -149,16 +148,16 @@ System:
   OS:                    Ubuntu 26.04.1 LTS
   Kernel:                7.4.0-rc4
   Kernel version:        #1 SMP PREEMPT_DYNAMIC Mon Oct 26 00:00:00 UTC 2026
-  Kernel build ID:       a353cb750ce957edc048de5781c555a5896e08ed
+  Kernel build ID:       b8062019fac324c85620713300bbc10be2c1909d
   Architecture:          x86_64
   CPUs:                  4
-  Memory:                160M/3.83G
-  Disk:                  1.24G/7.82G
+  Memory:                166M/3.83G
+  Disk:                  1.25G/7.81G
   Uptime:                0d 0h 0m
-  Machine ID:            524894a373c94f24a3c0d2c491025923
-  Boot ID:               08997ad8-3611-451f-b2cf-ee47553abea1
+  Machine ID:            cf32ce5a9c0045d59c045e0f9236f99c
+  Boot ID:               76ebce83-6fc8-4bf6-9831-4603248725a6
 ## shirudo image status
-Config root hash:      97b47dcbd2b4f8069188ca63c28d9013459cde5c9988862b8a0aed01f29cc862
+Config root hash:      11863582866d1a030fa3529e8bd80c0c8064f599e52c9fb40e1d1c2fec6c68c3
 Next boot root hash:   none
 PCR:                   14
 Sequence:              1

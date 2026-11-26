@@ -9,10 +9,8 @@ import (
 	shirudodemo "github.com/spin-stack/shirudo-demo"
 )
 
-// pins is what the demo is built from, versions.yaml's entries: each a
-// commit or a digest, never a branch.
 type pins struct {
-	machine, shirudo, registry, ubuntu versions.Entry
+	machine, operator, registry versions.Entry
 }
 
 func loadPins() (pins, error) {
@@ -21,7 +19,7 @@ func loadPins() (pins, error) {
 		return pins{}, err
 	}
 	var p pins
-	for name, e := range map[string]*versions.Entry{"spin-machine": &p.machine, "shirudo": &p.shirudo, "upatch-registry": &p.registry, "ubuntu": &p.ubuntu} {
+	for name, e := range map[string]*versions.Entry{"spin-machine": &p.machine, "shirudo-operator": &p.operator, "upatch-registry": &p.registry} {
 		if *e, err = v.Get(name); err != nil {
 			return pins{}, fmt.Errorf("versions.yaml: %w", err)
 		}

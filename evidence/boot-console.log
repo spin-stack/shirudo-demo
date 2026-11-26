@@ -1,3 +1,4 @@
+ntf '%s\n' '@@B''a7103c385390@@'; stty -echo 2>/dev/null; dmesg -n 1 2>/dev/null; true; printf '%s%s\n' '@@E''a7103c385390@@' "$?"
 Booting initrd of Ubuntu 26.04.1 LTS dracut-110-11ubuntu0.1 (Initramfs)...
 [  OK  ] Started systemd-ask-password-console.path - Dispatch Password Requests to Console Directory Watch.
          Expecting device dev-vda.device - /dev/vda...
@@ -9,37 +10,39 @@ Booting initrd of Ubuntu 26.04.1 LTS dracut-110-11ubuntu0.1 (Initramfs)...
 [  OK  ] Reached target timers.target - Timer Units.
 [  OK  ] Listening on systemd-journald-dev-log.socket - Journal Socket (/dev/log).
 [  OK  ] Listening on systemd-journald.socket - Journal Sockets.
-[  OK  ] Listening on systemd-udevd-control.socket - udev Control Socket.
 [  OK  ] Listening on systemd-udevd-kernel.socket - udev Kernel Socket.
+[  OK  ] Listening on systemd-udevd-varlink.socket - udev Varlink Socket.
 [  OK  ] Reached target sockets.target - Socket Units.
          Starting dracut-cmdline.service - dracut cmdline hook...
          Starting dracut-pre-mount.service - dracut pre-mount hook...
          Starting systemd-journald.service - Journal Service...
+         Starting systemd-pcrphase-initrd.service - TPM PCR Barrier (initrd)...
          Starting systemd-sysctl.service - Apply Kernel Variables...
          Starting systemd-tmpfiles-setup-dev-early.service - Create Static Device Nodes in /dev gracefully...
-[  OK  ] Finished systemd-tmpfiles-setup-dev-early.service - Create Static Device Nodes in /dev gracefully.
-[  OK  ] Finished systemd-sysctl.service - Apply Kernel Variables.
 [  OK  ] Finished dracut-pre-mount.service - dracut pre-mount hook.
+[  OK  ] Finished systemd-sysctl.service - Apply Kernel Variables.
+[  OK  ] Finished systemd-tmpfiles-setup-dev-early.service - Create Static Device Nodes in /dev gracefully.
          Starting systemd-tmpfiles-setup-dev.service - Create Static Device Nodes in /dev...
+[  OK  ] Started systemd-journald.service - Journal Service.
 [  OK  ] Finished systemd-tmpfiles-setup-dev.service - Create Static Device Nodes in /dev.
 [  OK  ] Reached target local-fs-pre.target - Preparation for Local File Systems.
 [  OK  ] Reached target local-fs.target - Local File Systems.
-[  OK  ] Started systemd-journald.service - Journal Service.
-[  OK  ] Finished dracut-cmdline.service - dracut cmdline hook.
          Starting systemd-tmpfiles-setup.service - Create System Files and Directories...
+[  OK  ] Finished dracut-cmdline.service - dracut cmdline hook.
          Starting systemd-udevd.service - Rule-based Manager for Device Events and Files...
 [  OK  ] Finished systemd-tmpfiles-setup.service - Create System Files and Directories.
+[  OK  ] Finished systemd-pcrphase-initrd.service - TPM PCR Barrier (initrd).
 [  OK  ] Started systemd-udevd.service - Rule-based Manager for Device Events and Files.
          Starting systemd-udev-trigger.service - Coldplug All udev Devices...
 [  OK  ] Finished systemd-udev-trigger.service - Coldplug All udev Devices.
 [  OK  ] Reached target sysinit.target - System Initialization.
 [  OK  ] Reached target basic.target - Basic System.
          Expecting device dev-tpm0.device - /dev/tpm0...
+[  OK  ] Found device dev-tpm0.device - /dev/tpm0.
+[  OK  ] Reached target tpm2.target - Trusted Platform Module.
 [  OK  ] Found device dev-vda.device - /dev/vda.
 [  OK  ] Reached target initrd-root-device.target - Initrd Root Device.
          Starting systemd-fsck-root.service - File System Check on /dev/vda...
-[  OK  ] Found device dev-tpm0.device - /dev/tpm0.
-[  OK  ] Reached target tpm2.target - Trusted Platform Module.
 [  OK  ] Finished systemd-fsck-root.service - File System Check on /dev/vda.
          Mounting sysroot.mount - /sysroot...
 [  OK  ] Mounted sysroot.mount - /sysroot.
@@ -51,6 +54,7 @@ Booting initrd of Ubuntu 26.04.1 LTS dracut-110-11ubuntu0.1 (Initramfs)...
          Starting dracut-mount.service - dracut mount hook...
 [  OK  ] Finished dracut-mount.service - dracut mount hook.
 [*     ] Job shirudo-initrd.service/start running (3s / no limit)
+[**    ] Job shirudo-initrd.service/start running (3s / no limit)
 [  OK  ] Finished shirudo-initrd.service - shirudo: bring up the BPF LSM and bind the register from the initrd.
 [  OK  ] Reached target initrd.target - Initrd Default Target.
          Starting initrd-cleanup.service - Cleaning Up and Shutting Down Daemons...
@@ -70,7 +74,7 @@ Booting initrd of Ubuntu 26.04.1 LTS dracut-110-11ubuntu0.1 (Initramfs)...
 [  OK  ] Stopped dracut-mount.service - dracut mount hook.
 [  OK  ] Stopped dracut-pre-mount.service - dracut pre-mount hook.
 [  OK  ] Stopped shirudo-initrd.service - shirudo: bring up the BPF LSM and bind the register from the initrd.
-[  OK  ] Stopped target tpm2.target - Trusted Platform Module.
+         Stopping systemd-pcrphase-initrd.service - TPM PCR Barrier (initrd)...
 [  OK  ] Stopped systemd-sysctl.service - Apply Kernel Variables.
 [  OK  ] Stopped systemd-tmpfiles-setup.service - Create System Files and Directories.
 [  OK  ] Stopped target local-fs.target - Local File Systems.
@@ -79,7 +83,9 @@ Booting initrd of Ubuntu 26.04.1 LTS dracut-110-11ubuntu0.1 (Initramfs)...
          Stopping systemd-udevd.service - Rule-based Manager for Device Events and Files...
 [  OK  ] Finished initrd-cleanup.service - Cleaning Up and Shutting Down Daemons.
 [  OK  ] Stopped systemd-udevd.service - Rule-based Manager for Device Events and Files.
-[  OK  ] Closed systemd-udevd-control.socket - udev Control Socket.
+[  OK  ] Stopped systemd-pcrphase-initrd.service - TPM PCR Barrier (initrd).
+[  OK  ] Stopped target tpm2.target - Trusted Platform Module.
+[  OK  ] Closed systemd-udevd-varlink.socket - udev Varlink Socket.
          Starting initrd-udevadm-cleanup-db.service - Cleanup udev Database...
 [  OK  ] Stopped systemd-tmpfiles-setup-dev.service - Create Static Device Nodes in /dev.
 [  OK  ] Stopped systemd-tmpfiles-setup-dev-early.service - Create Static Device Nodes in /dev gracefully.
@@ -103,31 +109,30 @@ Welcome to Ubuntu 26.04.1 LTS!
 [  OK  ] Mounted tmp.mount - Temporary Directory /tmp.
          Starting systemd-logind.service - User Login Management...
 [  OK  ] Finished spin-machine-sshd-keygen.service - Generate SSH host keys for this VM.
-         Starting ssh.service - OpenBSD Secure Shell server...
-[  OK  ] Started systemd-journald.service - Journal Service.
 [  OK  ] Started dbus-broker.service - D-Bus System Message Bus.
-[  OK  ] Started ssh.service - OpenBSD Secure Shell server.
+[  OK  ] Started systemd-journald.service - Journal Service.
+         Starting ssh.service - OpenBSD Secure Shell server...
 [  OK  ] Created slice user-0.slice - User Slice of UID 0.
+[  OK  ] Started ssh.service - OpenBSD Secure Shell server.
 [  OK  ] Started systemd-logind.service - User Login Management.
          Starting user-runtime-dir@0.service - User Runtime Directory /run/user/0...
 [  OK  ] Finished user-runtime-dir@0.service - User Runtime Directory /run/user/0.
          Starting user@0.service - User Manager for UID 0...
 [  OK  ] Started user@0.service - User Manager for UID 0.
-
+]3008;start=1edbe244d85143b9a0ae73e32059659e;user=root;hostname=localhost;machineid=cf32ce5a9c0045d59c045e0f9236f99c;bootid=76ebce836fc84bf698314603248725a6;pid=359;pidfdid=194;comm=(agetty);servicename=serial-getty@ttyS0.service;invocationid=d1a7efcc20e5
 Ubuntu 26.04.1 LTS localhost ttyS0
 
 localhost login: root (automatic login)
 
-root@localhost:~# printf '%s\n' '@@B''e5468fca8312@@'; stty -echo 2>/dev/null; dmesg -n 1 2>/dev/null; true; printf '%s%s\n' '@@E''e5468fca8312@@' "$?"
-@@Be5468fca8312@@
-@@Ee5468fca8312@@0
+root@localhost:~# printf '%s\n' '@@B''17095ef99e86@@'; stty -echo 2>/dev/null; dmesg -n 1 2>/dev/null; true; printf '%s%s\n' '@@E''17095ef99e86@@' "$?"
+@@B17095ef99e86@@
+@@E17095ef99e86@@0
 root@localhost:~# 
-@@Be996197e0d98@@
-@@Ee996197e0d98@@1
-root@localhost::~# 
-@@B75e560f62042@@
-@@E75e560f62042@@0
+@@Bd41b7172e7c1@@
+@@Ed41b7172e7c1@@1
+root@localhosst:~# 
+@@Bf0e49e8d1cd8@@
+@@Ef0e49e8d1cd8@@0
 root@localhost:~# 
-@@B294897de9219@@
-@@E294897de9219@@0
-]3008;end=67e
+@@B15c6925cb76d@@
+@@E15c6925cb76d@@0

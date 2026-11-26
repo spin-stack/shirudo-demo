@@ -16,17 +16,22 @@ import (
 	"github.com/spin-stack/shirudo-demo/internal/console"
 )
 
-// The guest finds the stage disk by its serial.
-const stageDev = "/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_stage"
+type disk struct {
+	img, serial string
+	readonly    bool
+}
 
-// Each boot has its own sockets, named for it: a QEMU that is still exiting
-// unlinks its own, which were the next boot's when the two shared a name.
-// run/machine holds the running boot's pid and name.
+func (k disk) dev() string { return "/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_" + k.serial }
+
+func (d *demo) stageDisk() disk {
+	return disk{img: filepath.Join(d.out, "stage.img"), serial: "stage", readonly: true}
+}
+
+// Per-boot socket names: an exiting QEMU unlinks its sockets, even if the next boot reuses the name.
 func (d *demo) pidFile() string     { return filepath.Join(d.run, "machine") }
 func (d *demo) consoleSock() string { return filepath.Join(d.run, d.name+".console.sock") }
 func (d *demo) qmpSock() string     { return filepath.Join(d.run, d.name+".qmp.sock") }
 
-// running exits 0 when the machine runs: Taskfile.yml's boot asks it.
 func (d *demo) running() error {
 	if _, ok := d.pid(); !ok {
 		return errors.New("the machine is not running")
@@ -48,9 +53,7 @@ func (d *demo) pid() (int, bool) {
 	return pid, true
 }
 
-// start boots the machine in the background, its console on a socket, waits
-// for root's shell, and mounts the stage disk at /opt/demo.
-func (d *demo) start(name string, flags ...string) (*console.Console, error) {
+func (d *demo) start(name, root string, k disk, flags ...string) (*console.Console, error) {
 	d.name = name
 	for _, f := range []string{d.consoleSock(), d.qmpSock()} {
 		if err := os.Remove(f); err != nil && !errors.Is(err, os.ErrNotExist) {
@@ -62,14 +65,13 @@ func (d *demo) start(name string, flags ...string) (*console.Console, error) {
 		return nil, err
 	}
 	defer log.Close()
-	args := append([]string{"boot", "--release", d.release, "--disk", filepath.Join(d.work, "disk.qcow2"),
+	args := append([]string{"boot", "--release", d.release, "--disk", root,
 		"--memory", strconv.Itoa(d.memoryMB), "--cpus", strconv.Itoa(d.cpus), "--net",
 		"--hotplug-disks", "1", "--qmp", d.qmpSock(),
 		"--console", "unix:" + d.consoleSock() + ",server=on,wait=off,logfile=" + filepath.Join(d.run, name+".console.log")},
 		flags...)
 	m := exec.Command(d.machineCmd, args...)
 	m.Stdout, m.Stderr = log, log
-	// Its own session, so the machine outlives this program.
 	m.SysProcAttr = &syscall.SysProcAttr{Setsid: true}
 	if err := m.Start(); err != nil {
 		return nil, err
@@ -88,39 +90,42 @@ func (d *demo) start(name string, flags ...string) (*console.Console, error) {
 		con.Close()
 		return nil, fmt.Errorf("%w; the machine said: %s", err, filepath.Join(d.run, name+".out"))
 	}
-	if err := d.attachStage(con); err != nil {
+	if err := d.attach(con, k); err != nil {
 		con.Close()
 		return nil, err
 	}
 	return con, nil
 }
 
-// attachStage hot-plugs stage.img and mounts it read-only at /opt/demo.
-func (d *demo) attachStage(con *console.Console) error {
-	if err := cmd("", d.machineCmd, "attach", "--qmp", d.qmpSock(), "--release", d.release,
-		"--disk", filepath.Join(d.out, "stage.img"), "--disk-format", "raw", "--disk-serial", "stage", "--disk-readonly"); err != nil {
+func (d *demo) attach(con *console.Console, k disk) error {
+	args := []string{"attach", "--qmp", d.qmpSock(), "--release", d.release,
+		"--disk", k.img, "--disk-format", "raw", "--disk-serial", k.serial}
+	mount := "mount "
+	if k.readonly {
+		args = append(args, "--disk-readonly")
+		mount += "-o ro "
+	}
+	if err := cmd("", d.machineCmd, args...); err != nil {
 		return err
 	}
 	deadline := time.Now().Add(30 * time.Second)
 	for {
-		if status, _, err := con.Run("test -e "+stageDev, deadline); err != nil {
+		if status, _, err := con.Run("test -e "+k.dev(), deadline); err != nil {
 			return err
 		} else if status == 0 {
 			break
 		}
 		if time.Now().After(deadline) {
-			return fmt.Errorf("the guest has no %s after the attach", stageDev)
+			return fmt.Errorf("the guest has no %s after the attach", k.dev())
 		}
 		time.Sleep(time.Second)
 	}
-	if err := guest(con, "mkdir -p /opt/demo && mount -o ro "+stageDev+" /opt/demo", time.Minute); err != nil {
+	if err := guest(con, "mkdir -p /opt/demo && "+mount+k.dev()+" /opt/demo", time.Minute); err != nil {
 		return err
 	}
-	return touch(filepath.Join(d.run, "stage.attached"))
+	return os.WriteFile(filepath.Join(d.run, k.serial+".attached"), nil, 0o644)
 }
 
-// refreshStage puts a stage.img built since the machine's attach in place of
-// the old one, so a change reaches the running machine without a reboot.
 func (d *demo) refreshStage(con *console.Console) error {
 	img, err := os.Stat(filepath.Join(d.out, "stage.img"))
 	if err != nil {
@@ -137,10 +142,9 @@ func (d *demo) refreshStage(con *console.Console) error {
 	if err := cmd("", d.machineCmd, "detach", "--qmp", d.qmpSock(), "--disk-serial", "stage"); err != nil {
 		return err
 	}
-	return d.attachStage(con)
+	return d.attach(con, d.stageDisk())
 }
 
-// connect opens the running machine's console.
 func (d *demo) connect() (*console.Console, error) {
 	if _, ok := d.pid(); !ok {
 		return nil, errors.New("the machine is not running: demo boot")
@@ -161,7 +165,6 @@ func (d *demo) connect() (*console.Console, error) {
 	return con, nil
 }
 
-// guest runs a command in the guest with its output on ours.
 func guest(con *console.Console, command string, timeout time.Duration) error {
 	status, out, err := con.Run(command, time.Now().Add(timeout))
 	fmt.Fprint(os.Stderr, out)
@@ -174,8 +177,6 @@ func guest(con *console.Console, command string, timeout time.Duration) error {
 	return nil
 }
 
-// record runs one of demo-guest's steps and keeps what it printed in
-// evidence/NAME.txt.
 func (d *demo) record(con *console.Console, name, step string) error {
 	status, out, err := con.Run("/opt/demo/bin/demo-guest "+step, time.Now().Add(30*time.Minute))
 	fmt.Print(out)
@@ -196,7 +197,7 @@ func (d *demo) shutdown(con *console.Console) error {
 	if !ok {
 		return nil
 	}
-	// The console closes as the guest powers off, so the command never ends.
+	// The console closes on poweroff, so this never sees an end marker.
 	_, _, _ = con.Run("systemctl poweroff", time.Now().Add(20*time.Second))
 	for range 60 {
 		if syscall.Kill(pid, 0) != nil {
@@ -210,34 +211,62 @@ func (d *demo) shutdown(con *console.Console) error {
 	return os.Remove(d.pidFile())
 }
 
-// provision makes a new 8 GiB disk over the release's base image, boots it
-// without shirudo and has demo-guest place shirudo's images and units on it.
-func (d *demo) provision() error {
+func (d *demo) overlay(path, size string) error {
+	if err := os.Remove(path); err != nil && !errors.Is(err, os.ErrNotExist) {
+		return err
+	}
+	args := []string{"create", "-q", "-f", "qcow2", "-F", "qcow2", "-b", filepath.Join(d.release, "image/rootfs.qcow2"), path}
+	if size != "" {
+		args = append(args, size)
+	}
+	return cmd("", filepath.Join(d.release, "bin/qemu-img"), args...)
+}
+
+const autologin = "systemd.set_credential=agetty.autologin:root"
+
+// oneShot boots a new overlay of the base image without shirudo, runs one
+// demo-guest step with k at /opt/demo, and powers off.
+func (d *demo) oneShot(name, root, size string, k disk) error {
 	if _, ok := d.pid(); ok {
 		return errors.New("the machine is running: demo stop")
 	}
-	say("provisioning a fresh disk over the release's base image")
-	disk := filepath.Join(d.work, "disk.qcow2")
-	if err := os.Remove(disk); err != nil && !errors.Is(err, os.ErrNotExist) {
+	if err := d.overlay(root, size); err != nil {
 		return err
 	}
-	if err := cmd("", filepath.Join(d.release, "bin/qemu-img"), "create", "-q", "-f", "qcow2", "-F", "qcow2",
-		"-b", filepath.Join(d.release, "image/rootfs.qcow2"), disk, "8G"); err != nil {
-		return err
-	}
-	con, err := d.start("provision", "--append", "systemd.set_credential=agetty.autologin:root")
+	con, err := d.start(name, root, k, "--append", autologin)
 	if err != nil {
 		return err
 	}
 	defer con.Close()
-	if err := d.record(con, "provision", "provision"); err != nil {
+	if err := d.record(con, name, name); err != nil {
+		return err
+	}
+	if err := guest(con, "umount /opt/demo", time.Minute); err != nil {
 		return err
 	}
 	return d.shutdown(con)
 }
 
-// boot boots the provisioned disk as a shirudo machine: lockdown and keyrings
-// as shirudo asks, a TPM, and shirudo's initrd.
+func (d *demo) operator() error {
+	say("the operator's disk: the release's shirudo and operator half, the registry, demo-guest")
+	if err := d.opDisk(); err != nil {
+		return err
+	}
+	root := filepath.Join(d.work, "operator.qcow2")
+	if err := d.oneShot("operator", root, "", disk{img: d.opImg(), serial: "op"}); err != nil {
+		return err
+	}
+	if err := os.Remove(root); err != nil {
+		return err
+	}
+	return d.opResults()
+}
+
+func (d *demo) provision() error {
+	say("provisioning a fresh disk over the release's base image")
+	return d.oneShot("provision", filepath.Join(d.work, "disk.qcow2"), "8G", d.stageDisk())
+}
+
 func (d *demo) boot() error {
 	if _, ok := d.pid(); ok {
 		say("the shirudo machine already runs")
@@ -247,8 +276,8 @@ func (d *demo) boot() error {
 	if err := os.MkdirAll(tpm, 0o700); err != nil {
 		return err
 	}
-	con, err := d.start("shirudo", "--lockdown", "shirudo", "--tpm", tpm, "--initrd", filepath.Join(d.out, "initrd.img"),
-		"--append", "systemd.set_credential=agetty.autologin:root systemd.show_status=true")
+	con, err := d.start("shirudo", filepath.Join(d.work, "disk.qcow2"), d.stageDisk(), "--lockdown", "shirudo", "--tpm", tpm, "--initrd", filepath.Join(d.out, "initrd.img"),
+		"--append", autologin+" systemd.show_status=true")
 	if err != nil {
 		return err
 	}
@@ -305,12 +334,4 @@ func (d *demo) stop() error {
 	}
 	defer con.Close()
 	return d.shutdown(con)
-}
-
-func touch(path string) error {
-	now := time.Now()
-	if err := os.WriteFile(path, nil, 0o644); err != nil {
-		return err
-	}
-	return os.Chtimes(path, now, now)
 }

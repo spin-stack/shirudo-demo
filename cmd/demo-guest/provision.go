@@ -14,12 +14,9 @@ import (
 	"golang.org/x/sys/unix"
 )
 
-// ext4IocResizeFS is EXT4_IOC_RESIZE_FS, _IOW('f', 16, __u64).
+// _IOW('f', 16, __u64)
 const ext4IocResizeFS = 0x40086610
 
-// provision does what "Place the images on the target" and "Install the unit
-// drop-ins" in shirudo's boot-integration guide do, and installs the Python
-// the registry's payloads are written in.
 func provision() error {
 	heading("grow / to the disk")
 	if err := growRoot(); err != nil {
@@ -47,7 +44,7 @@ func provision() error {
 		mode     os.FileMode
 	}{
 		{"cert.der", "/var/lib/shirudo/keys/cert.der", 0o644},
-		{"shirudo-target", "/usr/bin/shirudo", 0o755},
+		{"shirudo", "/usr/bin/shirudo", 0o755},
 		{"shirudo.service", "/etc/systemd/system/shirudo.service", 0o644},
 		{"runtime-service.conf", "/etc/systemd/system/shirudo.service.d/runtime.conf", 0o644},
 	} {
@@ -72,11 +69,8 @@ func provision() error {
 	return nil
 }
 
-// growRoot grows / to fill /dev/vda. The base image is a 1 GiB file system
-// with ~100 MiB free, too small for Java. resize2fs cannot grow it: it opens
-// /dev/vda for writing, which this kernel refuses for a mounted device
-// (CONFIG_BLK_DEV_WRITE_MOUNTED is off, as shirudo's hardening asks). ext4's
-// own online resize, the ioctl on the mount, can.
+// Not resize2fs: it opens /dev/vda for writing, which the kernel refuses while mounted
+// (CONFIG_BLK_DEV_WRITE_MOUNTED=n). The ext4 online-resize ioctl works.
 func growRoot() error {
 	var st unix.Statfs_t
 	if err := unix.Statfs("/", &st); err != nil {

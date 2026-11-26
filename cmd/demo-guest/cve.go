@@ -24,11 +24,6 @@ const (
 	registry   = stage + "/registry"
 )
 
-// cve runs CVE-2025-24813 as upatch.dev publishes it: the registry's setup
-// and payload, unchanged, with the upatch built and signed with this run's
-// key. The payload exits 0 when Tomcat reaches the vulnerable path and 10
-// when it is blocked: 0, then 10 with the upatch loaded, then 0 after the
-// unload.
 func cve() error {
 	dir := filepath.Join(work, cveID)
 	up, unload, err := unpackCVE(dir)
@@ -85,8 +80,6 @@ func cve() error {
 	return nil
 }
 
-// cveTest runs the registry's tools/test on the package, against the Tomcat
-// cve set up, as the registry's README runs it.
 func cveTest() error {
 	env, err := readEnv(filepath.Join(work, cveID, "env"))
 	if err != nil {
@@ -99,8 +92,6 @@ func cveTest() error {
 	return cmd.Run()
 }
 
-// unpackCVE unpacks the package and returns its upatch and the one that
-// unloads it.
 func unpackCVE(dir string) (up, unload string, err error) {
 	ups, err := unpack(cvePackage, dir)
 	if err != nil {
@@ -117,8 +108,6 @@ func unpackCVE(dir string) (up, unload string, err error) {
 	return up, strings.TrimSuffix(up, ".upatch") + ".unload.upatch", nil
 }
 
-// readEnv reads what setup printed: KEY=VALUE lines, as the registry's
-// tools/test reads them.
 func readEnv(path string) ([]string, error) {
 	f, err := os.Open(path)
 	if err != nil {
@@ -148,8 +137,6 @@ func tomcatAnswers() bool {
 	return true
 }
 
-// unpack unpacks a shirudo package, a gzip'd tar, into a new dir/package and
-// returns the upatches it carries.
 func unpack(archive, dir string) ([]string, error) {
 	pkg := filepath.Join(dir, "package")
 	if err := os.RemoveAll(pkg); err != nil {
@@ -161,7 +148,6 @@ func unpack(archive, dir string) ([]string, error) {
 	return filepath.Glob(filepath.Join(pkg, "*", "upatches", "*.upatch"))
 }
 
-// untar unpacks a gzip'd tar into dir.
 func untar(archive, dir string) error {
 	f, err := os.Open(archive)
 	if err != nil {

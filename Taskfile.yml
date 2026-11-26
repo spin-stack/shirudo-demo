@@ -1,11 +1,5 @@
 version: '3'
 
-# Shirudo in a spin-machine guest, end to end (README), from a checkout. `go tool task` runs every
-# step in order; `go tool task <step>` runs one and what it needs. A step whose result is already
-# there is skipped, so a run can be repeated after a fix. Each step is the released demo's: bin
-# builds demo and demo-guest as release:build does, and every step runs that demo. What the guest
-# printed lands in evidence/.
-
 run: once
 
 includes:
@@ -13,7 +7,6 @@ includes:
     taskfile: '{{.GO_TOOLS_TASKS}}'
     flatten: true
     vars:
-      # release.yml runs `task release` once release:build's tarball is signed.
       RELEASE:
         map: {proof: ci.yml, jobs: Gate, files: _output/release/*.tar.gz _output/release/*.sigstore.json _output/release/checksums.txt}
 
@@ -23,7 +16,6 @@ env:
 vars:
   WORK: '{{.WORK | default (print .ROOT_DIR "/work")}}'
   OUT: '{{.WORK}}/out'
-  SRC: '{{.WORK}}/src/shirudo'
   BIN: '{{.WORK}}/bin'
   DEMO: '{{.BIN}}/demo'
 
@@ -46,99 +38,49 @@ tasks:
       - go build -trimpath -ldflags='-s -w' -o '{{.BIN}}/' ./cmd/demo ./cmd/demo-guest
 
   release:build:
-    desc: The demo's release, _output/release/shirudo-demo_linux_amd64.tar.gz (shirudo-demo/demo and shirudo-demo/demo-guest), and its sha256 in checksums.txt.
+    desc: Reproducible release tarball and checksums.txt in _output/release.
     vars:
       OUT: '{{.ROOT_DIR}}/_output/release'
     cmds:
       - rm -rf '{{.OUT}}'
       - task: bin
         vars: {BIN: '{{.OUT}}/shirudo-demo'}
-      # Sorted, owned by nobody and dated by the commit: the same bytes from the same commit.
       - >-
         tar --sort=name --owner=0 --group=0 --numeric-owner --mtime="@$(git show -s --format=%ct HEAD)"
         -C '{{.OUT}}' -czf '{{.OUT}}/shirudo-demo_linux_amd64.tar.gz' shirudo-demo
       - cd '{{.OUT}}' && sha256sum shirudo-demo_linux_amd64.tar.gz > checksums.txt
 
   machine:
-    desc: Download the spin-machine release versions.yaml pins, check its sha256 and its Sigstore bundle, and unpack it in work/machine.
+    desc: Download, verify (sha256, Sigstore) and unpack the pinned spin-machine release and shirudo-operator in work/machine.
     deps: [bin]
     cmds:
       - '{{.DEMO}} machine'
 
-  pins:
-    desc: The shirudo versions.yaml pins is the one the pinned spin-machine release carries its kernel hooks from (that tag's versions.yaml).
-    deps: [bin]
-    cmds:
-      - '{{.DEMO}} pins'
-
   check:
-    desc: machine, then - the release has its TPM, passt and spin-machine, passt can make its user namespace, /dev/kvm is usable, docker and git are installed, and pins.
+    desc: machine, then check the release's files, passt's user namespace, /dev/kvm and git.
     deps: [bin]
     cmds:
       - '{{.DEMO}} check'
 
-  shirudo:
-    desc: Clone shirudo and the registry at versions.yaml's pins and build shirudo in its container, against the release kernel's BTF.
+  operator:
+    desc: In a guest without shirudo, build the key, images, packages, units and initrd into work/out; evidence/operator.txt.
     deps: [check]
-    sources: [versions.yaml]
+    sources: [versions.yaml, cmd/demo-guest/operator.go]
     generates:
-      - '{{.SRC}}/shirudo'
-      - '{{.SRC}}/shirudo-target'
-      - '{{.SRC}}/tools/shirudo-build/shirudo-build'
-    cmds:
-      - '{{.DEMO}} shirudo'
-
-  keys:
-    desc: shirudo genkey makes this run's ML-DSA-87 operator key in work/keys; never committed, new for each run.
-    deps: [shirudo]
-    status:
-      - test -s '{{.WORK}}/keys/cert.der'
-    cmds:
-      - '{{.DEMO}} keys'
-
-  images:
-    desc: The signed config image and the dm-verity runtime image, and the initrd's bootstrap file naming the runtime image's root hash.
-    deps: [keys]
-    sources:
-      - '{{.WORK}}/keys/cert.der'
-      - '{{.SRC}}/shirudo-target'
-    generates:
+      - '{{.OUT}}/keys/cert.der'
       - '{{.OUT}}/images/runtime.roothash'
-      - '{{.OUT}}/images/initial.p7s'
-      - '{{.OUT}}/uki-bootstrap.conf'
-      - '{{.OUT}}/runtime-service.conf'
-    cmds:
-      - '{{.DEMO}} images'
-
-  initrd:
-    desc: shirudo-gen-initrd runs dracut with shirudo's module in Ubuntu 26.04's systemd, then checks the result.
-    deps: [images, bin]
-    sources:
-      - initrd/Dockerfile
-      - versions.yaml
-      - '{{.OUT}}/uki-bootstrap.conf'
-      - '{{.SRC}}/shirudo-target'
-    generates:
-      - '{{.OUT}}/initrd.img'
-    cmds:
-      - '{{.DEMO}} initrd'
-
-  packages:
-    desc: The registry's tools/build builds and signs CVE-2025-24813's package; shirudo bpm build builds and signs kernel-obs.
-    deps: [keys, bin]
-    sources:
-      - '{{.WORK}}/keys/cert.der'
-      - '{{.SRC}}/shirudo'
-    generates:
       - '{{.OUT}}/packages/cve-2025-24813-1.0.0.bee'
       - '{{.OUT}}/packages/kernel-obs-1.0.0.bee'
+      - '{{.OUT}}/runtime-service.conf'
+      - '{{.OUT}}/initrd.img'
     cmds:
-      - '{{.DEMO}} packages'
+      - '{{.DEMO}} operator'
 
   stage:
-    desc: The ext4 image the guest mounts at /opt/demo - shirudo's images and units, demo-guest, the packages, the registry's payloads and tools.
-    deps: [images, packages, bin]
+    desc: The ext4 image the shirudo machine mounts at /opt/demo.
+    deps: [operator, bin]
     sources:
+      - '{{.OUT}}/initrd.img'
       - '{{.OUT}}/images/*'
       - '{{.OUT}}/packages/*'
       - '{{.BIN}}/demo-guest'
@@ -154,7 +96,6 @@ tasks:
     sources:
       - '{{.OUT}}/images/*'
       - '{{.OUT}}/runtime-service.conf'
-      - '{{.SRC}}/shirudo-target'
       - cmd/demo-guest/provision.go
     generates:
       - '{{.WORK}}/disk.qcow2'
@@ -163,7 +104,7 @@ tasks:
 
   boot:
     desc: spin-machine boot --lockdown shirudo --tpm --initrd --net, its console on a socket; the stage disk at /opt/demo.
-    deps: [provision, initrd, bin]
+    deps: [provision, bin]
     status:
       - '{{.DEMO}} running'
     cmds:
@@ -206,4 +147,3 @@ tasks:
       - task: bin
       - go vet ./...
       - go test ./...
-      - task: pins

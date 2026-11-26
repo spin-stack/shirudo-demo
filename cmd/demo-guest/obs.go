@@ -18,15 +18,10 @@ import (
 	"time"
 )
 
-// lookup is the name the guest resolves and connects to, through passt's
-// DNS and NIC.
 const lookup = "upatch.dev"
 
 var tables = []string{"exec", "file", "dns", "net"}
 
-// obs loads shirudo's kernel-obs package, has the kernel run a program, open
-// a credential file, resolve a name and make two connections, and reads the
-// records back with `shirudo upatch map`, in the guest, with no collector.
 func obs() error {
 	dir := filepath.Join(work, "kernel-obs")
 	ups, err := unpack(stage+"/packages/kernel-obs-1.0.0.bee", dir)
@@ -52,8 +47,7 @@ func obs() error {
 		return err
 	}
 
-	// Each read drains the table's interval, so the actions run right after a
-	// read of every table, and the next read holds what they did.
+	// Each map read drains the table: empty them so the next read holds only act's records.
 	for _, t := range tables {
 		if _, err := mapTable(t); err != nil {
 			return err
@@ -107,7 +101,6 @@ func obs() error {
 	return nil
 }
 
-// act makes the kernel do what kernel-obs records.
 func act(id string) error {
 	heading("an exec: /usr/bin/id")
 	if err := run(nil, id); err != nil {
@@ -183,11 +176,9 @@ func mapTable(table string) ([]map[string]any, error) {
 	return doc.Records, nil
 }
 
-// noise is what summarize leaves out of a record: identities and times.
 var noise = []string{"entry_index", "cgroup_id", "executable", "caller", "owner", "actor",
 	"first_seen_unix_nano", "last_seen_unix_nano", "cap_effective", "path_truncated"}
 
-// summarize prints one line per record, without its identity and time fields.
 func summarize(records []map[string]any) {
 	fmt.Println(len(records), "records")
 	for _, r := range records {

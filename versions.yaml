@@ -1,28 +1,27 @@
 - name: spin-machine
   kind: download
   source: https://github.com/spin-stack/machine/releases/download/{version}/spin-machine-{version}-linux-x86_64.tar.gz
-  version: v20261126.02
-  pin: bb748877cdf489c1f5aaeb4aaea7146740926c79eb69aed67fd3dbe127b4c265
+  version: v20261126.03
+  pin: 1d20bf462bc63198cb8653553eb8df1346a6e337cb0054daa3edd1b951454303
   track: github-release https://github.com/spin-stack/machine
   note: >-
     the machine the demo boots, as released: QEMU, the kernel with shirudo's hooks, the base image,
-    swtpm, passt and bin/spin-machine. `demo machine` downloads it, checks this sha256 and
-    the tarball's Sigstore bundle (release.yml at refs/heads/main), and unpacks it in work/machine.
-    A bump is a whole run, `go tool task clean default`: shirudo builds against this kernel's BTF.
+    swtpm, passt, bin/spin-machine and guest/shirudo, the static shirudo the guest runs.
+    `demo machine` downloads it, checks this sha256 and the tarball's Sigstore bundle (release.yml
+    at refs/heads/main), and unpacks it in work/machine. A bump is a whole run,
+    `go tool task clean && go tool task`, and moves shirudo-operator with it.
 
-- name: shirudo
-  kind: git
-  source: https://github.com/shirudo-dev/shirudo
-  version: main
-  pin: 5795f8d4a7509af2afeb331046f179300a1756a2
-  track: with spin-stack/machine@release shirudo pin
+- name: shirudo-operator
+  kind: download
+  source: https://github.com/spin-stack/machine/releases/download/{version}/spin-machine-{version}-linux-x86_64.shirudo-operator.tar.gz
+  version: v20261126.03
+  pin: c6bdf331fab5d1b2922db02cb6601aba477d932aca72164ba13f1c654670c7ee
+  track: with spin-machine
   note: >-
-    the shirudo the demo builds in its own container (testing/container) against the release
-    kernel's BTF, and whose genkey, gen-image, gen-runtime, gen-initrd, bpm and kernel-obs package
-    it uses. It is the commit the pinned spin-machine release carries shirudo's kernel hooks from
-    (its versions.yaml's shirudo pin), so the demo tests what the release ships; `go tool task pins`
-    fails when the two differ. It moves with spin-machine, and a bump is a whole run,
-    `go tool task clean default`.
+    the same release's operator half of shirudo (its docs/shirudo.md): shirudo-build, clang, the
+    gen-image and gen-initrd tools, the BPF headers and vmlinux.h of the release's kernel, the
+    units, kernel-obs, and the Ubuntu packages they need. `demo machine` checks it as it checks
+    the machine and unpacks it over it; `demo operator` runs it in a guest of the release.
 
 - name: upatch-registry
   kind: git
@@ -33,18 +32,7 @@
   note: >-
     upatch.dev's registry: CVE-2025-24813's upatch, built and signed by its tools/build with this
     run's key, and its payloads/ and tools/test, run unchanged in the guest. After the bump:
-    `go tool task packages stage cve`.
-
-- name: ubuntu
-  kind: image
-  source: mirror.gcr.io/library/ubuntu
-  version: '26.04'
-  pin: sha256:d66b366dac61b575bee2aef07e9c26e8070096fbe84a3d4d3eb0da069b5d76db
-  track: digest
-  note: >-
-    what initrd/Dockerfile is made on: its systemd and dracut make the initrd shirudo's init runs
-    in (README, "How the guest differs"). After the bump: `go tool task initrd`, then
-    `go tool task stop boot init`.
+    `go tool task operator stage cve`.
 
 - name: task
   kind: download

@@ -11,8 +11,6 @@ import (
 	"time"
 )
 
-// A bash on a terminal that echoes what is typed, as agetty's login shell
-// does, behind a Unix socket, as QEMU's chardev serves the console.
 func shell(t *testing.T) string {
 	t.Helper()
 	if _, err := exec.LookPath("script"); err != nil {
