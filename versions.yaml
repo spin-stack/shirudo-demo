@@ -1,8 +1,8 @@
 - name: spin-machine
   kind: download
   source: https://github.com/spin-stack/machine/releases/download/{version}/spin-machine-{version}-linux-x86_64.tar.gz
-  version: v20261126.01
-  pin: f4fbb082a5e707eaba65eaefdc2648cea621df4028a490a717df7ff1f118b2e4
+  version: v20261126.02
+  pin: bb748877cdf489c1f5aaeb4aaea7146740926c79eb69aed67fd3dbe127b4c265
   track: github-release https://github.com/spin-stack/machine
   note: >-
     the machine the demo boots, as released: QEMU, the kernel with shirudo's hooks, the base image,
