@@ -1,4 +1,4 @@
-riBooting initrd of Ubuntu 26.04.1 LTS dracut-110-11ubuntu0.1 (Initramfs)...
+Booting initrd of Ubuntu 26.04.1 LTS dracut-110-11ubuntu0.1 (Initramfs)...
 [  OK  ] Started systemd-ask-password-console.path - Dispatch Password Requests to Console Directory Watch.
          Expecting device dev-vda.device - /dev/vda...
 [  OK  ] Reached target initrd-usr-fs.target - Initrd /usr File System.
@@ -17,15 +17,15 @@ riBooting initrd of Ubuntu 26.04.1 LTS dracut-110-11ubuntu0.1 (Initramfs)...
          Starting systemd-journald.service - Journal Service...
          Starting systemd-sysctl.service - Apply Kernel Variables...
          Starting systemd-tmpfiles-setup-dev-early.service - Create Static Device Nodes in /dev gracefully...
-[  OK  ] Finished dracut-pre-mount.service - dracut pre-mount hook.
-[  OK  ] Finished systemd-sysctl.service - Apply Kernel Variables.
 [  OK  ] Finished systemd-tmpfiles-setup-dev-early.service - Create Static Device Nodes in /dev gracefully.
+[  OK  ] Finished systemd-sysctl.service - Apply Kernel Variables.
+[  OK  ] Finished dracut-pre-mount.service - dracut pre-mount hook.
          Starting systemd-tmpfiles-setup-dev.service - Create Static Device Nodes in /dev...
 [  OK  ] Finished systemd-tmpfiles-setup-dev.service - Create Static Device Nodes in /dev.
-[  OK  ] Started systemd-journald.service - Journal Service.
-[  OK  ] Finished dracut-cmdline.service - dracut cmdline hook.
 [  OK  ] Reached target local-fs-pre.target - Preparation for Local File Systems.
 [  OK  ] Reached target local-fs.target - Local File Systems.
+[  OK  ] Started systemd-journald.service - Journal Service.
+[  OK  ] Finished dracut-cmdline.service - dracut cmdline hook.
          Starting systemd-tmpfiles-setup.service - Create System Files and Directories...
          Starting systemd-udevd.service - Rule-based Manager for Device Events and Files...
 [  OK  ] Finished systemd-tmpfiles-setup.service - Create System Files and Directories.
@@ -50,6 +50,7 @@ riBooting initrd of Ubuntu 26.04.1 LTS dracut-110-11ubuntu0.1 (Initramfs)...
 [  OK  ] Reached target initrd-fs.target - Initrd File Systems.
          Starting dracut-mount.service - dracut mount hook...
 [  OK  ] Finished dracut-mount.service - dracut mount hook.
+[*     ] Job shirudo-initrd.service/start running (3s / no limit)
 [  OK  ] Finished shirudo-initrd.service - shirudo: bring up the BPF LSM and bind the register from the initrd.
 [  OK  ] Reached target initrd.target - Initrd Default Target.
          Starting initrd-cleanup.service - Cleaning Up and Shutting Down Daemons...
@@ -100,14 +101,14 @@ Welcome to Ubuntu 26.04.1 LTS!
          Starting spin-machine-sshd-keygen.service - Generate SSH host keys for this VM...
 [  OK  ] Listening on systemd-logind-varlink.socket - User Login Management Varlink Socket.
 [  OK  ] Mounted tmp.mount - Temporary Directory /tmp.
+         Starting systemd-logind.service - User Login Management...
 [  OK  ] Finished spin-machine-sshd-keygen.service - Generate SSH host keys for this VM.
          Starting ssh.service - OpenBSD Secure Shell server...
-         Starting systemd-logind.service - User Login Management...
-[  OK  ] Started dbus-broker.service - D-Bus System Message Bus.
 [  OK  ] Started systemd-journald.service - Journal Service.
+[  OK  ] Started dbus-broker.service - D-Bus System Message Bus.
 [  OK  ] Started ssh.service - OpenBSD Secure Shell server.
-[  OK  ] Started systemd-logind.service - User Login Management.
 [  OK  ] Created slice user-0.slice - User Slice of UID 0.
+[  OK  ] Started systemd-logind.service - User Login Management.
          Starting user-runtime-dir@0.service - User Runtime Directory /run/user/0...
 [  OK  ] Finished user-runtime-dir@0.service - User Runtime Directory /run/user/0.
          Starting user@0.service - User Manager for UID 0...
@@ -117,15 +118,16 @@ Ubuntu 26.04.1 LTS localhost ttyS0
 
 localhost login: root (automatic login)
 
-root@localhost:~# printf '%s\n' '@@B''df810f68c600@@'; stty -echo 2>/dev/null; dmesg -n 1 2>/dev/null; true; printf '%s%s\n' '@@E''df810f68c600@@' "$?"
-@@Bdf810f68c600@@
-@@Edf810f68c600@@0
-root@localhosst:~# 
-@@B434002e1d836@@
-@@E434002e1d836@@1
+root@localhost:~# printf '%s\n' '@@B''e5468fca8312@@'; stty -echo 2>/dev/null; dmesg -n 1 2>/dev/null; true; printf '%s%s\n' '@@E''e5468fca8312@@' "$?"
+@@Be5468fca8312@@
+@@Ee5468fca8312@@0
 root@localhost:~# 
-@@B6e03ae3a291e@@
-@@E6e03ae3a291e@@0
+@@Be996197e0d98@@
+@@Ee996197e0d98@@1
+root@localhost::~# 
+@@B75e560f62042@@
+@@E75e560f62042@@0
 root@localhost:~# 
-@@B37878e22f74a@@
-@@E37878e22f74a@@0
+@@B294897de9219@@
+@@E294897de9219@@0
+]3008;end=67e
