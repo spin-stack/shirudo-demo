@@ -14,6 +14,8 @@ import (
 	"strconv"
 	"strings"
 	"syscall"
+
+	shirudodemo "github.com/spin-stack/shirudo-demo"
 )
 
 // cmd runs a command with its output on ours.
@@ -37,6 +39,12 @@ func output(name string, args ...string) (string, error) {
 }
 
 func (d *demo) check() error {
+	if err := d.fetchRelease(); err != nil {
+		return err
+	}
+	if _, err := os.Stat(d.guestCmd); err != nil {
+		return fmt.Errorf("no demo-guest beside demo: %w", err)
+	}
 	for _, f := range []string{"bin/spin-machine", "bin/swtpm", "bin/passt", "bin/qemu-img", "bin/mkfs.ext4", "e2fsprogs/mke2fs.conf", "kernel/vmlinux", "image/rootfs.qcow2"} {
 		if _, err := os.Stat(filepath.Join(d.release, f)); err != nil {
 			return fmt.Errorf("%s has no %s: versions.yaml pins a release from before the TPM, the network or bin/spin-machine", d.release, f)
@@ -223,9 +231,12 @@ func (d *demo) initrd() error {
 		return err
 	}
 	say("building the shirudo initrd for %s with dracut, in Ubuntu 26.04's systemd", kver)
-	if err := cmd("", "docker", "build", "-q", "--build-arg", "UBUNTU_IMAGE="+d.pins.ubuntu.Source+"@"+d.pins.ubuntu.Pin,
-		"-t", "shirudo-demo-initrd", filepath.Join(d.here, "initrd")); err != nil {
-		return err
+	build := exec.Command("docker", "build", "-q", "--build-arg", "UBUNTU_IMAGE="+d.pins.ubuntu.Source+"@"+d.pins.ubuntu.Pin,
+		"-t", "shirudo-demo-initrd", "-")
+	build.Stdin = bytes.NewReader(shirudodemo.InitrdDockerfile)
+	build.Stdout, build.Stderr = os.Stderr, os.Stderr
+	if err := build.Run(); err != nil {
+		return fmt.Errorf("building the initrd's image: %w", err)
 	}
 	unit := filepath.Join(d.out, "shirudo-initrd.service")
 	if err := d.unit("shirudo-initrd.service", unit); err != nil {
@@ -299,15 +310,16 @@ func (d *demo) stage() error {
 	if err := os.RemoveAll(st); err != nil {
 		return err
 	}
-	if err := os.MkdirAll(filepath.Join(st, "registry"), 0o755); err != nil {
-		return err
+	for _, dir := range []string{"registry", "bin"} {
+		if err := os.MkdirAll(filepath.Join(st, dir), 0o755); err != nil {
+			return err
+		}
 	}
 	for from, to := range map[string]string{
 		filepath.Join(d.out, "images"):        "images",
 		filepath.Join(d.out, "packages"):      "packages",
 		filepath.Join(d.registry, "payloads"): "registry/payloads",
 		filepath.Join(d.registry, "tools"):    "registry/tools",
-		filepath.Join(d.out, "guest"):         "bin",
 	} {
 		if err := os.CopyFS(filepath.Join(st, to), os.DirFS(from)); err != nil {
 			return err
@@ -317,6 +329,7 @@ func (d *demo) stage() error {
 		filepath.Join(d.keyDir, "cert.der"):          "cert.der",
 		filepath.Join(d.build, "shirudo-target"):     "shirudo-target",
 		filepath.Join(d.out, "runtime-service.conf"): "runtime-service.conf",
+		d.guestCmd: "bin/demo-guest",
 	} {
 		if err := copyFile(from, filepath.Join(st, to)); err != nil {
 			return err
