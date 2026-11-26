@@ -1,14 +1,28 @@
+- name: spin-machine
+  kind: download
+  source: https://github.com/spin-stack/machine/releases/download/{version}/spin-machine-{version}-linux-x86_64.tar.gz
+  version: v20261126.02
+  pin: bb748877cdf489c1f5aaeb4aaea7146740926c79eb69aed67fd3dbe127b4c265
+  track: github-release https://github.com/spin-stack/machine
+  note: >-
+    the machine the demo boots, as released: QEMU, the kernel with shirudo's hooks, the base image,
+    swtpm, passt and bin/spin-machine. `demo machine` downloads it, checks this sha256 and
+    the tarball's Sigstore bundle (release.yml at refs/heads/main), and unpacks it in work/machine.
+    A bump is a whole run, `go tool task clean default`: shirudo builds against this kernel's BTF.
+
 - name: shirudo
   kind: git
   source: https://github.com/shirudo-dev/shirudo
   version: main
-  pin: 2a560729814a9ac0ac702bb15d39c2145522c143
-  track: branch
+  pin: 5795f8d4a7509af2afeb331046f179300a1756a2
+  track: with spin-stack/machine@release shirudo pin
   note: >-
     the shirudo the demo builds in its own container (testing/container) against the release
     kernel's BTF, and whose genkey, gen-image, gen-runtime, gen-initrd, bpm and kernel-obs package
-    it uses. A bump is a whole run, `rm -rf work && go tool task`, since the kernel hooks the release
-    carries are this commit's.
+    it uses. It is the commit the pinned spin-machine release carries shirudo's kernel hooks from
+    (its versions.yaml's shirudo pin), so the demo tests what the release ships; `go tool task pins`
+    fails when the two differ. It moves with spin-machine, and a bump is a whole run,
+    `go tool task clean default`.
 
 - name: upatch-registry
   kind: git
@@ -25,7 +39,7 @@
   kind: image
   source: mirror.gcr.io/library/ubuntu
   version: '26.04'
-  pin: sha256:c098726dd9b9733f3e885f8de0ef375206a311b0a317eadc40d347b1115fb944
+  pin: sha256:d66b366dac61b575bee2aef07e9c26e8070096fbe84a3d4d3eb0da069b5d76db
   track: digest
   note: >-
     what initrd/Dockerfile is made on: its systemd and dracut make the initrd shirudo's init runs

@@ -1,11 +1,10 @@
 // SPDX-License-Identifier: BSD-2-Clause
 
-// demo runs one step of the demo on the host. Taskfile.yml runs the steps in
-// order and skips the ones whose results are already there; this program
-// does a step whenever it is asked to. Its environment:
+// demo runs the demo: `demo run` every step in order, `demo STEP` one of
+// them. It does a step whenever it is asked to; Taskfile.yml runs the same
+// steps and skips the ones whose results are already there. demo-guest, the
+// guest's half, is the file beside it. Its environment:
 //
-//	MACHINE_RELEASE  an unpacked spin-machine release tree (README), required
-//	SPIN_MACHINE     the spin-machine command (default: MACHINE_RELEASE/bin/spin-machine)
 //	WORK             where everything is built and kept (default: ./work)
 //	EVIDENCE         where what the guest printed is kept (default: ./evidence)
 //	MEMORY_MB, CPUS  the guest's size (default: 4096, 4)
@@ -20,12 +19,12 @@ import (
 )
 
 type demo struct {
-	release    string // MACHINE_RELEASE
-	machineCmd string // SPIN_MACHINE
+	release    string // the unpacked release tree versions.yaml pins (release.go)
+	machineCmd string // its bin/spin-machine
+	guestCmd   string // demo-guest, beside this program
 	memoryMB   int
 	cpus       int
 
-	here     string // this checkout
 	work     string
 	evidence string
 	build    string // shirudo's checkout
@@ -40,54 +39,67 @@ type demo struct {
 type step struct {
 	name string
 	do   func(*demo) error
+	// byName: run when asked for alone, and not by run. pins is check's
+	// first part; running is Taskfile.yml's question.
+	byName bool
 }
 
+// steps, in the order run runs them.
 var steps = []step{
-	{"check", (*demo).check},
-	{"shirudo", (*demo).shirudo},
-	{"keys", (*demo).keys},
-	{"images", (*demo).images},
-	{"initrd", (*demo).initrd},
-	{"packages", (*demo).packages},
-	{"stage", (*demo).stage},
-	{"provision", (*demo).provision},
-	{"boot", (*demo).boot},
-	{"init", (*demo).init},
-	{"cve", (*demo).cve},
-	{"obs", (*demo).obs},
-	{"stop", (*demo).stop},
-	{"running", (*demo).running},
+	{name: "machine", do: (*demo).fetchRelease},
+	{name: "pins", do: (*demo).pinsAgree, byName: true},
+	{name: "check", do: (*demo).check},
+	{name: "shirudo", do: (*demo).shirudo},
+	{name: "keys", do: (*demo).keys},
+	{name: "images", do: (*demo).images},
+	{name: "initrd", do: (*demo).initrd},
+	{name: "packages", do: (*demo).packages},
+	{name: "stage", do: (*demo).stage},
+	{name: "provision", do: (*demo).provision},
+	{name: "boot", do: (*demo).boot},
+	{name: "init", do: (*demo).init},
+	{name: "cve", do: (*demo).cve},
+	{name: "obs", do: (*demo).obs},
+	{name: "stop", do: (*demo).stop},
+	{name: "running", do: (*demo).running, byName: true},
 }
 
 func main() {
 	if len(os.Args) != 2 {
 		usage()
 	}
-	i := slices.IndexFunc(steps, func(s step) bool { return s.name == os.Args[1] })
-	if i < 0 {
+	todo := steps
+	if os.Args[1] == "run" {
+		todo = slices.DeleteFunc(slices.Clone(steps), func(s step) bool { return s.byName })
+	} else if i := slices.IndexFunc(steps, func(s step) bool { return s.name == os.Args[1] }); i >= 0 {
+		todo = steps[i : i+1]
+	} else {
 		usage()
 	}
 	d, err := load()
-	if err == nil {
-		err = steps[i].do(d)
-	}
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "demo %s: %v\n", os.Args[1], err)
+		fmt.Fprintf(os.Stderr, "demo: %v\n", err)
 		os.Exit(1)
+	}
+	for _, s := range todo {
+		if err := s.do(d); err != nil {
+			fmt.Fprintf(os.Stderr, "demo %s: %v\n", s.name, err)
+			os.Exit(1)
+		}
 	}
 }
 
 func usage() {
-	names := make([]string, len(steps))
-	for i, s := range steps {
-		names[i] = s.name
+	names := []string{"run"}
+	for _, s := range steps {
+		names = append(names, s.name)
 	}
 	fmt.Fprintf(os.Stderr, "usage: demo %v\n", names)
 	os.Exit(2)
 }
 
 func load() (*demo, error) {
-	here, err := os.Getwd()
+	self, err := os.Executable()
 	if err != nil {
 		return nil, err
 	}
@@ -109,17 +121,8 @@ func load() (*demo, error) {
 		}
 		return n, nil
 	}
-	d := &demo{here: here}
-	if d.pins, err = loadPins(here); err != nil {
-		return nil, err
-	}
-	if os.Getenv("MACHINE_RELEASE") == "" {
-		return nil, fmt.Errorf("set MACHINE_RELEASE to an unpacked spin-machine release tree (README)")
-	}
-	if d.release, err = abs("MACHINE_RELEASE", ""); err != nil {
-		return nil, err
-	}
-	if d.machineCmd, err = abs("SPIN_MACHINE", filepath.Join(d.release, "bin/spin-machine")); err != nil {
+	d := &demo{guestCmd: filepath.Join(filepath.Dir(self), "demo-guest")}
+	if d.pins, err = loadPins(); err != nil {
 		return nil, err
 	}
 	if d.work, err = abs("WORK", "work"); err != nil {
@@ -134,6 +137,8 @@ func load() (*demo, error) {
 	if d.cpus, err = num("CPUS", 4); err != nil {
 		return nil, err
 	}
+	d.release = filepath.Join(d.work, "machine", releaseName(d.pins.machine), "usr/share/spin-stack")
+	d.machineCmd = filepath.Join(d.release, "bin/spin-machine")
 	d.build = filepath.Join(d.work, "src/shirudo")
 	d.registry = filepath.Join(d.work, "src/upatch-registry")
 	d.keyDir = filepath.Join(d.work, "keys")
