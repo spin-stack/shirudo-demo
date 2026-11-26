@@ -4,9 +4,9 @@ package main
 
 import (
 	"fmt"
-	"path/filepath"
 
 	"github.com/spin-stack/go-tools/versions"
+	shirudodemo "github.com/spin-stack/shirudo-demo"
 )
 
 // pins is what the demo is built from, versions.yaml's entries: each a
@@ -15,8 +15,8 @@ type pins struct {
 	machine, shirudo, registry, ubuntu versions.Entry
 }
 
-func loadPins(here string) (pins, error) {
-	v, err := versions.Load(filepath.Join(here, "versions.yaml"))
+func loadPins() (pins, error) {
+	v, err := versions.Parse(shirudodemo.Versions)
 	if err != nil {
 		return pins{}, err
 	}

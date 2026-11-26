@@ -6,7 +6,7 @@
   track: github-release https://github.com/spin-stack/machine
   note: >-
     the machine the demo boots, as released: QEMU, the kernel with shirudo's hooks, the base image,
-    swtpm, passt and bin/spin-machine. `go tool task release` downloads it, checks this sha256 and
+    swtpm, passt and bin/spin-machine. `demo machine` downloads it, checks this sha256 and
     the tarball's Sigstore bundle (release.yml at refs/heads/main), and unpacks it in work/machine.
     A bump is a whole run, `go tool task clean default`: shirudo builds against this kernel's BTF.
 

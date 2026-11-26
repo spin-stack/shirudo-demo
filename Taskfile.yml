@@ -1,11 +1,21 @@
 version: '3'
 
-# Shirudo in a spin-machine guest, end to end (README). `go tool task` runs every step in order;
-# `go tool task <step>` runs one and what it needs. A step whose result is already there is
-# skipped, so a run can be repeated after a fix. cmd/demo does each host step and cmd/demo-guest
-# each guest step; what the guest printed lands in evidence/.
+# Shirudo in a spin-machine guest, end to end (README), from a checkout. `go tool task` runs every
+# step in order; `go tool task <step>` runs one and what it needs. A step whose result is already
+# there is skipped, so a run can be repeated after a fix. Each step is the released demo's: bin
+# builds demo and demo-guest as release:build does, and every step runs that demo. What the guest
+# printed lands in evidence/.
 
 run: once
+
+includes:
+  common:
+    taskfile: '{{.GO_TOOLS_TASKS}}'
+    flatten: true
+    vars:
+      # release.yml runs `task release` once release:build's tarball is signed.
+      RELEASE:
+        map: {proof: ci.yml, jobs: Gate, files: _output/release/*.tar.gz _output/release/*.sigstore.json _output/release/checksums.txt}
 
 env:
   WORK: '{{.WORK}}'
@@ -14,7 +24,8 @@ vars:
   WORK: '{{.WORK | default (print .ROOT_DIR "/work")}}'
   OUT: '{{.WORK}}/out'
   SRC: '{{.WORK}}/src/shirudo'
-  DEMO: go run ./cmd/demo
+  BIN: '{{.WORK}}/bin'
+  DEMO: '{{.BIN}}/demo'
 
 tasks:
   default:
@@ -25,19 +36,44 @@ tasks:
       - task: obs
       - task: stop
 
-  release:
-    desc: Download the spin-machine release versions.yaml pins, check its sha256 and its Sigstore bundle, and unpack it in work/machine.
+  bin:
+    desc: demo and demo-guest in work/bin, static for linux/amd64, as the release builds them.
+    env:
+      CGO_ENABLED: '0'
+      GOOS: linux
+      GOARCH: amd64
     cmds:
-      - '{{.DEMO}} release'
+      - go build -trimpath -ldflags='-s -w' -o '{{.BIN}}/' ./cmd/demo ./cmd/demo-guest
+
+  release:build:
+    desc: The demo's release, _output/release/shirudo-demo_linux_amd64.tar.gz (shirudo-demo/demo and shirudo-demo/demo-guest), and its sha256 in checksums.txt.
+    vars:
+      OUT: '{{.ROOT_DIR}}/_output/release'
+    cmds:
+      - rm -rf '{{.OUT}}'
+      - task: bin
+        vars: {BIN: '{{.OUT}}/shirudo-demo'}
+      # Sorted, owned by nobody and dated by the commit: the same bytes from the same commit.
+      - >-
+        tar --sort=name --owner=0 --group=0 --numeric-owner --mtime="@$(git show -s --format=%ct HEAD)"
+        -C '{{.OUT}}' -czf '{{.OUT}}/shirudo-demo_linux_amd64.tar.gz' shirudo-demo
+      - cd '{{.OUT}}' && sha256sum shirudo-demo_linux_amd64.tar.gz > checksums.txt
+
+  machine:
+    desc: Download the spin-machine release versions.yaml pins, check its sha256 and its Sigstore bundle, and unpack it in work/machine.
+    deps: [bin]
+    cmds:
+      - '{{.DEMO}} machine'
 
   pins:
     desc: The shirudo versions.yaml pins is the one the pinned spin-machine release carries its kernel hooks from (that tag's versions.yaml).
+    deps: [bin]
     cmds:
       - '{{.DEMO}} pins'
 
   check:
-    desc: The release has its TPM, passt and spin-machine, passt can make its user namespace, /dev/kvm is usable, docker and git are installed.
-    deps: [release]
+    desc: machine, then - the release has its TPM, passt and spin-machine, passt can make its user namespace, /dev/kvm is usable, docker and git are installed, and pins.
+    deps: [bin]
     cmds:
       - '{{.DEMO}} check'
 
@@ -76,7 +112,7 @@ tasks:
 
   initrd:
     desc: shirudo-gen-initrd runs dracut with shirudo's module in Ubuntu 26.04's systemd, then checks the result.
-    deps: [images]
+    deps: [images, bin]
     sources:
       - initrd/Dockerfile
       - versions.yaml
@@ -89,7 +125,7 @@ tasks:
 
   packages:
     desc: The registry's tools/build builds and signs CVE-2025-24813's package; shirudo bpm build builds and signs kernel-obs.
-    deps: [keys]
+    deps: [keys, bin]
     sources:
       - '{{.WORK}}/keys/cert.der'
       - '{{.SRC}}/shirudo'
@@ -99,28 +135,13 @@ tasks:
     cmds:
       - '{{.DEMO}} packages'
 
-  guest:
-    desc: cmd/demo-guest, static, for the guest.
-    sources:
-      - go.mod
-      - go.sum
-      - cmd/demo-guest/*.go
-    generates:
-      - '{{.OUT}}/guest/demo-guest'
-    env:
-      CGO_ENABLED: '0'
-      GOOS: linux
-      GOARCH: amd64
-    cmds:
-      - go build -trimpath -o '{{.OUT}}/guest/demo-guest' ./cmd/demo-guest
-
   stage:
     desc: The ext4 image the guest mounts at /opt/demo - shirudo's images and units, demo-guest, the packages, the registry's payloads and tools.
-    deps: [images, packages, guest]
+    deps: [images, packages, bin]
     sources:
       - '{{.OUT}}/images/*'
       - '{{.OUT}}/packages/*'
-      - '{{.OUT}}/guest/*'
+      - '{{.BIN}}/demo-guest'
       - '{{.OUT}}/runtime-service.conf'
     generates:
       - '{{.OUT}}/stage.img'
@@ -129,7 +150,7 @@ tasks:
 
   provision:
     desc: A new 8 GiB disk over the release's base image, booted without shirudo; demo-guest provision installs shirudo's images, units and Python.
-    deps: [stage]
+    deps: [stage, bin]
     sources:
       - '{{.OUT}}/images/*'
       - '{{.OUT}}/runtime-service.conf'
@@ -142,7 +163,7 @@ tasks:
 
   boot:
     desc: spin-machine boot --lockdown shirudo --tpm --initrd --net, its console on a socket; the stage disk at /opt/demo.
-    deps: [provision, initrd]
+    deps: [provision, initrd, bin]
     status:
       - '{{.DEMO}} running'
     cmds:
@@ -168,6 +189,7 @@ tasks:
 
   stop:
     desc: Power the guest off. work/disk.qcow2 and work/tpm stay, so `go tool task boot init` boots the same machine again.
+    deps: [bin]
     cmds:
       - '{{.DEMO}} stop'
 
@@ -178,10 +200,10 @@ tasks:
       - rm -rf '{{.WORK}}' .task
 
   test:
-    desc: gofmt, vet and test the demo's Go, and build demo-guest for the guest.
+    desc: gofmt, vet and test the demo's Go, and build the release's binaries.
     cmds:
       - test -z "$(gofmt -l .)"
-      - CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /dev/null ./cmd/demo-guest
+      - task: bin
       - go vet ./...
       - go test ./...
       - task: pins

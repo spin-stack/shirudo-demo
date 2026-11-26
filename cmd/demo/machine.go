@@ -143,7 +143,7 @@ func (d *demo) refreshStage(con *console.Console) error {
 // connect opens the running machine's console.
 func (d *demo) connect() (*console.Console, error) {
 	if _, ok := d.pid(); !ok {
-		return nil, errors.New("the machine is not running: task boot")
+		return nil, errors.New("the machine is not running: demo boot")
 	}
 	deadline := time.Now().Add(time.Minute)
 	con, err := console.Dial(d.consoleSock(), deadline)
@@ -214,7 +214,7 @@ func (d *demo) shutdown(con *console.Console) error {
 // without shirudo and has demo-guest place shirudo's images and units on it.
 func (d *demo) provision() error {
 	if _, ok := d.pid(); ok {
-		return errors.New("the machine is running: task stop")
+		return errors.New("the machine is running: demo stop")
 	}
 	say("provisioning a fresh disk over the release's base image")
 	disk := filepath.Join(d.work, "disk.qcow2")
