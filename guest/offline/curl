@@ -1,0 +1,17 @@
+#!/bin/sh
+# SPDX-License-Identifier: BSD-2-Clause
+#
+# The guest has no network. This curl answers the payload setup's downloads from
+# archive.apache.org with the same files, fetched on the host, and hands every
+# other request to the real curl. setup still checks the tarball's SHA-512.
+out="" url="" prev=""
+for a in "$@"; do
+	[ "$prev" = -o ] && out=$a
+	case $a in https://archive.apache.org/*) url=$a ;; esac
+	prev=$a
+done
+cached=/opt/demo/cache/${url##*/}
+if [ -n "$url" ] && [ -n "$out" ] && [ -f "$cached" ]; then
+	exec cp "$cached" "$out"
+fi
+exec /usr/bin/curl "$@"

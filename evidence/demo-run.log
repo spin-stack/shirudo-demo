@@ -1,0 +1,17 @@
+==> release /var/tmp/sdemo/machine/_output, kernel 7.4.0-rc4
+==> building shirudo 2a560729814a9ac0ac702bb15d39c2145522c143 in its container, against the release kernel's BTF
+==> making this run's operator key (never committed)
+==> building the signed config image and the dm-verity runtime image
+==> building the shirudo initrd for 7.4.0-rc4 with dracut, in Ubuntu 26.04's systemd
+==> building and signing CVE-2025-24813's upatch with the registry's tools/build
+==> building and signing shirudo's kernel-obs package
+==> staging what the guest gets: images, units, the packages, the payload and its downloads
+==> provisioning a fresh disk over the release's base image
+==> provision: booting (pid 2984333); console /var/tmp/sdemo/work/run/console.sock
+==> shirudo: booting (pid 2984532); console /var/tmp/sdemo/work/run/console.sock
+==> shirudo init, in the initrd and again in the root file system
+==> CVE-2025-24813: payload, load, payload, unload, payload
+==> the registry's own tools/test, as its README runs it
+==> kernel-obs: what the kernel saw
+==> stopping the machine
+wall 124.73 s
