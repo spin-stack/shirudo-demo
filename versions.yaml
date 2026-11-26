@@ -14,13 +14,15 @@
   kind: git
   source: https://github.com/shirudo-dev/shirudo
   version: main
-  pin: 2a560729814a9ac0ac702bb15d39c2145522c143
-  track: branch
+  pin: 5795f8d4a7509af2afeb331046f179300a1756a2
+  track: with spin-stack/machine@release shirudo pin
   note: >-
     the shirudo the demo builds in its own container (testing/container) against the release
     kernel's BTF, and whose genkey, gen-image, gen-runtime, gen-initrd, bpm and kernel-obs package
-    it uses. A bump is a whole run, `rm -rf work && go tool task`, since the kernel hooks the release
-    carries are this commit's.
+    it uses. It is the commit the pinned spin-machine release carries shirudo's kernel hooks from
+    (its versions.yaml's shirudo pin), so the demo tests what the release ships; `go tool task pins`
+    fails when the two differ. It moves with spin-machine, and a bump is a whole run,
+    `go tool task clean default`.
 
 - name: upatch-registry
   kind: git

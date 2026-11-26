@@ -42,6 +42,7 @@ type step struct {
 
 var steps = []step{
 	{"release", (*demo).fetchRelease},
+	{"pins", (*demo).pinsAgree},
 	{"check", (*demo).check},
 	{"shirudo", (*demo).shirudo},
 	{"keys", (*demo).keys},

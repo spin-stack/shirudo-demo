@@ -9,7 +9,7 @@ git clone https://github.com/spin-stack/shirudo-demo && cd shirudo-demo
 go tool task
 ```
 
-It downloads the [spin-machine](https://github.com/spin-stack/machine) release `versions.yaml` pins, v20261126.01, checks it, and boots it with the release's own `bin/spin-machine`: nothing of spin-machine is built. From an empty `work/`, the whole run took 247 s on this README's host (2026-11-26, 20 threads, KVM), with shirudo's build container and the initrd's Ubuntu image already built by an earlier run; a first run also builds those two images. `evidence/demo-run.log` is that run.
+It downloads the [spin-machine](https://github.com/spin-stack/machine) release `versions.yaml` pins, v20261126.01, checks it, and boots it with the release's own `bin/spin-machine`: nothing of spin-machine is built. From an empty `work/`, the whole run took 292 s on this README's host (2026-11-26, 20 threads, KVM), with shirudo's build container and the initrd's Ubuntu image already built by an earlier run; a first run also builds those two images. `evidence/demo-run.log` is that run.
 
 `Taskfile.yml` runs the steps in order. Every step checks its own result and stops on a failure. A step whose result is already there is skipped, so the run can be repeated after a fix. `go tool task <step>` runs one step and what it needs; `go tool task --list` names them. What the guest printed for each step lands in `evidence/`.
 
@@ -38,17 +38,18 @@ It downloads the [spin-machine](https://github.com/spin-stack/machine) release `
 
   The profile applies to that release's passt at that path alone. `sudo apparmor_parser -R /etc/apparmor.d/spin-machine-passt` and removing the file take it away. The demo never changes the host itself.
 
-`versions.yaml` pins the spin-machine release by sha256, the shirudo and upatch-registry commits, the Ubuntu image by digest, and Task.
+`versions.yaml` pins the spin-machine release by sha256, the shirudo and upatch-registry commits, the Ubuntu image by digest, and Task. Shirudo's pin is the commit the release carries shirudo's kernel hooks from, its own `versions.yaml`'s `shirudo` pin at the release's tag, so the demo tests the shirudo the release ships hooks for. `go tool task pins` reads that file and fails when the two differ, and CI runs it. The release does not ship shirudo itself yet (spin-stack/machine#759), so the demo builds it at that pin.
 
 ## The steps
 
 | Step | Where | What it does |
 | --- | --- | --- |
 | `release` | host | Downloads the pinned spin-machine release, checks its sha256 and Sigstore bundle, and unpacks it in `work/machine`. |
-| `check` | host | The release has swtpm, passt and `bin/spin-machine`, the release's passt can make its user namespace, `/dev/kvm` is usable, the tools are there. |
+| `pins` | host | Shirudo's pin is the one the release's `versions.yaml` names. |
+| `check` | host | `pins`, then: the release has swtpm, passt and `bin/spin-machine`, the release's passt can make its user namespace, `/dev/kvm` is usable, the tools are there. |
 | `shirudo` | container | Clones shirudo and the registry at their pins and builds shirudo (`make`, `make target shirudo-build`) against the release kernel's BTF. |
 | `keys` | container | `shirudo genkey` makes this run's ML-DSA-87 operator key in `work/keys`. It signs the upatches, the config image and the runtime image. It is never committed, and a new run makes a new one. |
-| `images` | container | The signed config image and the dm-verity runtime image, built as shirudo's [boot integration guide](https://github.com/shirudo-dev/shirudo/blob/2a560729814a9ac0ac702bb15d39c2145522c143/Documentation/operate/deploy/boot-integration.rst) builds them (`shirudo-gen-image`, `shirudo-gen-runtime`), and the initrd's bootstrap file that names the runtime image's root hash. |
+| `images` | container | The signed config image and the dm-verity runtime image, built as shirudo's [boot integration guide](https://github.com/shirudo-dev/shirudo/blob/5795f8d4a7509af2afeb331046f179300a1756a2/Documentation/operate/deploy/boot-integration.rst) builds them (`shirudo-gen-image`, `shirudo-gen-runtime`), and the initrd's bootstrap file that names the runtime image's root hash. |
 | `initrd` | container | `shirudo-gen-initrd` runs dracut with shirudo's module, then checks the result with `--check`. |
 | `packages` | container | The registry's `tools/build` builds and signs CVE-2025-24813's package. `shirudo bpm build` builds and signs `kernel-obs`. |
 | `guest` | host | `cmd/demo-guest`, built static for linux/amd64. |
