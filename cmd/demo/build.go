@@ -13,6 +13,7 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
+	"syscall"
 )
 
 // cmd runs a command with its output on ours.
@@ -36,13 +37,10 @@ func output(name string, args ...string) (string, error) {
 }
 
 func (d *demo) check() error {
-	for _, f := range []string{"bin/swtpm", "bin/passt", "bin/qemu-img", "bin/mkfs.ext4", "e2fsprogs/mke2fs.conf", "kernel/vmlinux", "image/rootfs.qcow2"} {
+	for _, f := range []string{"bin/spin-machine", "bin/swtpm", "bin/passt", "bin/qemu-img", "bin/mkfs.ext4", "e2fsprogs/mke2fs.conf", "kernel/vmlinux", "image/rootfs.qcow2"} {
 		if _, err := os.Stat(filepath.Join(d.release, f)); err != nil {
-			return fmt.Errorf("%s has no %s: it predates the TPM or the network (README, \"What you need\")", d.release, f)
+			return fmt.Errorf("%s has no %s: versions.yaml pins a release from before the TPM, the network or bin/spin-machine", d.release, f)
 		}
-	}
-	if _, err := os.Stat(d.machineCmd); err != nil {
-		return fmt.Errorf("no spin-machine at %s: set SPIN_MACHINE to the one built from the release's tag (README)", d.machineCmd)
 	}
 	for _, tool := range []string{"docker", "git"} {
 		if _, err := exec.LookPath(tool); err != nil {
@@ -54,6 +52,9 @@ func (d *demo) check() error {
 		return fmt.Errorf("/dev/kvm is not usable: %w", err)
 	}
 	kvm.Close()
+	if err := d.passtSandboxes(); err != nil {
+		return err
+	}
 	kver, err := d.kernelRelease()
 	if err != nil {
 		return err
@@ -348,4 +349,45 @@ func copyFile(from, to string) error {
 		return err
 	}
 	return os.WriteFile(to, b, fi.Mode().Perm())
+}
+
+// passtSandboxes runs the release's passt as spin-machine boot --net runs
+// it, on a socket whose other end is already closed: it makes its user
+// namespace and sandbox, reads the end of the socket and exits 0, or dies
+// saying what refused it. Where AppArmor refuses an unprivileged process a
+// user namespace, passt's own profile lets it make one; installing it takes
+// root, so this prints the commands and the reader runs them.
+func (d *demo) passtSandboxes() error {
+	fds, err := syscall.Socketpair(syscall.AF_UNIX, syscall.SOCK_STREAM|syscall.SOCK_CLOEXEC, 0)
+	if err != nil {
+		return err
+	}
+	end := os.NewFile(uintptr(fds[1]), "passt")
+	defer end.Close()
+	if err := syscall.Close(fds[0]); err != nil {
+		return err
+	}
+	passt := exec.Command(filepath.Join(d.release, "bin/passt"), "--foreground", "--fd", "3", "--ipv4-only")
+	passt.ExtraFiles = []*os.File{end}
+	said, err := passt.CombinedOutput()
+	if err == nil {
+		return nil
+	}
+	var host []string
+	for _, k := range []string{"kernel/apparmor_restrict_unprivileged_userns", "kernel/apparmor_restrict_unprivileged_unconfined", "user/max_user_namespaces"} {
+		v, _ := os.ReadFile("/proc/sys/" + k)
+		host = append(host, k+"="+strings.TrimSpace(string(v)))
+	}
+	return fmt.Errorf(`passt cannot make its user namespace on this host, so boot --net would give the guest no network: %w
+passt said: %s
+this host: %s
+Where AppArmor restricts unprivileged user namespaces, install passt's own profile once, as root
+(spin-stack/machine docs/machine.md, "A network without root"):
+
+  %s apparmor --release %s | sudo tee /etc/apparmor.d/spin-machine-passt >/dev/null
+  sudo apparmor_parser -r /etc/apparmor.d/spin-machine-passt
+
+It applies to this release's passt at this path alone; 'sudo apparmor_parser -R /etc/apparmor.d/spin-machine-passt'
+and removing the file take it away`,
+		err, strings.TrimSpace(string(said)), strings.Join(host, " "), d.machineCmd, d.release)
 }

@@ -25,10 +25,14 @@ tasks:
       - task: obs
       - task: stop
 
+  release:
+    desc: Download the spin-machine release versions.yaml pins, check its sha256 and its Sigstore bundle, and unpack it in work/machine.
+    cmds:
+      - '{{.DEMO}} release'
+
   check:
-    desc: The release tree has a TPM and passt, /dev/kvm is usable, docker and git are installed.
-    requires:
-      vars: [MACHINE_RELEASE]
+    desc: The release has its TPM, passt and spin-machine, passt can make its user namespace, /dev/kvm is usable, docker and git are installed.
+    deps: [release]
     cmds:
       - '{{.DEMO}} check'
 

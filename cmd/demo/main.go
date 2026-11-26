@@ -4,8 +4,6 @@
 // order and skips the ones whose results are already there; this program
 // does a step whenever it is asked to. Its environment:
 //
-//	MACHINE_RELEASE  an unpacked spin-machine release tree (README), required
-//	SPIN_MACHINE     the spin-machine command (default: MACHINE_RELEASE/bin/spin-machine)
 //	WORK             where everything is built and kept (default: ./work)
 //	EVIDENCE         where what the guest printed is kept (default: ./evidence)
 //	MEMORY_MB, CPUS  the guest's size (default: 4096, 4)
@@ -20,8 +18,8 @@ import (
 )
 
 type demo struct {
-	release    string // MACHINE_RELEASE
-	machineCmd string // SPIN_MACHINE
+	release    string // the unpacked release tree versions.yaml pins (release.go)
+	machineCmd string // its bin/spin-machine
 	memoryMB   int
 	cpus       int
 
@@ -43,6 +41,7 @@ type step struct {
 }
 
 var steps = []step{
+	{"release", (*demo).fetchRelease},
 	{"check", (*demo).check},
 	{"shirudo", (*demo).shirudo},
 	{"keys", (*demo).keys},
@@ -113,15 +112,6 @@ func load() (*demo, error) {
 	if d.pins, err = loadPins(here); err != nil {
 		return nil, err
 	}
-	if os.Getenv("MACHINE_RELEASE") == "" {
-		return nil, fmt.Errorf("set MACHINE_RELEASE to an unpacked spin-machine release tree (README)")
-	}
-	if d.release, err = abs("MACHINE_RELEASE", ""); err != nil {
-		return nil, err
-	}
-	if d.machineCmd, err = abs("SPIN_MACHINE", filepath.Join(d.release, "bin/spin-machine")); err != nil {
-		return nil, err
-	}
 	if d.work, err = abs("WORK", "work"); err != nil {
 		return nil, err
 	}
@@ -134,6 +124,8 @@ func load() (*demo, error) {
 	if d.cpus, err = num("CPUS", 4); err != nil {
 		return nil, err
 	}
+	d.release = filepath.Join(d.work, "machine", releaseName(d.pins.machine), "usr/share/spin-stack")
+	d.machineCmd = filepath.Join(d.release, "bin/spin-machine")
 	d.build = filepath.Join(d.work, "src/shirudo")
 	d.registry = filepath.Join(d.work, "src/upatch-registry")
 	d.keyDir = filepath.Join(d.work, "keys")
