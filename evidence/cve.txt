@@ -169,29 +169,29 @@ Tomcat started.
 TOMCAT_URL=http://127.0.0.1:8080
 TOMCAT_APP_WORK=/opt/upatch-payload/cve-2025-24813/apache-tomcat-9.0.98/work/Catalina/localhost/ROOT
 ## payload, before the upatch
-reached: the partial PUT wrote .upatch-probe-3f5d368423b6.session in the work directory (HTTP 409); removed it
+reached: the partial PUT wrote .upatch-probe-a9ecd2b42b13.session in the work directory (HTTP 409); removed it
 payload exit 0
 ## shirudo upatch load cve-2025-24813-tomcat-block.upatch
-upatch load: signed loader accepted, keyring 1053397742, 226 instructions
+upatch load: signed loader accepted, keyring 823016468, 226 instructions
 upatch load: loader ran, 1 maps and 2 programs
 upatch load: program 0 (lsm) pinned at /run/shirudo/bpffs/upatches/cve-2025-24813-tomcat-block/link_0
 upatch load: program 1 (lsm) pinned at /run/shirudo/bpffs/upatches/cve-2025-24813-tomcat-block/link_1
 upatch load: map 0 (refused) pinned at /run/shirudo/bpffs/upatches/cve-2025-24813-tomcat-block/maps/refused
-upatch load: cve-2025-24813-tomcat-block loaded, 2 programs, keyring 1053397742
-upatch load: cve-2025-24813-tomcat-block measured, register 618382f3a3d57cd530a3232218e94760e6c97ae23556d64cabd77ce55172a342
+upatch load: cve-2025-24813-tomcat-block loaded, 2 programs, keyring 823016468
+upatch load: cve-2025-24813-tomcat-block measured, register f2166e9b4bca6b2f8be28234ead3ec480f8e6c56db1ecd31a24d84a06bf1076e
 ## shirudo upatch list
 Archived upatches (/var/lib/shirudo/upatches):
   NAME                         LOADED  TYPE    KIND  PAYLOAD
-  cve-2025-24813-tomcat-block  yes     load    bpf   75df267fbcbf3008..
+  cve-2025-24813-tomcat-block  yes     load    bpf   3275c8446eccf431..
 ## payload, upatch loaded
 blocked: the partial PUT failed with HTTP 500 and wrote no file
 payload exit 10
 ## shirudo upatch unload cve-2025-24813-tomcat-block.unload.upatch
-upatch unload: signed loader accepted, keyring 1053397742, 165 instructions
+upatch unload: signed loader accepted, keyring 823016468, 165 instructions
 upatch unload: cve-2025-24813-tomcat-block carries the directive's payload
-upatch unload: cve-2025-24813-tomcat-block measured, register 8565e1b92638f156fdc94ef48b7d8c3dcb51480e72f7991a90fee05e9ac3bb22
+upatch unload: cve-2025-24813-tomcat-block measured, register 6b067784019a4187a224f20da015a4501a47db6427a1dc8d6510764aa7f148b5
 upatch unload: cve-2025-24813-tomcat-block detached and unpinned
 ## payload, after the unload
-reached: the partial PUT wrote .upatch-probe-baad3a7fbca3.session in the work directory (HTTP 409); removed it
+reached: the partial PUT wrote .upatch-probe-c6c21091b302.session in the work directory (HTTP 409); removed it
 payload exit 0
 ## result: before=0 loaded=10 after=0

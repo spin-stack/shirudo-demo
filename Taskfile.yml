@@ -140,6 +140,15 @@ tasks:
       - task: stop
       - rm -rf '{{.WORK}}' .task
 
+  record:
+    desc: Record the README's run against the latest release into evidence/demo-run.cast (asciinema), from a new DIR (default /var/tmp/shirudo-run).
+    vars:
+      DIR: '{{.DIR | default "/var/tmp/shirudo-run"}}'
+    cmds:
+      - if [ -x '{{.DIR}}/shirudo-demo/demo' ]; then cd '{{.DIR}}/shirudo-demo' && ./demo stop; fi
+      - rm -rf '{{.DIR}}'
+      - bash scripts/record.sh '{{.DIR}}'
+
   test:
     desc: gofmt, vet and test the demo's Go, and build the release's binaries.
     cmds:

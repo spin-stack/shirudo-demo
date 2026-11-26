@@ -138,6 +138,15 @@ tpm.tcti = device:/dev/tpmrm0
 	if err := os.RemoveAll(tmp); err != nil {
 		return err
 	}
+	// The host made the disk's root its user's (mkfs -E root_owner): given to
+	// them, the host's debugfs rdump can set the owner it reads back.
+	var st unix.Stat_t
+	if err := unix.Stat(stage, &st); err != nil {
+		return err
+	}
+	if err := run(nil, "chown", "-R", fmt.Sprintf("%d:%d", st.Uid, st.Gid), opOut); err != nil {
+		return err
+	}
 	unix.Sync()
 	return nil
 }

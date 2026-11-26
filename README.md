@@ -42,8 +42,8 @@ From a checkout, `go tool task` runs the same steps with Go, skipping those whos
 - A host where passt can make its user namespace. Where AppArmor refuses it, `./demo check` stops and prints the two commands that install passt's own profile, once, as root:
 
   ```sh
-  work/machine/spin-machine-v20261126.03-linux-x86_64/usr/share/spin-stack/bin/spin-machine apparmor \
-    --release "$PWD/work/machine/spin-machine-v20261126.03-linux-x86_64/usr/share/spin-stack" |
+  work/machine/spin-machine-v20261126.04-linux-x86_64/usr/share/spin-stack/bin/spin-machine apparmor \
+    --release "$PWD/work/machine/spin-machine-v20261126.04-linux-x86_64/usr/share/spin-stack" |
     sudo tee /etc/apparmor.d/spin-machine-passt >/dev/null
   sudo apparmor_parser -r /etc/apparmor.d/spin-machine-passt
   ```

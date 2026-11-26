@@ -1,35 +1,33 @@
-$ go tool task default   # from a checkout, empty work/
-task: [bin] go build -trimpath -ldflags='-s -w' -o '/home/aledbf/Trabajo/github/spin-stack/shirudo-demo/work/bin/' ./cmd/demo ./cmd/demo-guest
-task: [check] /home/aledbf/Trabajo/github/spin-stack/shirudo-demo/work/bin/demo check
-==> spin-machine v20261126.03: downloading https://github.com/spin-stack/machine/releases/download/v20261126.03/spin-machine-v20261126.03-linux-x86_64.tar.gz
-==> spin-machine v20261126.03: sha256 1d20bf462bc63198cb8653553eb8df1346a6e337cb0054daa3edd1b951454303, as pinned
-==> spin-machine v20261126.03: signed by https://github.com/spin-stack/machine/.github/workflows/release.yml@refs/heads/main
-==> shirudo-operator v20261126.03: downloading https://github.com/spin-stack/machine/releases/download/v20261126.03/spin-machine-v20261126.03-linux-x86_64.shirudo-operator.tar.gz
-==> shirudo-operator v20261126.03: sha256 c6bdf331fab5d1b2922db02cb6601aba477d932aca72164ba13f1c654670c7ee, as pinned
-==> shirudo-operator v20261126.03: signed by https://github.com/spin-stack/machine/.github/workflows/release.yml@refs/heads/main
-==> release /home/aledbf/Trabajo/github/spin-stack/shirudo-demo/work/machine/spin-machine-v20261126.03-linux-x86_64/usr/share/spin-stack, kernel 7.4.0-rc4
-task: [operator] /home/aledbf/Trabajo/github/spin-stack/shirudo-demo/work/bin/demo operator
-==> the operator's disk: the release's shirudo and operator half, the registry, demo-guest
-==> operator: booting (pid 389170); console /home/aledbf/Trabajo/github/spin-stack/shirudo-demo/work/run/operator.console.sock
-attached /home/aledbf/Trabajo/github/spin-stack/shirudo-demo/work/op.img as op
+$ ./demo run   # the release tarball's layout, demo and demo-guest built from this commit, empty work/
+[1m==> spin-machine v20261126.03: downloading https://github.com/spin-stack/machine/releases/download/v20261126.03/spin-machine-v20261126.03-linux-x86_64.tar.gz[0m
+[1m==> spin-machine v20261126.03: sha256 1d20bf462bc63198cb8653553eb8df1346a6e337cb0054daa3edd1b951454303, as pinned[0m
+[1m==> spin-machine v20261126.03: signed by https://github.com/spin-stack/machine/.github/workflows/release.yml@refs/heads/main[0m
+[1m==> shirudo-operator v20261126.03: downloading https://github.com/spin-stack/machine/releases/download/v20261126.03/spin-machine-v20261126.03-linux-x86_64.shirudo-operator.tar.gz[0m
+[1m==> shirudo-operator v20261126.03: sha256 c6bdf331fab5d1b2922db02cb6601aba477d932aca72164ba13f1c654670c7ee, as pinned[0m
+[1m==> shirudo-operator v20261126.03: signed by https://github.com/spin-stack/machine/.github/workflows/release.yml@refs/heads/main[0m
+[1m==> release v20261126.03: unpacked in /var/tmp/shirudo-run/shirudo-demo/work/machine/spin-machine-v20261126.03-linux-x86_64[0m
+[1m==> release /var/tmp/shirudo-run/shirudo-demo/work/machine/spin-machine-v20261126.03-linux-x86_64/usr/share/spin-stack[0m
+[1m==> the operator's disk: the release's shirudo and operator half, the registry, demo-guest[0m
+[1m==> operator: booting (pid 780721); console /var/tmp/shirudo-run/shirudo-demo/work/run/operator.console.sock[0m
+attached /var/tmp/shirudo-run/shirudo-demo/work/op.img as op
 ## shirudo-operator/install, the release's, offline
 Ign:1 file:/opt/demo/spin-stack/shirudo-operator/debs ./ InRelease
 Ign:2 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Release
 Get:3 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Packages
-Ign:4 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en_US
-Ign:5 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en
-Ign:4 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en_US
-Ign:5 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en
-Ign:4 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en_US
-Ign:5 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en
-Ign:4 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en_US
-Ign:5 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en
-Ign:4 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en_US
-Ign:5 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en
-Ign:4 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en_US
-Ign:5 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en
-Ign:4 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en_US
-Ign:5 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en
+Ign:4 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en
+Ign:5 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en_US
+Ign:4 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en
+Ign:5 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en_US
+Ign:4 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en
+Ign:5 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en_US
+Ign:4 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en
+Ign:5 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en_US
+Ign:4 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en
+Ign:5 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en_US
+Ign:4 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en
+Ign:5 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en_US
+Ign:4 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en
+Ign:5 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en_US
 Reading package lists...
 Reading package lists...
 Building dependency tree...
@@ -217,23 +215,24 @@ version-id: 112fb3e2caeec5b91ae22ca1032358b1dce79811795d4def6de9f4ed0cdd052f
 wrote /opt/demo/out/keys/signing_key.pem (ML-DSA-87, mode 0600)
 wrote /opt/demo/out/keys/cert.der (X.509 self-signed, no expiration date)
 genkey: created shirudo ML-DSA-87 signing material at /opt/demo/out/keys
-16b4dd268d0a29a46a41b1a370275c5c6b0c6d0b7d30478fc0c9a707d91eb898
+f2b7e5dda85185bdf33f0b90565a3950fa69e652cfa650198c29a11c41e72db6
 ## the signed config image and the dm-verity runtime image
-d0122e7c04eff5f180f098c65ce2faf4c6c83bdeb922104710bf84713404599e
-d0122e7c04eff5f180f098c65ce2faf4c6c83bdeb922104710bf84713404599e
-361b38f33a547cf9711c6fba9a535127a27b92641d95605443be68a51adac1aa
+5f6cc3b504bd26810bece4fa4d30aa71d5db798cb2877e0f2df232af555c548a
+5f6cc3b504bd26810bece4fa4d30aa71d5db798cb2877e0f2df232af555c548a
+bad9f7d255e3e9d5180a2fa9dee4a8ba4a9a5f580b39361bd333ad0b3a3b8880
 Runtime invocation (after the authenticated image is mounted):
 /run/shirudo/runtime/usr/bin/shirudo init
 ## CVE-2025-24813's package, from the registry's tools/build
 1 entries checked, 0 problems
-wrote /opt/demo/tmp/shirudo-bpm-build.ubxwB2/0.upatch (insns=1808 sig=4853 data=43000 sections=2 maps=1 progs=2 decoders=0 name=cve-2025-24813-tomcat-block)
-wrote /opt/demo/tmp/shirudo-bpm-build.ubxwB2/0.unload.upatch (insns=1320 sig=4853 data=2808 sections=2 maps=1 progs=1 decoders=0 name=cve-2025-24813-tomcat-block UNLOAD)
+wrote /opt/demo/tmp/shirudo-bpm-build.ytrRgq/0.upatch (insns=1808 sig=4853 data=43000 sections=2 maps=1 progs=2 decoders=0 name=cve-2025-24813-tomcat-block)
+wrote /opt/demo/tmp/shirudo-bpm-build.ytrRgq/0.unload.upatch (insns=1320 sig=4853 data=2808 sections=2 maps=1 progs=1 decoders=0 name=cve-2025-24813-tomcat-block UNLOAD)
 /opt/demo/registry/build/packages/cve-2025-24813-1.0.0.bee
+/opt/demo/out/packages/cve-2025-24813-1.0.0.bee
 ## kernel-obs's package, the release's, from shirudo bpm build
-wrote /opt/demo/tmp/shirudo-bpm-build.gNDnYD/0.upatch (insns=40024 sig=4853 data=781632 sections=3 maps=19 progs=35 decoders=9 name=kernel-obs)
-wrote /opt/demo/tmp/shirudo-bpm-build.gNDnYD/0.unload.upatch (insns=1320 sig=4853 data=2808 sections=2 maps=1 progs=1 decoders=0 name=kernel-obs UNLOAD)
-wrote /opt/demo/tmp/shirudo-bpm-build.gNDnYD/1.upatch (insns=1184 sig=4853 data=3216 sections=2 maps=1 progs=1 decoders=0 name=userns-unshare-counter)
-wrote /opt/demo/tmp/shirudo-bpm-build.gNDnYD/1.unload.upatch (insns=1320 sig=4853 data=2808 sections=2 maps=1 progs=1 decoders=0 name=userns-unshare-counter UNLOAD)
+wrote /opt/demo/tmp/shirudo-bpm-build.8SRlny/0.upatch (insns=40024 sig=4853 data=781632 sections=3 maps=19 progs=35 decoders=9 name=kernel-obs)
+wrote /opt/demo/tmp/shirudo-bpm-build.8SRlny/0.unload.upatch (insns=1320 sig=4853 data=2808 sections=2 maps=1 progs=1 decoders=0 name=kernel-obs UNLOAD)
+wrote /opt/demo/tmp/shirudo-bpm-build.8SRlny/1.upatch (insns=1184 sig=4853 data=3216 sections=2 maps=1 progs=1 decoders=0 name=userns-unshare-counter)
+wrote /opt/demo/tmp/shirudo-bpm-build.8SRlny/1.unload.upatch (insns=1320 sig=4853 data=2808 sections=2 maps=1 progs=1 decoders=0 name=userns-unshare-counter UNLOAD)
 /opt/demo/out/packages/kernel-obs-1.0.0.bee
 ## the units and the systemd initrd
 shirudo-gen-initrd: running dracut for 7.4.0-rc4
@@ -243,51 +242,49 @@ shirudo-gen-initrd: the kernel command line must carry bpf.keyring_unsealed=1 fo
 shirudo-gen-initrd: the kernel command line must carry dm_verity.keyring_unsealed=1 for initrd key enrollment; this boot does not
 shirudo-gen-initrd: /opt/demo/out/initrd.img holds shirudo, the certificate and shirudo-initrd.service
 ## what the operator made
--rw-r--r--     194860 packages/kernel-obs-1.0.0.bee
--rw-r--r--      39105 packages/cve-2025-24813-1.0.0.bee
+-rw-r--r--       1697 shirudo-initrd.service
 -rw-r--r--       1261 shirudo.service
--rw-------   26706899 initrd.img
--rw-r--r--         64 images/initial.roothash
+-rw-------        133 uki-bootstrap.conf
+-rw-r--r--        170 runtime-service.conf
+-rw-r--r--      39112 packages/cve-2025-24813-1.0.0.bee
+-rw-r--r--     194866 packages/kernel-obs-1.0.0.bee
+-rw-------       7457 keys/cert.der
+-rw-------       6774 keys/signing_key.pem
+-rw-r--r--    1048576 images/initial.img
+-rw-r--r--         64 images/runtime.roothash
 -rw-r--r--       4853 images/initial.p7s
 -rw-r--r--       4853 images/runtime.p7s
--rw-r--r--         64 images/runtime.roothash
--rw-r--r--      16384 images/initial.verity
--rw-r--r--    1048576 images/initial.img
 -rw-r--r--     131072 images/runtime.verity
 -rw-r--r--   15728640 images/runtime.img
--rw-r--r--       1697 shirudo-initrd.service
--rw-r--r--        170 runtime-service.conf
--rw-------        133 uki-bootstrap.conf
--rw-------       6774 keys/signing_key.pem
--rw-------       7457 keys/cert.der
+-rw-r--r--         64 images/initial.roothash
+-rw-r--r--      16384 images/initial.verity
+-rw-------   26706908 initrd.img
 debugfs 1.47.4 (6-Mar-2025)
-dump_file: Operation not permitted while changing ownership of /home/aledbf/Trabajo/github/spin-stack/shirudo-demo/work/out/keys/signing_key.pem
-dump_file: Operation not permitted while changing ownership of /home/aledbf/Trabajo/github/spin-stack/shirudo-demo/work/out/keys/cert.der
-rdump: Operation not permitted while changing ownership of /home/aledbf/Trabajo/github/spin-stack/shirudo-demo/work/out/keys
-dump_file: Operation not permitted while changing ownership of /home/aledbf/Trabajo/github/spin-stack/shirudo-demo/work/out/images/initial.img
-dump_file: Operation not permitted while changing ownership of /home/aledbf/Trabajo/github/spin-stack/shirudo-demo/work/out/images/initial.verity
-dump_file: Operation not permitted while changing ownership of /home/aledbf/Trabajo/github/spin-stack/shirudo-demo/work/out/images/initial.roothash
-dump_file: Operation not permitted while changing ownership of /home/aledbf/Trabajo/github/spin-stack/shirudo-demo/work/out/images/initial.p7s
-dump_file: Operation not permitted while changing ownership of /home/aledbf/Trabajo/github/spin-stack/shirudo-demo/work/out/images/runtime.img
-dump_file: Operation not permitted while changing ownership of /home/aledbf/Trabajo/github/spin-stack/shirudo-demo/work/out/images/runtime.verity
-dump_file: Operation not permitted while changing ownership of /home/aledbf/Trabajo/github/spin-stack/shirudo-demo/work/out/images/runtime.roothash
-dump_file: Operation not permitted while changing ownership of /home/aledbf/Trabajo/github/spin-stack/shirudo-demo/work/out/images/runtime.p7s
-rdump: Operation not permitted while changing ownership of /home/aledbf/Trabajo/github/spin-stack/shirudo-demo/work/out/images
-dump_file: Operation not permitted while changing ownership of /home/aledbf/Trabajo/github/spin-stack/shirudo-demo/work/out/packages/cve-2025-24813-1.0.0.bee
-dump_file: Operation not permitted while changing ownership of /home/aledbf/Trabajo/github/spin-stack/shirudo-demo/work/out/packages/kernel-obs-1.0.0.bee
-rdump: Operation not permitted while changing ownership of /home/aledbf/Trabajo/github/spin-stack/shirudo-demo/work/out/packages
-dump_file: Operation not permitted while changing ownership of /home/aledbf/Trabajo/github/spin-stack/shirudo-demo/work/out/runtime-service.conf
-dump_file: Operation not permitted while changing ownership of /home/aledbf/Trabajo/github/spin-stack/shirudo-demo/work/out/uki-bootstrap.conf
-dump_file: Operation not permitted while changing ownership of /home/aledbf/Trabajo/github/spin-stack/shirudo-demo/work/out/shirudo.service
-dump_file: Operation not permitted while changing ownership of /home/aledbf/Trabajo/github/spin-stack/shirudo-demo/work/out/shirudo-initrd.service
-dump_file: Operation not permitted while changing ownership of /home/aledbf/Trabajo/github/spin-stack/shirudo-demo/work/out/initrd.img
-rdump: Operation not permitted while changing ownership of /home/aledbf/Trabajo/github/spin-stack/shirudo-demo/work/out
-task: [stage] /home/aledbf/Trabajo/github/spin-stack/shirudo-demo/work/bin/demo stage
-==> staging what the guest gets
-task: [provision] /home/aledbf/Trabajo/github/spin-stack/shirudo-demo/work/bin/demo provision
-==> provisioning a fresh disk over the release's base image
-==> provision: booting (pid 398605); console /home/aledbf/Trabajo/github/spin-stack/shirudo-demo/work/run/provision.console.sock
-attached /home/aledbf/Trabajo/github/spin-stack/shirudo-demo/work/out/stage.img as stage
+dump_file: Operation not permitted while changing ownership of /var/tmp/shirudo-run/shirudo-demo/work/out/keys/signing_key.pem
+dump_file: Operation not permitted while changing ownership of /var/tmp/shirudo-run/shirudo-demo/work/out/keys/cert.der
+rdump: Operation not permitted while changing ownership of /var/tmp/shirudo-run/shirudo-demo/work/out/keys
+dump_file: Operation not permitted while changing ownership of /var/tmp/shirudo-run/shirudo-demo/work/out/images/initial.img
+dump_file: Operation not permitted while changing ownership of /var/tmp/shirudo-run/shirudo-demo/work/out/images/initial.verity
+dump_file: Operation not permitted while changing ownership of /var/tmp/shirudo-run/shirudo-demo/work/out/images/initial.roothash
+dump_file: Operation not permitted while changing ownership of /var/tmp/shirudo-run/shirudo-demo/work/out/images/initial.p7s
+dump_file: Operation not permitted while changing ownership of /var/tmp/shirudo-run/shirudo-demo/work/out/images/runtime.img
+dump_file: Operation not permitted while changing ownership of /var/tmp/shirudo-run/shirudo-demo/work/out/images/runtime.verity
+dump_file: Operation not permitted while changing ownership of /var/tmp/shirudo-run/shirudo-demo/work/out/images/runtime.roothash
+dump_file: Operation not permitted while changing ownership of /var/tmp/shirudo-run/shirudo-demo/work/out/images/runtime.p7s
+rdump: Operation not permitted while changing ownership of /var/tmp/shirudo-run/shirudo-demo/work/out/images
+dump_file: Operation not permitted while changing ownership of /var/tmp/shirudo-run/shirudo-demo/work/out/packages/cve-2025-24813-1.0.0.bee
+dump_file: Operation not permitted while changing ownership of /var/tmp/shirudo-run/shirudo-demo/work/out/packages/kernel-obs-1.0.0.bee
+rdump: Operation not permitted while changing ownership of /var/tmp/shirudo-run/shirudo-demo/work/out/packages
+dump_file: Operation not permitted while changing ownership of /var/tmp/shirudo-run/shirudo-demo/work/out/runtime-service.conf
+dump_file: Operation not permitted while changing ownership of /var/tmp/shirudo-run/shirudo-demo/work/out/uki-bootstrap.conf
+dump_file: Operation not permitted while changing ownership of /var/tmp/shirudo-run/shirudo-demo/work/out/shirudo.service
+dump_file: Operation not permitted while changing ownership of /var/tmp/shirudo-run/shirudo-demo/work/out/shirudo-initrd.service
+dump_file: Operation not permitted while changing ownership of /var/tmp/shirudo-run/shirudo-demo/work/out/initrd.img
+rdump: Operation not permitted while changing ownership of /var/tmp/shirudo-run/shirudo-demo/work/out
+[1m==> staging what the guest gets[0m
+[1m==> provisioning a fresh disk over the release's base image[0m
+[1m==> provision: booting (pid 786772); console /var/tmp/shirudo-run/shirudo-demo/work/run/provision.console.sock[0m
+attached /var/tmp/shirudo-run/shirudo-demo/work/out/stage.img as stage
 ## grow / to the disk
 /: 8001 MiB, 7108 MiB free
 ## shirudo's images, certificate, binary and units
@@ -306,24 +303,24 @@ Created symlink '/etc/systemd/system/sysinit.target.wants/shirudo.service' → '
 ## apt-get install python3
 Get:1 https://download.docker.com/linux/ubuntu resolute InRelease [32.5 kB]
 Get:2 https://download.docker.com/linux/ubuntu resolute/stable amd64 Packages [35.5 kB]
-Get:3 http://archive.ubuntu.com/ubuntu resolute InRelease [136 kB]
-Get:4 http://security.ubuntu.com/ubuntu resolute-security InRelease [137 kB]
-Get:5 http://archive.ubuntu.com/ubuntu resolute-updates InRelease [137 kB]
-Get:6 http://security.ubuntu.com/ubuntu resolute-security/universe Sources [66.1 kB]
-Get:7 http://security.ubuntu.com/ubuntu resolute-security/restricted Sources [27.1 kB]
-Get:8 http://security.ubuntu.com/ubuntu resolute-security/multiverse Sources [11.3 kB]
-Get:9 http://security.ubuntu.com/ubuntu resolute-security/main Sources [219 kB]
-Get:10 http://archive.ubuntu.com/ubuntu resolute/restricted Sources [18.6 kB]
-Get:11 http://archive.ubuntu.com/ubuntu resolute/main Sources [1,002 kB]
+Get:3 http://security.ubuntu.com/ubuntu resolute-security InRelease [137 kB]
+Get:4 http://archive.ubuntu.com/ubuntu resolute InRelease [136 kB]
+Get:5 http://security.ubuntu.com/ubuntu resolute-security/multiverse Sources [11.3 kB]
+Get:6 http://archive.ubuntu.com/ubuntu resolute-updates InRelease [137 kB]
+Get:7 http://security.ubuntu.com/ubuntu resolute-security/main Sources [219 kB]
+Get:8 http://archive.ubuntu.com/ubuntu resolute/restricted Sources [18.6 kB]
+Get:9 http://security.ubuntu.com/ubuntu resolute-security/universe Sources [66.1 kB]
+Get:10 http://archive.ubuntu.com/ubuntu resolute/universe Sources [13.4 MB]
+Get:11 http://security.ubuntu.com/ubuntu resolute-security/restricted Sources [27.1 kB]
 Get:12 http://security.ubuntu.com/ubuntu resolute-security/main amd64 Packages [764 kB]
-Get:13 http://archive.ubuntu.com/ubuntu resolute/universe Sources [13.4 MB]
-Get:14 http://security.ubuntu.com/ubuntu resolute-security/main Translation-en [165 kB]
-Get:15 http://security.ubuntu.com/ubuntu resolute-security/restricted amd64 Packages [615 kB]
-Get:16 http://security.ubuntu.com/ubuntu resolute-security/restricted Translation-en [128 kB]
-Get:17 http://security.ubuntu.com/ubuntu resolute-security/universe amd64 Packages [228 kB]
-Get:18 http://security.ubuntu.com/ubuntu resolute-security/universe Translation-en [74.4 kB]
-Get:19 http://security.ubuntu.com/ubuntu resolute-security/multiverse amd64 Packages [20.0 kB]
-Get:20 http://security.ubuntu.com/ubuntu resolute-security/multiverse Translation-en [3,728 B]
+Get:13 http://security.ubuntu.com/ubuntu resolute-security/main Translation-en [165 kB]
+Get:14 http://security.ubuntu.com/ubuntu resolute-security/restricted amd64 Packages [615 kB]
+Get:15 http://security.ubuntu.com/ubuntu resolute-security/restricted Translation-en [128 kB]
+Get:16 http://security.ubuntu.com/ubuntu resolute-security/universe amd64 Packages [228 kB]
+Get:17 http://security.ubuntu.com/ubuntu resolute-security/universe Translation-en [74.4 kB]
+Get:18 http://security.ubuntu.com/ubuntu resolute-security/multiverse amd64 Packages [20.0 kB]
+Get:19 http://security.ubuntu.com/ubuntu resolute-security/multiverse Translation-en [3,728 B]
+Get:20 http://archive.ubuntu.com/ubuntu resolute/main Sources [1,002 kB]
 Get:21 http://archive.ubuntu.com/ubuntu resolute/multiverse Sources [215 kB]
 Get:22 http://archive.ubuntu.com/ubuntu resolute/main amd64 Packages [1,480 kB]
 Get:23 http://archive.ubuntu.com/ubuntu resolute/main Translation-en [524 kB]
@@ -333,9 +330,9 @@ Get:26 http://archive.ubuntu.com/ubuntu resolute/universe amd64 Packages [16.0 M
 Get:27 http://archive.ubuntu.com/ubuntu resolute/universe Translation-en [6,329 kB]
 Get:28 http://archive.ubuntu.com/ubuntu resolute/multiverse amd64 Packages [290 kB]
 Get:29 http://archive.ubuntu.com/ubuntu resolute/multiverse Translation-en [127 kB]
-Get:30 http://archive.ubuntu.com/ubuntu resolute-updates/universe Sources [131 kB]
-Get:31 http://archive.ubuntu.com/ubuntu resolute-updates/main Sources [373 kB]
-Get:32 http://archive.ubuntu.com/ubuntu resolute-updates/restricted Sources [28.3 kB]
+Get:30 http://archive.ubuntu.com/ubuntu resolute-updates/restricted Sources [28.3 kB]
+Get:31 http://archive.ubuntu.com/ubuntu resolute-updates/universe Sources [131 kB]
+Get:32 http://archive.ubuntu.com/ubuntu resolute-updates/main Sources [373 kB]
 Get:33 http://archive.ubuntu.com/ubuntu resolute-updates/multiverse Sources [13.2 kB]
 Get:34 http://archive.ubuntu.com/ubuntu resolute-updates/main amd64 Packages [917 kB]
 Get:35 http://archive.ubuntu.com/ubuntu resolute-updates/main Translation-en [203 kB]
@@ -345,7 +342,7 @@ Get:38 http://archive.ubuntu.com/ubuntu resolute-updates/universe amd64 Packages
 Get:39 http://archive.ubuntu.com/ubuntu resolute-updates/universe Translation-en [126 kB]
 Get:40 http://archive.ubuntu.com/ubuntu resolute-updates/multiverse amd64 Packages [21.0 kB]
 Get:41 http://archive.ubuntu.com/ubuntu resolute-updates/multiverse Translation-en [4,168 B]
-Fetched 45.3 MB in 5s (8,934 kB/s)
+Fetched 45.3 MB in 7s (6,079 kB/s)
 Reading package lists...
 Reading package lists...
 Building dependency tree...
@@ -371,7 +368,7 @@ Get:5 http://archive.ubuntu.com/ubuntu resolute-updates/main amd64 libpython3.14
 Get:6 http://archive.ubuntu.com/ubuntu resolute-updates/main amd64 python3.14 amd64 3.14.4-1ubuntu0.2 [830 kB]
 Get:7 http://archive.ubuntu.com/ubuntu resolute/main amd64 libpython3-stdlib amd64 3.14.3-0ubuntu2 [8,476 B]
 Get:8 http://archive.ubuntu.com/ubuntu resolute/main amd64 python3 amd64 3.14.3-0ubuntu2 [22.9 kB]
-Fetched 6,829 kB in 9s (803 kB/s)
+Fetched 6,829 kB in 3s (2,203 kB/s)
 Selecting previously unselected package libpython3.14-minimal:amd64.
 (Reading database… 13223 files and directories currently installed.)
 Preparing to unpack …/libpython3.14-minimal_3.14.4-1ubuntu0.2_amd64.deb…
@@ -409,11 +406,9 @@ Setting up libpython3-stdlib:amd64 (3.14.3-0ubuntu2)…
 Setting up python3 (3.14.3-0ubuntu2)…
 Processing triggers for systemd (262.1-1ubuntu1+spin1)…
 provisioned
-task: [boot] /home/aledbf/Trabajo/github/spin-stack/shirudo-demo/work/bin/demo boot
-==> shirudo: booting (pid 408643); console /home/aledbf/Trabajo/github/spin-stack/shirudo-demo/work/run/shirudo.console.sock
-attached /home/aledbf/Trabajo/github/spin-stack/shirudo-demo/work/out/stage.img as stage
-task: [init] /home/aledbf/Trabajo/github/spin-stack/shirudo-demo/work/bin/demo init
-==> shirudo init, in the initrd and again in the root file system
+[1m==> shirudo: booting (pid 797342); console /var/tmp/shirudo-run/shirudo-demo/work/run/shirudo.console.sock[0m
+attached /var/tmp/shirudo-run/shirudo-demo/work/out/stage.img as stage
+[1m==> shirudo init, in the initrd and again in the root file system[0m
 ## kernel
 7.4.0-rc4
 ## /proc/cmdline
@@ -438,7 +433,7 @@ lockdown,capability,bpf
     altname enx525400123456
     inet 10.0.2.15/24 brd 10.0.2.255 scope global eth0
        valid_lft forever preferred_lft forever
-    inet6 fe80::5054:ff:fe12:3456/64 scope link proto kernel_ll 
+    inet6 fe80::5054:ff:fe12:3456/64 scope link tentative proto kernel_ll 
        valid_lft forever preferred_lft forever
 3: sit0@NONE: <NOARP> mtu 1480 qdisc noop state DOWN group default qlen 1000
     link/sit 0.0.0.0 brd 0.0.0.0
@@ -448,53 +443,53 @@ default via 10.0.2.2 dev eth0 proto static
 ## cat /etc/resolv.conf
 nameserver 10.0.2.3
 ## getent hosts upatch.dev
-216.150.16.129  upatch.dev
-216.150.1.193   upatch.dev
+216.150.16.1    upatch.dev
+216.150.1.65    upatch.dev
 ## journalctl -b -u shirudo-initrd.service -u shirudo.service
-[    2.627086] localhost systemd[1]: Starting shirudo-initrd.service - shirudo: bring up the BPF LSM and bind the register from the initrd...
-[    2.662776] localhost shirudo[230]: initrd: /sysroot/var/lib/shirudo bound writable at /var/lib/shirudo for config recovery
-[    2.664025] localhost shirudo[230]: mounted private bpffs at /run/shirudo/bpffs (mode=0700,nosuid,nodev,noexec)
-[    2.717555] localhost shirudo[230]: bpf keyring serial=1043670390: /run/shirudo/runtime/keys/cert.der enrolled (key serial=499906196)
-[    2.717756] localhost shirudo[230]: bpf keyring serial=1043670390: 1 certificate enrolled and sealed
-[    3.145504] localhost shirudo[230]: bpf2 and seal attached: lsm/bpf gate live, writable state sealed
-[    3.846909] localhost shirudo[230]: tpm: register bound in the initrd and extended (index 0x01818E00, PCR 9 anchored, 0 upatches in set)
-[    3.888112] localhost shirudo[230]: init: complete (LSM active, writable state sealed)
-[    3.899052] localhost shirudo[230]: Pre-flight checks:
-[    3.899052] localhost shirudo[230]:   OK    root
-[    3.899052] localhost shirudo[230]:   OK    bpf_lsm_active
-[    3.899052] localhost shirudo[230]:   OK    bpffs_supported
-[    3.899052] localhost shirudo[230]:   OK    signed_loader_kernel_abi
-[    3.899052] localhost shirudo[230]:   OK    kernel_lsm_hooks
-[    3.899052] localhost shirudo[230]:   OK    module_signatures
-[    3.899052] localhost shirudo[230]:   OK    cert_on_disk
-[    3.899052] localhost shirudo[230]:   OK    cert_algorithm
-[    3.899052] localhost shirudo[230]:   OK    cert_kernel_support
-[    3.899052] localhost shirudo[230]:   OK    kernel_keyring
-[    3.899052] localhost shirudo[230]:   OK    embedded_loader
-[    3.899052] localhost shirudo[230]:   OK    tpm2_reachable
-[    3.899052] localhost shirudo[230]: 12 of 12 passed
-[    3.899747] localhost systemd[1]: Finished shirudo-initrd.service - shirudo: bring up the BPF LSM and bind the register from the initrd.
-[    3.922468] localhost systemd[1]: shirudo-initrd.service: Deactivated successfully.
-[    3.922520] localhost systemd[1]: Stopped shirudo-initrd.service - shirudo: bring up the BPF LSM and bind the register from the initrd.
-[    4.292168] localhost systemd[1]: Starting shirudo.service - shirudo: bring up the BPF LSM and re-apply signed upatches...
-[    4.394949] localhost shirudo[309]: bpf2 already attached (/run/shirudo/bpffs/lsm_link exists)
-[    4.586623] localhost shirudo[309]: tpm: register already bound this boot; chain unchanged (index 0x01818E00)
-[    4.613620] localhost shirudo[309]: init: complete (LSM active, writable state sealed)
-[    4.624450] localhost shirudo[309]: Pre-flight checks:
-[    4.624450] localhost shirudo[309]:   OK    root
-[    4.624450] localhost shirudo[309]:   OK    bpf_lsm_active
-[    4.624450] localhost shirudo[309]:   OK    bpffs_supported
-[    4.624450] localhost shirudo[309]:   OK    signed_loader_kernel_abi
-[    4.624450] localhost shirudo[309]:   OK    kernel_lsm_hooks
-[    4.624450] localhost shirudo[309]:   OK    module_signatures
-[    4.624450] localhost shirudo[309]:   OK    cert_on_disk
-[    4.624450] localhost shirudo[309]:   OK    cert_algorithm
-[    4.624450] localhost shirudo[309]:   OK    cert_kernel_support
-[    4.624450] localhost shirudo[309]:   OK    kernel_keyring
-[    4.624450] localhost shirudo[309]:   OK    embedded_loader
-[    4.624450] localhost shirudo[309]:   OK    tpm2_reachable: TCTI from the config: device:/dev/tpmrm0
-[    4.624450] localhost shirudo[309]: 12 of 12 passed
-[    4.625233] localhost systemd[1]: Finished shirudo.service - shirudo: bring up the BPF LSM and re-apply signed upatches.
+[    1.647091] localhost systemd[1]: Starting shirudo-initrd.service - shirudo: bring up the BPF LSM and bind the register from the initrd...
+[    1.685601] localhost shirudo[232]: initrd: /sysroot/var/lib/shirudo bound writable at /var/lib/shirudo for config recovery
+[    1.688463] localhost shirudo[232]: mounted private bpffs at /run/shirudo/bpffs (mode=0700,nosuid,nodev,noexec)
+[    1.813960] localhost shirudo[232]: bpf keyring serial=30885906: /run/shirudo/runtime/keys/cert.der enrolled (key serial=510093947)
+[    1.814382] localhost shirudo[232]: bpf keyring serial=30885906: 1 certificate enrolled and sealed
+[    2.297125] localhost shirudo[232]: bpf2 and seal attached: lsm/bpf gate live, writable state sealed
+[    3.019335] localhost shirudo[232]: tpm: register bound in the initrd and extended (index 0x01818E00, PCR 9 anchored, 0 upatches in set)
+[    3.070531] localhost shirudo[232]: init: complete (LSM active, writable state sealed)
+[    3.086722] localhost shirudo[232]: Pre-flight checks:
+[    3.086722] localhost shirudo[232]:   OK    root
+[    3.086722] localhost shirudo[232]:   OK    bpf_lsm_active
+[    3.086722] localhost shirudo[232]:   OK    bpffs_supported
+[    3.086722] localhost shirudo[232]:   OK    signed_loader_kernel_abi
+[    3.086722] localhost shirudo[232]:   OK    kernel_lsm_hooks
+[    3.086722] localhost shirudo[232]:   OK    module_signatures
+[    3.086722] localhost shirudo[232]:   OK    cert_on_disk
+[    3.086722] localhost shirudo[232]:   OK    cert_algorithm
+[    3.086722] localhost shirudo[232]:   OK    cert_kernel_support
+[    3.086722] localhost shirudo[232]:   OK    kernel_keyring
+[    3.086722] localhost shirudo[232]:   OK    embedded_loader
+[    3.086722] localhost shirudo[232]:   OK    tpm2_reachable
+[    3.086722] localhost shirudo[232]: 12 of 12 passed
+[    3.087758] localhost systemd[1]: Finished shirudo-initrd.service - shirudo: bring up the BPF LSM and bind the register from the initrd.
+[    3.138398] localhost systemd[1]: shirudo-initrd.service: Deactivated successfully.
+[    3.138498] localhost systemd[1]: Stopped shirudo-initrd.service - shirudo: bring up the BPF LSM and bind the register from the initrd.
+[    3.616888] localhost systemd[1]: Starting shirudo.service - shirudo: bring up the BPF LSM and re-apply signed upatches...
+[    3.701047] localhost shirudo[310]: bpf2 already attached (/run/shirudo/bpffs/lsm_link exists)
+[    3.895297] localhost shirudo[310]: tpm: register already bound this boot; chain unchanged (index 0x01818E00)
+[    3.927020] localhost shirudo[310]: init: complete (LSM active, writable state sealed)
+[    3.938050] localhost shirudo[310]: Pre-flight checks:
+[    3.938050] localhost shirudo[310]:   OK    root
+[    3.938050] localhost shirudo[310]:   OK    bpf_lsm_active
+[    3.938050] localhost shirudo[310]:   OK    bpffs_supported
+[    3.938050] localhost shirudo[310]:   OK    signed_loader_kernel_abi
+[    3.938050] localhost shirudo[310]:   OK    kernel_lsm_hooks
+[    3.938050] localhost shirudo[310]:   OK    module_signatures
+[    3.938050] localhost shirudo[310]:   OK    cert_on_disk
+[    3.938050] localhost shirudo[310]:   OK    cert_algorithm
+[    3.938050] localhost shirudo[310]:   OK    cert_kernel_support
+[    3.938050] localhost shirudo[310]:   OK    kernel_keyring
+[    3.938050] localhost shirudo[310]:   OK    embedded_loader
+[    3.938050] localhost shirudo[310]:   OK    tpm2_reachable: TCTI from the config: device:/dev/tpmrm0
+[    3.938050] localhost shirudo[310]: 12 of 12 passed
+[    3.938932] localhost systemd[1]: Finished shirudo.service - shirudo: bring up the BPF LSM and re-apply signed upatches.
 ## shirudo status --show-full
 Host:                  localhost
 Roles:                 target
@@ -504,11 +499,11 @@ Version ID:            112fb3e2caeec5b91ae22ca1032358b1dce79811795d4def6de9f4ed0
 Conditions:
   TYPE               STATUS  DETAIL
   LsmAttached        OK      lsm/bpf link present and pinned
-  KeyringSealed      OK      bpf serial 1043670390, dm-verity serial 644974498, pins match
+  KeyringSealed      OK      bpf serial 30885906, dm-verity serial 425823682, pins match
   ChainIntact        OK      live register equals the eventlog replay
   UpatchesMeasured   OK      every pinned or archived upatch is in this boot's records
   TpmMeasured        OK      NV index 0x01818E00 readable
-  ConfigActive       OK      config d0122e7c04ef.. is active
+  ConfigActive       OK      config 5f6cc3b504bd.. is active
   XdpCovered         OK      every device an XDP upatch selects runs it
 
 Tamper attempts (this boot):
@@ -522,28 +517,28 @@ Loaded upatches (0):
   none
 
 Keyring (.bpf):
-  Serial:                1043670390
-  Frozen serial:         1043670390  (matches)
+  Serial:                30885906
+  Frozen serial:         30885906  (matches)
   Certificates:          1 trusted, 0 revoked, 0 unvouched, 1 in the bpf keyring
-    16b4dd268d0a29a46a41b1a370275c5c6b0c6d0b7d30478fc0c9a707d91eb898  (primary)
+    f2b7e5dda85185bdf33f0b90565a3950fa69e652cfa650198c29a11c41e72db6  (primary)
       CN=shirudo, ML-DSA-87, issued 2026-11-26
-      key 499906196  shirudo: 9c784008f8a968e72c2864269d1f244bac69dd3e  (frozen)
+      key 510093947  shirudo: 7deac32fdbce4747decdd3c585f5e0854e57c590  (frozen)
 
 Keyring (.dm-verity):
-  Serial:                644974498
-  Frozen serial:         644974498  (matches)
+  Serial:                425823682
+  Frozen serial:         425823682  (matches)
   Certificates:          1 trusted, 1 in the dm-verity keyring
-    16b4dd268d0a29a46a41b1a370275c5c6b0c6d0b7d30478fc0c9a707d91eb898  (config)
+    f2b7e5dda85185bdf33f0b90565a3950fa69e652cfa650198c29a11c41e72db6  (config)
       CN=shirudo, ML-DSA-87, issued 2026-11-26
-      key 933539185  shirudo: 9c784008f8a968e72c2864269d1f244bac69dd3e  (frozen)
+      key 308952232  shirudo: 7deac32fdbce4747decdd3c585f5e0854e57c590  (frozen)
 
 TPM measurement:
   TPM:                   reachable (device:/dev/tpmrm0)
   NV index:              0x01818E00 (anchored in PCR 9)
-  Chain:                 9fee1cad8d95251c9d7bf8e020d4370afcd6151c7bcaf49d28a204c30ed307f5
-  Register name:         000b0eb131d095ae0f7629a6f74bbe53d69b1e46fc8cadc1f26f6dd735978ec661f0
+  Chain:                 a3e9d52605d16f282d06184a6d4474f3eb093b2b4793122fbea7e8fd8570641a
+  Register name:         000b2a76003381d3335b2ceeefc81efa1c8994d14c5c505bdf84b632fe28be9bbf18
   Anchored:              yes, name on record
-  PCR before init:       ae16088304f88bfb8d0ee388986515158a879a86be8b376d11a195b614a7f2a5
+  PCR before init:       c0d18eac0fbd4f442c716b3ca9166bbd4f3b1c6b52d6e649c917b02f0445e1d3
   Phase at init:         d15b0e8e244e65c40f024e95773f2347ce4ef3ffe6b597c9a14b50bbab6df319 (PCR 11)
   Bound in:              initrd
   Chain vs eventlog:     matches
@@ -551,7 +546,7 @@ TPM measurement:
 
 Eventlog:
   TIME                 TYPE          DIGEST        DETAIL
-  2026-11-26T21:34:07Z init          b51a7a1acbf9  set_digest=e3b0c44298fc..
+  2026-11-26T22:22:32Z init          268644775481  set_digest=e3b0c44298fc..
 
 Assets (/var/lib/shirudo):
   keys/cert.der          present
@@ -567,13 +562,13 @@ System:
   Kernel build ID:       b8062019fac324c85620713300bbc10be2c1909d
   Architecture:          x86_64
   CPUs:                  4
-  Memory:                156M/3.83G
+  Memory:                161M/3.83G
   Disk:                  1.25G/7.81G
   Uptime:                0d 0h 0m
-  Machine ID:            a8d59152246d4e68a2402c5a5f584492
-  Boot ID:               f00fcc96-95e7-49ea-878c-c5610680f1b8
+  Machine ID:            f30c43200591480aaa5df75a7b2baa4e
+  Boot ID:               601dbc4b-89aa-4973-a702-6d302faa87e9
 ## shirudo image status
-Config root hash:      d0122e7c04eff5f180f098c65ce2faf4c6c83bdeb922104710bf84713404599e
+Config root hash:      5f6cc3b504bd26810bece4fa4d30aa71d5db798cb2877e0f2df232af555c548a
 Next boot root hash:   none
 PCR:                   14
 Sequence:              1
@@ -581,8 +576,7 @@ TPM reset count:       1
 Restart count:         0
 Pending:               no
 Consistent:            yes
-task: [cve] /home/aledbf/Trabajo/github/spin-stack/shirudo-demo/work/bin/demo cve
-==> CVE-2025-24813: payload, load, payload, unload, payload
+[1m==> CVE-2025-24813: payload, load, payload, unload, payload[0m
 ## setup, the registry's, unchanged
 Selecting previously unselected package ca-certificates-java.
 (Reading database… (Reading database… 5%(Reading database… 10%(Reading database… 15%(Reading database… 20%(Reading database… 25%(Reading database… 30%(Reading database… 35%(Reading database… 40%(Reading database… 45%(Reading database… 50%(Reading database… 55%(Reading database… 60%(Reading database… 65%(Reading database… 70%(Reading database… 75%(Reading database… 80%(Reading database… 85%(Reading database… 90%(Reading database… 95%(Reading database… 100%(Reading database… 14055 files and directories currently installed.)
@@ -754,42 +748,41 @@ Tomcat started.
 TOMCAT_URL=http://127.0.0.1:8080
 TOMCAT_APP_WORK=/opt/upatch-payload/cve-2025-24813/apache-tomcat-9.0.98/work/Catalina/localhost/ROOT
 ## payload, before the upatch
-reached: the partial PUT wrote .upatch-probe-683f46f617fc.session in the work directory (HTTP 409); removed it
+reached: the partial PUT wrote .upatch-probe-c919de1d23cd.session in the work directory (HTTP 409); removed it
 payload exit 0
 ## shirudo upatch load cve-2025-24813-tomcat-block.upatch
-upatch load: signed loader accepted, keyring 1043670390, 226 instructions
+upatch load: signed loader accepted, keyring 30885906, 226 instructions
 upatch load: loader ran, 1 maps and 2 programs
 upatch load: program 0 (lsm) pinned at /run/shirudo/bpffs/upatches/cve-2025-24813-tomcat-block/link_0
 upatch load: program 1 (lsm) pinned at /run/shirudo/bpffs/upatches/cve-2025-24813-tomcat-block/link_1
 upatch load: map 0 (refused) pinned at /run/shirudo/bpffs/upatches/cve-2025-24813-tomcat-block/maps/refused
-upatch load: cve-2025-24813-tomcat-block loaded, 2 programs, keyring 1043670390
-upatch load: cve-2025-24813-tomcat-block measured, register c3171c9c4a5e417d694baa47c19e0abbc0bf66cfd733fe48331e21c345a9505e
+upatch load: cve-2025-24813-tomcat-block loaded, 2 programs, keyring 30885906
+upatch load: cve-2025-24813-tomcat-block measured, register fe88b0e067875649551d03c19fa22c18ada57a8e750634c9ee2463ed6bd7c69a
 ## shirudo upatch list
 Archived upatches (/var/lib/shirudo/upatches):
   NAME                         LOADED  TYPE    KIND  PAYLOAD
-  cve-2025-24813-tomcat-block  yes     load    bpf   ce30c235f1447f55..
+  cve-2025-24813-tomcat-block  yes     load    bpf   20e50f1c1e817aa5..
 ## payload, upatch loaded
 blocked: the partial PUT failed with HTTP 500 and wrote no file
 payload exit 10
 ## shirudo upatch unload cve-2025-24813-tomcat-block.unload.upatch
-upatch unload: signed loader accepted, keyring 1043670390, 165 instructions
+upatch unload: signed loader accepted, keyring 30885906, 165 instructions
 upatch unload: cve-2025-24813-tomcat-block carries the directive's payload
-upatch unload: cve-2025-24813-tomcat-block measured, register c2f44d56a74e03733283a28d42f29e8152af58b2224e048a21cdf41558747142
+upatch unload: cve-2025-24813-tomcat-block measured, register a04d83f43fc8bf6dc148a0c81cbcf56461ff9de01a0a6479b1bd1355e1e584d9
 upatch unload: cve-2025-24813-tomcat-block detached and unpinned
 ## payload, after the unload
-reached: the partial PUT wrote .upatch-probe-38631ddd1a0c.session in the work directory (HTTP 409); removed it
+reached: the partial PUT wrote .upatch-probe-15f9068be79d.session in the work directory (HTTP 409); removed it
 payload exit 0
 ## result: before=0 loaded=10 after=0
-==> the registry's own tools/test, as its README runs it
+[1m==> the registry's own tools/test, as its README runs it[0m
 cve-2025-24813
-  before  reached      the partial PUT wrote .upatch-probe-5bf03686bf81.session in the work directory (HTTP 409); removed it
+  before  reached      the partial PUT wrote .upatch-probe-0bc270789d04.session in the work directory (HTTP 409); removed it
   loaded  blocked      the partial PUT failed with HTTP 500 and wrote no file
-  after   reached      the partial PUT wrote .upatch-probe-88482d5f3856.session in the work directory (HTTP 409); removed it
+  after   reached      the partial PUT wrote .upatch-probe-b22e31032b11.session in the work directory (HTTP 409); removed it
   PASS: reached before, blocked while loaded, reached again after
-task: [obs] /home/aledbf/Trabajo/github/spin-stack/shirudo-demo/work/bin/demo obs
-==> kernel-obs: what the kernel saw
+[1m==> kernel-obs: what the kernel saw[0m
 ## shirudo upatch load kernel-obs.upatch
-upatch load: signed loader accepted, keyring 1043670390, 5003 instructions
+upatch load: signed loader accepted, keyring 30885906, 5003 instructions
 upatch load: loader ran, 19 maps and 35 programs
 upatch load: serializer program 0 pinned at /run/shirudo/bpffs/upatches/kernel-obs/serializers/priv
 upatch load: serializer program 1 pinned at /run/shirudo/bpffs/upatches/kernel-obs/serializers/exec
@@ -836,8 +829,8 @@ upatch load: map 10 (dns) pinned at /run/shirudo/bpffs/upatches/kernel-obs/maps/
 upatch load: map 11 (priv) pinned at /run/shirudo/bpffs/upatches/kernel-obs/maps/priv
 upatch load: map 12 (file) pinned at /run/shirudo/bpffs/upatches/kernel-obs/maps/file
 upatch load: map 13 (watch_stat) pinned at /run/shirudo/bpffs/upatches/kernel-obs/maps/watch_stat
-upatch load: kernel-obs loaded, 35 programs, keyring 1043670390
-upatch load: kernel-obs measured, register b92511ba611d59cb83eba48cba330c03379bd52e7b706f76d25d105758482c75
+upatch load: kernel-obs loaded, 35 programs, keyring 30885906
+upatch load: kernel-obs measured, register 49b1dabaf19f6acdd1f009a40f13ca96815d4cdb07db62bec6a66c7d652607b6
 ## shirudo upatch list
 Archived upatches (/var/lib/shirudo/upatches):
   NAME                      LOADED  TYPE    KIND  PAYLOAD
@@ -847,12 +840,12 @@ uid=0(root) gid=0(root) groups=0(root)
 ## a read of /etc/shadow
 read
 ## a DNS lookup: upatch.dev, through the guest's resolver
-upatch.dev -> 216.150.16.129 216.150.1.193
+upatch.dev -> 216.150.1.65 216.150.16.1
 ## a connection: 127.0.0.1:8080
 connected to 127.0.0.1:8080
 "HTTP/1.1 200"
 ## a connection: upatch.dev:443
-connected to 216.150.16.129:443
+connected to 216.150.1.65:443
 ## shirudo upatch map kernel-obs exec --json
 2 records
   {"caller_inferred":true,"euid":0,"exec_count":"4","interpreter":false,"name":"shirudo","path":"/run/shirudo/runtime/usr/bin/shirudo","pid":1004,"uid":0}
@@ -862,16 +855,16 @@ connected to 216.150.16.129:443
   {"count":"1","euid":0,"fs_magic":"61267","mode":"r","path":"/etc/shadow","pid":989,"rule":1}
 ## shirudo upatch map kernel-obs dns --json
 2 records
-  {"address":"216.150.16.129","answer_count":"1","family":2,"names":[{"last_seen_unix_nano":"1795728872213411309","name":"upatch.dev","seen_count":"1"}]}
-  {"address":"216.150.1.193","answer_count":"1","family":2,"names":[{"last_seen_unix_nano":"1795728872213411309","name":"upatch.dev","seen_count":"1"}]}
+  {"address":"216.150.1.65","answer_count":"1","family":2,"names":[{"last_seen_unix_nano":"1795731788500012666","name":"upatch.dev","seen_count":"1"}]}
+  {"address":"216.150.16.1","answer_count":"1","family":2,"names":[{"last_seen_unix_nano":"1795731788500012666","name":"upatch.dev","seen_count":"1"}]}
 ## shirudo upatch map kernel-obs net --json
 6 records
   {"address":"10.0.2.3","count":"2","family":2,"pid":989,"port":53,"proto":"udp","rx_bytes":"240","rx_packets":"2","tx_bytes":"134","tx_packets":"2"}
-  {"address":"127.0.0.1","count":"1","family":2,"pid":989,"port":8080,"proto":"tcp","role":"initiator","rx_bytes":"11538","rx_packets":"4","tx_bytes":"338","tx_packets":"6"}
+  {"address":"127.0.0.1","count":"1","family":2,"pid":989,"port":8080,"proto":"tcp","role":"initiator","rx_bytes":"11538","rx_packets":"4","tx_bytes":"286","tx_packets":"5"}
   {"address":"127.0.0.1","count":"0","family":2,"pid":0,"port":0,"proto":"tcp","role":"listener","rx_bytes":"112","rx_packets":"2","tx_bytes":"60","tx_packets":"1"}
-  {"address":"0000:0000:0000:0000:0000:ffff:7f00:0001","count":"1","family":10,"pid":902,"port":0,"proto":"tcp","role":"acceptor","rx_bytes":"0","rx_packets":"0","tx_bytes":"0","tx_packets":"0"}
-  {"address":"127.0.0.1","count":"0","family":2,"pid":0,"port":0,"proto":"tcp","role":"acceptor","rx_bytes":"226","rx_packets":"4","tx_bytes":"11478","tx_packets":"3"}
-  {"address":"216.150.16.129","count":"1","family":2,"pid":989,"port":443,"proto":"tcp","role":"initiator","rx_bytes":"88","rx_packets":"2","tx_bytes":"140","tx_packets":"3"}
+  {"address":"0000:0000:0000:0000:0000:ffff:7f00:0001","count":"1","family":10,"pid":903,"port":0,"proto":"tcp","role":"acceptor","rx_bytes":"0","rx_packets":"0","tx_bytes":"0","tx_packets":"0"}
+  {"address":"127.0.0.1","count":"0","family":2,"pid":0,"port":0,"proto":"tcp","role":"acceptor","rx_bytes":"174","rx_packets":"3","tx_bytes":"11478","tx_packets":"3"}
+  {"address":"216.150.1.65","count":"1","family":2,"pid":989,"port":443,"proto":"tcp","role":"initiator","rx_bytes":"88","rx_packets":"2","tx_bytes":"140","tx_packets":"3"}
 ## shirudo upatch map kernel-obs
 Pinned maps (9):
   UPATCH                 MAP              TYPE               ENTRIES
@@ -890,6 +883,4 @@ file: /etc/shadow recorded
 dns: upatch.dev recorded
 net: a connection to 127.0.0.1:8080 recorded
 net: a connection to upatch.dev:443 recorded
-task: [stop] /home/aledbf/Trabajo/github/spin-stack/shirudo-demo/work/bin/demo stop
-==> stopping the machine
-exit 0 after 283 s
+[1m==> stopping the machine[0m

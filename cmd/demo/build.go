@@ -112,7 +112,8 @@ func (d *demo) mkfs(dir, img, label, size string) error {
 	if err := os.Remove(img); err != nil && !errors.Is(err, os.ErrNotExist) {
 		return err
 	}
-	mkfs := exec.Command(filepath.Join(d.release, "bin/mkfs.ext4"), "-q", "-t", "ext4", "-L", label, "-d", dir, img, size)
+	owner := fmt.Sprintf("root_owner=%d:%d", os.Getuid(), os.Getgid())
+	mkfs := exec.Command(filepath.Join(d.release, "bin/mkfs.ext4"), "-q", "-t", "ext4", "-L", label, "-E", owner, "-d", dir, img, size)
 	mkfs.Env = append(os.Environ(), "MKE2FS_CONFIG="+filepath.Join(d.release, "e2fsprogs/mke2fs.conf"))
 	mkfs.Stdout, mkfs.Stderr = os.Stderr, os.Stderr
 	return mkfs.Run()

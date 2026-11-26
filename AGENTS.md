@@ -8,7 +8,7 @@ Shirudo in a spin-machine guest, end to end. A demo: keep it small and plain.
 - `cmd/demo-guest`: the guest side, run from the disk mounted at `/opt/demo`. Prints `## ` headings; the host keeps the output in `evidence/`.
 - `internal/console`: types commands at the guest's serial console and reads their exit status.
 - `versions.yaml`: every pin (spin-machine release and its `shirudo-operator` tarball by sha256, the registry commit, Task). Compiled into `demo` via `embed.go`.
-- `evidence/`: what one full run printed. Committed.
+- `evidence/`: what one full run printed. Committed. `demo-run.cast` is the README's run from an empty directory, recorded by `go tool task record` (asciinema, `scripts/record.sh`) against the latest release.
 
 Everything shirudo needs comes from the spin-machine release. Nothing is built from source and nothing runs in Docker: the `operator` step runs the release's operator half in a throwaway guest.
 

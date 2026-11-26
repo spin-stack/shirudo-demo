@@ -80,11 +80,25 @@ func (d *demo) start(name, root string, k disk, flags ...string) (*console.Conso
 		return nil, err
 	}
 	say("%s: booting (pid %d); console %s", name, m.Process.Pid, d.consoleSock())
-	_ = m.Process.Release()
+	// Reaped here, or a machine that exits stays a zombie while demo runs,
+	// and kill(pid, 0) in pid() and shutdown() still finds it.
+	exited := make(chan struct{})
+	go func() { _ = m.Wait(); close(exited) }()
 	deadline := time.Now().Add(5 * time.Minute)
-	con, err := console.Dial(d.consoleSock(), deadline)
-	if err != nil {
-		return nil, err
+	var con *console.Console
+	for {
+		if con, err = console.Dial(d.consoleSock(), time.Now().Add(time.Second)); err == nil {
+			break
+		}
+		select {
+		case <-exited:
+			out, _ := os.ReadFile(log.Name())
+			return nil, fmt.Errorf("%s exited before its console opened: %s", name, strings.TrimSpace(string(out)))
+		default:
+		}
+		if time.Now().After(deadline) {
+			return nil, err
+		}
 	}
 	if err := con.WaitLogin(deadline); err != nil {
 		con.Close()
@@ -197,8 +211,10 @@ func (d *demo) shutdown(con *console.Console) error {
 	if !ok {
 		return nil
 	}
-	// The console closes on poweroff, so this never sees an end marker.
 	_, _, _ = con.Run("systemctl poweroff", time.Now().Add(20*time.Second))
+	// Unread, or closed, the console stops taking the UART's output and the
+	// guest's shutdown blocks writing its status; QEMU closes it as it exits.
+	_ = con.Drain(time.Now().Add(time.Minute))
 	for range 60 {
 		if syscall.Kill(pid, 0) != nil {
 			return os.Remove(d.pidFile())
@@ -208,7 +224,14 @@ func (d *demo) shutdown(con *console.Console) error {
 	if err := syscall.Kill(pid, syscall.SIGTERM); err != nil && !errors.Is(err, syscall.ESRCH) {
 		return err
 	}
-	return os.Remove(d.pidFile())
+	// spin-machine stops QEMU before it exits; until then QEMU holds the disk's lock.
+	for range 30 {
+		if syscall.Kill(pid, 0) != nil {
+			return os.Remove(d.pidFile())
+		}
+		time.Sleep(time.Second)
+	}
+	return fmt.Errorf("the machine (pid %d) is still running 30 s after SIGTERM", pid)
 }
 
 func (d *demo) overlay(path, size string) error {

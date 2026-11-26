@@ -1,8 +1,8 @@
 - name: spin-machine
   kind: download
   source: https://github.com/spin-stack/machine/releases/download/{version}/spin-machine-{version}-linux-x86_64.tar.gz
-  version: v20261126.03
-  pin: 1d20bf462bc63198cb8653553eb8df1346a6e337cb0054daa3edd1b951454303
+  version: v20261126.04
+  pin: 06ca6f383f35999e26bcf067be2b8d15d691aeffc7bd6f9ab82fe9a2601c4632
   track: github-release https://github.com/spin-stack/machine
   note: >-
     the machine the demo boots, as released: QEMU, the kernel with shirudo's hooks, the base image,
@@ -14,8 +14,8 @@
 - name: shirudo-operator
   kind: download
   source: https://github.com/spin-stack/machine/releases/download/{version}/spin-machine-{version}-linux-x86_64.shirudo-operator.tar.gz
-  version: v20261126.03
-  pin: c6bdf331fab5d1b2922db02cb6601aba477d932aca72164ba13f1c654670c7ee
+  version: v20261126.04
+  pin: 70b3bad6b21acb376cc53e7ff882181bc4745fff4aa963adede8bcc11765ef88
   track: with spin-machine
   note: >-
     the same release's operator half of shirudo (its docs/shirudo.md): shirudo-build, clang, the

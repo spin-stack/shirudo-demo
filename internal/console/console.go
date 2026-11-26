@@ -8,6 +8,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
+	"io"
 	"net"
 	"regexp"
 	"strconv"
@@ -39,6 +40,15 @@ func Dial(path string, deadline time.Time) (*Console, error) {
 }
 
 func (c *Console) Close() error { return c.conn.Close() }
+
+// Drain reads and discards the console until it closes or the deadline passes.
+func (c *Console) Drain(deadline time.Time) error {
+	if err := c.conn.SetDeadline(deadline); err != nil {
+		return err
+	}
+	_, err := io.Copy(io.Discard, c.conn)
+	return err
+}
 
 func (c *Console) WaitLogin(deadline time.Time) error {
 	for {
