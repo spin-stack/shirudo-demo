@@ -52,6 +52,9 @@ func (d *demo) check() error {
 		return fmt.Errorf("/dev/kvm is not usable: %w", err)
 	}
 	kvm.Close()
+	if err := d.pinsAgree(); err != nil {
+		return err
+	}
 	if err := d.passtSandboxes(); err != nil {
 		return err
 	}

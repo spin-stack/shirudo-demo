@@ -30,6 +30,11 @@ tasks:
     cmds:
       - '{{.DEMO}} release'
 
+  pins:
+    desc: The shirudo versions.yaml pins is the one the pinned spin-machine release carries its kernel hooks from (that tag's versions.yaml).
+    cmds:
+      - '{{.DEMO}} pins'
+
   check:
     desc: The release has its TPM, passt and spin-machine, passt can make its user namespace, /dev/kvm is usable, docker and git are installed.
     deps: [release]
@@ -179,3 +184,4 @@ tasks:
       - CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /dev/null ./cmd/demo-guest
       - go vet ./...
       - go test ./...
+      - task: pins

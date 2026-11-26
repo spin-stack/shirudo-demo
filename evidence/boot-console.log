@@ -1,4 +1,4 @@
-inBooting initrd of Ubuntu 26.04.1 LTS dracut-110-11ubuntu0.1 (Initramfs)...
+riBooting initrd of Ubuntu 26.04.1 LTS dracut-110-11ubuntu0.1 (Initramfs)...
 [  OK  ] Started systemd-ask-password-console.path - Dispatch Password Requests to Console Directory Watch.
          Expecting device dev-vda.device - /dev/vda...
 [  OK  ] Reached target initrd-usr-fs.target - Initrd /usr File System.
@@ -18,29 +18,28 @@ inBooting initrd of Ubuntu 26.04.1 LTS dracut-110-11ubuntu0.1 (Initramfs)...
          Starting systemd-sysctl.service - Apply Kernel Variables...
          Starting systemd-tmpfiles-setup-dev-early.service - Create Static Device Nodes in /dev gracefully...
 [  OK  ] Finished dracut-pre-mount.service - dracut pre-mount hook.
-[  OK  ] Finished systemd-tmpfiles-setup-dev-early.service - Create Static Device Nodes in /dev gracefully.
 [  OK  ] Finished systemd-sysctl.service - Apply Kernel Variables.
+[  OK  ] Finished systemd-tmpfiles-setup-dev-early.service - Create Static Device Nodes in /dev gracefully.
          Starting systemd-tmpfiles-setup-dev.service - Create Static Device Nodes in /dev...
 [  OK  ] Finished systemd-tmpfiles-setup-dev.service - Create Static Device Nodes in /dev.
 [  OK  ] Started systemd-journald.service - Journal Service.
+[  OK  ] Finished dracut-cmdline.service - dracut cmdline hook.
 [  OK  ] Reached target local-fs-pre.target - Preparation for Local File Systems.
 [  OK  ] Reached target local-fs.target - Local File Systems.
          Starting systemd-tmpfiles-setup.service - Create System Files and Directories...
-[  OK  ] Finished dracut-cmdline.service - dracut cmdline hook.
          Starting systemd-udevd.service - Rule-based Manager for Device Events and Files...
 [  OK  ] Finished systemd-tmpfiles-setup.service - Create System Files and Directories.
 [  OK  ] Started systemd-udevd.service - Rule-based Manager for Device Events and Files.
          Starting systemd-udev-trigger.service - Coldplug All udev Devices...
 [  OK  ] Finished systemd-udev-trigger.service - Coldplug All udev Devices.
-f '%s\n' '@@B''8134aaa42389@@'; stty -echo 2>/dev/null; dmesg -n 1 2>/dev/null; true; printf '%s%s\n' '@@E''8134aaa42389@@' "$?"
 [  OK  ] Reached target sysinit.target - System Initialization.
 [  OK  ] Reached target basic.target - Basic System.
          Expecting device dev-tpm0.device - /dev/tpm0...
-[  OK  ] Found device dev-tpm0.device - /dev/tpm0.
-[  OK  ] Reached target tpm2.target - Trusted Platform Module.
 [  OK  ] Found device dev-vda.device - /dev/vda.
 [  OK  ] Reached target initrd-root-device.target - Initrd Root Device.
          Starting systemd-fsck-root.service - File System Check on /dev/vda...
+[  OK  ] Found device dev-tpm0.device - /dev/tpm0.
+[  OK  ] Reached target tpm2.target - Trusted Platform Module.
 [  OK  ] Finished systemd-fsck-root.service - File System Check on /dev/vda.
          Mounting sysroot.mount - /sysroot...
 [  OK  ] Mounted sysroot.mount - /sysroot.
@@ -107,8 +106,8 @@ Welcome to Ubuntu 26.04.1 LTS!
 [  OK  ] Started dbus-broker.service - D-Bus System Message Bus.
 [  OK  ] Started systemd-journald.service - Journal Service.
 [  OK  ] Started ssh.service - OpenBSD Secure Shell server.
-[  OK  ] Created slice user-0.slice - User Slice of UID 0.
 [  OK  ] Started systemd-logind.service - User Login Management.
+[  OK  ] Created slice user-0.slice - User Slice of UID 0.
          Starting user-runtime-dir@0.service - User Runtime Directory /run/user/0...
 [  OK  ] Finished user-runtime-dir@0.service - User Runtime Directory /run/user/0.
          Starting user@0.service - User Manager for UID 0...
@@ -118,15 +117,15 @@ Ubuntu 26.04.1 LTS localhost ttyS0
 
 localhost login: root (automatic login)
 
-root@localhost:~# printf '%s\n' '@@B''ba4a9a7ee65e@@'; stty -echo 2>/dev/null; dmesg -n 1 2>/dev/null; true; printf '%s%s\n' '@@E''ba4a9a7ee65e@@' "$?"
-@@Bba4a9a7ee65e@@
-@@Eba4a9a7ee65e@@0
+root@localhost:~# printf '%s\n' '@@B''df810f68c600@@'; stty -echo 2>/dev/null; dmesg -n 1 2>/dev/null; true; printf '%s%s\n' '@@E''df810f68c600@@' "$?"
+@@Bdf810f68c600@@
+@@Edf810f68c600@@0
 root@localhosst:~# 
-@@B08ad86fccacb@@
-@@E08ad86fccacb@@1
-root@localhosst:~# 
-@@Bae7c6d963d92@@
-@@Eae7c6d963d92@@0
+@@B434002e1d836@@
+@@E434002e1d836@@1
 root@localhost:~# 
-@@Bd1d75a3b99af@@
-@@Ed1d75a3b99af@@0
+@@B6e03ae3a291e@@
+@@E6e03ae3a291e@@0
+root@localhost:~# 
+@@B37878e22f74a@@
+@@E37878e22f74a@@0
