@@ -1,4 +1,4 @@
-Booting initrd of Ubuntu 26.04.1 LTS dracut-110-11ubuntu0.1 (Initramfs)...
+inBooting initrd of Ubuntu 26.04.1 LTS dracut-110-11ubuntu0.1 (Initramfs)...
 [  OK  ] Started systemd-ask-password-console.path - Dispatch Password Requests to Console Directory Watch.
          Expecting device dev-vda.device - /dev/vda...
 [  OK  ] Reached target initrd-usr-fs.target - Initrd /usr File System.
@@ -17,29 +17,30 @@ Booting initrd of Ubuntu 26.04.1 LTS dracut-110-11ubuntu0.1 (Initramfs)...
          Starting systemd-journald.service - Journal Service...
          Starting systemd-sysctl.service - Apply Kernel Variables...
          Starting systemd-tmpfiles-setup-dev-early.service - Create Static Device Nodes in /dev gracefully...
-[  OK  ] Finished systemd-sysctl.service - Apply Kernel Variables.
-[  OK  ] Finished systemd-tmpfiles-setup-dev-early.service - Create Static Device Nodes in /dev gracefully.
 [  OK  ] Finished dracut-pre-mount.service - dracut pre-mount hook.
+[  OK  ] Finished systemd-tmpfiles-setup-dev-early.service - Create Static Device Nodes in /dev gracefully.
+[  OK  ] Finished systemd-sysctl.service - Apply Kernel Variables.
          Starting systemd-tmpfiles-setup-dev.service - Create Static Device Nodes in /dev...
 [  OK  ] Finished systemd-tmpfiles-setup-dev.service - Create Static Device Nodes in /dev.
-[  OK  ] Finished dracut-cmdline.service - dracut cmdline hook.
+[  OK  ] Started systemd-journald.service - Journal Service.
 [  OK  ] Reached target local-fs-pre.target - Preparation for Local File Systems.
 [  OK  ] Reached target local-fs.target - Local File Systems.
-         Starting systemd-udevd.service - Rule-based Manager for Device Events and Files...
-[  OK  ] Started systemd-journald.service - Journal Service.
          Starting systemd-tmpfiles-setup.service - Create System Files and Directories...
+[  OK  ] Finished dracut-cmdline.service - dracut cmdline hook.
+         Starting systemd-udevd.service - Rule-based Manager for Device Events and Files...
 [  OK  ] Finished systemd-tmpfiles-setup.service - Create System Files and Directories.
 [  OK  ] Started systemd-udevd.service - Rule-based Manager for Device Events and Files.
          Starting systemd-udev-trigger.service - Coldplug All udev Devices...
 [  OK  ] Finished systemd-udev-trigger.service - Coldplug All udev Devices.
+f '%s\n' '@@B''8134aaa42389@@'; stty -echo 2>/dev/null; dmesg -n 1 2>/dev/null; true; printf '%s%s\n' '@@E''8134aaa42389@@' "$?"
 [  OK  ] Reached target sysinit.target - System Initialization.
 [  OK  ] Reached target basic.target - Basic System.
          Expecting device dev-tpm0.device - /dev/tpm0...
+[  OK  ] Found device dev-tpm0.device - /dev/tpm0.
+[  OK  ] Reached target tpm2.target - Trusted Platform Module.
 [  OK  ] Found device dev-vda.device - /dev/vda.
 [  OK  ] Reached target initrd-root-device.target - Initrd Root Device.
          Starting systemd-fsck-root.service - File System Check on /dev/vda...
-[  OK  ] Found device dev-tpm0.device - /dev/tpm0.
-[  OK  ] Reached target tpm2.target - Trusted Platform Module.
 [  OK  ] Finished systemd-fsck-root.service - File System Check on /dev/vda.
          Mounting sysroot.mount - /sysroot...
 [  OK  ] Mounted sysroot.mount - /sysroot.
@@ -98,16 +99,16 @@ Welcome to Ubuntu 26.04.1 LTS!
          Starting dbus-broker.service - D-Bus System Message Bus...
 [  OK  ] Started spin-machine-boot-rest.service - The rest of the boot, after the first login's units.
          Starting spin-machine-sshd-keygen.service - Generate SSH host keys for this VM...
-[  OK  ] Finished spin-machine-sshd-keygen.service - Generate SSH host keys for this VM.
 [  OK  ] Listening on systemd-logind-varlink.socket - User Login Management Varlink Socket.
 [  OK  ] Mounted tmp.mount - Temporary Directory /tmp.
+[  OK  ] Finished spin-machine-sshd-keygen.service - Generate SSH host keys for this VM.
          Starting ssh.service - OpenBSD Secure Shell server...
          Starting systemd-logind.service - User Login Management...
 [  OK  ] Started dbus-broker.service - D-Bus System Message Bus.
-[  OK  ] Started ssh.service - OpenBSD Secure Shell server.
 [  OK  ] Started systemd-journald.service - Journal Service.
-[  OK  ] Started systemd-logind.service - User Login Management.
+[  OK  ] Started ssh.service - OpenBSD Secure Shell server.
 [  OK  ] Created slice user-0.slice - User Slice of UID 0.
+[  OK  ] Started systemd-logind.service - User Login Management.
          Starting user-runtime-dir@0.service - User Runtime Directory /run/user/0...
 [  OK  ] Finished user-runtime-dir@0.service - User Runtime Directory /run/user/0.
          Starting user@0.service - User Manager for UID 0...
@@ -117,15 +118,15 @@ Ubuntu 26.04.1 LTS localhost ttyS0
 
 localhost login: root (automatic login)
 
-root@localhost:~# printf '%s\n' '@@B''9c53ca6da246@@'; stty -echo 2>/dev/null; dmesg -n 1 2>/dev/null; true; printf '%s%s\n' '@@E''9c53ca6da246@@' "$?"
-@@B9c53ca6da246@@
-@@E9c53ca6da246@@0
+root@localhost:~# printf '%s\n' '@@B''ba4a9a7ee65e@@'; stty -echo 2>/dev/null; dmesg -n 1 2>/dev/null; true; printf '%s%s\n' '@@E''ba4a9a7ee65e@@' "$?"
+@@Bba4a9a7ee65e@@
+@@Eba4a9a7ee65e@@0
+root@localhosst:~# 
+@@B08ad86fccacb@@
+@@E08ad86fccacb@@1
+root@localhosst:~# 
+@@Bae7c6d963d92@@
+@@Eae7c6d963d92@@0
 root@localhost:~# 
-@@B7a8be65a3d94@@
-@@E7a8be65a3d94@@1
-root@localhost:~# 
-@@Bad24e1d83e14@@
-@@Ead24e1d83e14@@0
-root@localhost:~# 
-@@B58fc72e45b6a@@
-@@E58fc72e45b6a@@0
+@@Bd1d75a3b99af@@
+@@Ed1d75a3b99af@@0

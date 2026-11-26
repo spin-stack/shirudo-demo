@@ -9,7 +9,7 @@ import (
 )
 
 // initStatus shows what the machine booted into: the command line, lockdown,
-// the TPM, both init runs and shirudo's own report. It fails unless status
+// the TPM, the network, both init runs and shirudo's own report. It fails unless status
 // says ok.
 func initStatus() error {
 	for _, f := range []struct{ title, path string }{
@@ -32,6 +32,19 @@ func initStatus() error {
 			return err
 		}
 		fmt.Println(dev, fi.Mode())
+	}
+	// The network spin-machine boot --net gives the guest, on passt: the
+	// registry's setup downloads Tomcat and Java over it.
+	for _, c := range [][]string{
+		{"ip", "addr"},
+		{"ip", "route"},
+		{"cat", "/etc/resolv.conf"},
+		{"getent", "hosts", lookup},
+	} {
+		heading("%s", strings.Join(c, " "))
+		if err := run(nil, c[0], c[1:]...); err != nil {
+			return err
+		}
 	}
 	heading("journalctl -b -u shirudo-initrd.service -u shirudo.service")
 	if err := run(nil, "journalctl", "-b", "-u", "shirudo-initrd.service", "-u", "shirudo.service",
