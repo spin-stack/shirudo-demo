@@ -1,0 +1,102 @@
+## shirudo upatch load kernel-obs.upatch
+upatch load: signed loader accepted, keyring 889801055, 5003 instructions
+upatch load: loader ran, 19 maps and 35 programs
+upatch load: serializer program 0 pinned at /run/shirudo/bpffs/upatches/kernel-obs/serializers/priv
+upatch load: serializer program 1 pinned at /run/shirudo/bpffs/upatches/kernel-obs/serializers/exec
+upatch load: serializer program 2 pinned at /run/shirudo/bpffs/upatches/kernel-obs/serializers/net
+upatch load: serializer program 3 pinned at /run/shirudo/bpffs/upatches/kernel-obs/serializers/listen
+upatch load: serializer program 4 pinned at /run/shirudo/bpffs/upatches/kernel-obs/serializers/watch
+upatch load: serializer program 5 pinned at /run/shirudo/bpffs/upatches/kernel-obs/serializers/socket
+upatch load: serializer program 6 pinned at /run/shirudo/bpffs/upatches/kernel-obs/serializers/dns
+upatch load: serializer program 7 pinned at /run/shirudo/bpffs/upatches/kernel-obs/serializers/file
+upatch load: test-run program 8 pinned at /run/shirudo/bpffs/upatches/kernel-obs/test
+upatch load: program 9 (lsm) pinned at /run/shirudo/bpffs/upatches/kernel-obs/link_0
+upatch load: program 10 (lsm) pinned at /run/shirudo/bpffs/upatches/kernel-obs/link_1
+upatch load: program 11 (lsm) pinned at /run/shirudo/bpffs/upatches/kernel-obs/link_2
+upatch load: program 12 (lsm) pinned at /run/shirudo/bpffs/upatches/kernel-obs/link_3
+upatch load: program 13 (lsm) pinned at /run/shirudo/bpffs/upatches/kernel-obs/link_4
+upatch load: program 14 (lsm) pinned at /run/shirudo/bpffs/upatches/kernel-obs/link_5
+upatch load: program 15 (lsm) pinned at /run/shirudo/bpffs/upatches/kernel-obs/link_6
+upatch load: program 16 (lsm) pinned at /run/shirudo/bpffs/upatches/kernel-obs/link_7
+upatch load: program 17 (lsm) pinned at /run/shirudo/bpffs/upatches/kernel-obs/link_8
+upatch load: program 18 (lsm) pinned at /run/shirudo/bpffs/upatches/kernel-obs/link_9
+upatch load: program 19 (lsm) pinned at /run/shirudo/bpffs/upatches/kernel-obs/link_10
+upatch load: program 20 (lsm) pinned at /run/shirudo/bpffs/upatches/kernel-obs/link_11
+upatch load: program 21 (lsm) pinned at /run/shirudo/bpffs/upatches/kernel-obs/link_12
+upatch load: program 22 (lsm) pinned at /run/shirudo/bpffs/upatches/kernel-obs/link_13
+upatch load: program 23 (lsm) pinned at /run/shirudo/bpffs/upatches/kernel-obs/link_14
+upatch load: program 24 (lsm) pinned at /run/shirudo/bpffs/upatches/kernel-obs/link_15
+upatch load: program 25 (lsm) pinned at /run/shirudo/bpffs/upatches/kernel-obs/link_16
+upatch load: program 26 (lsm) pinned at /run/shirudo/bpffs/upatches/kernel-obs/link_17
+upatch load: program 27 (lsm) pinned at /run/shirudo/bpffs/upatches/kernel-obs/link_18
+upatch load: program 28 (lsm) pinned at /run/shirudo/bpffs/upatches/kernel-obs/link_19
+upatch load: program 29 (lsm) pinned at /run/shirudo/bpffs/upatches/kernel-obs/link_20
+upatch load: program 30 (lsm) pinned at /run/shirudo/bpffs/upatches/kernel-obs/link_21
+upatch load: program 31 (lsm) pinned at /run/shirudo/bpffs/upatches/kernel-obs/link_22
+upatch load: program 32 (lsm) pinned at /run/shirudo/bpffs/upatches/kernel-obs/link_23
+upatch load: program 33 (cgroup_skb/egress) pinned at /run/shirudo/bpffs/upatches/kernel-obs/link_24
+upatch load: program 34 (cgroup_skb/ingress) pinned at /run/shirudo/bpffs/upatches/kernel-obs/link_25
+upatch load: map 4 (shirudo_ser) pinned at /run/shirudo/bpffs/upatches/kernel-obs/maps/shirudo_ser
+upatch load: map 5 (exec) pinned at /run/shirudo/bpffs/upatches/kernel-obs/maps/exec
+upatch load: map 6 (net) pinned at /run/shirudo/bpffs/upatches/kernel-obs/maps/net
+upatch load: map 7 (socket) pinned at /run/shirudo/bpffs/upatches/kernel-obs/maps/socket
+upatch load: map 8 (listen) pinned at /run/shirudo/bpffs/upatches/kernel-obs/maps/listen
+upatch load: map 9 (watch) pinned at /run/shirudo/bpffs/upatches/kernel-obs/maps/watch
+upatch load: map 10 (dns) pinned at /run/shirudo/bpffs/upatches/kernel-obs/maps/dns
+upatch load: map 11 (priv) pinned at /run/shirudo/bpffs/upatches/kernel-obs/maps/priv
+upatch load: map 12 (file) pinned at /run/shirudo/bpffs/upatches/kernel-obs/maps/file
+upatch load: map 13 (watch_stat) pinned at /run/shirudo/bpffs/upatches/kernel-obs/maps/watch_stat
+upatch load: kernel-obs loaded, 35 programs, keyring 889801055
+upatch load: kernel-obs measured, register 855cf4b6ecd06455b590e47f9f4340fad2272157121bbb8934b0ed431c6a32c2
+## shirudo upatch list
+Archived upatches (/var/lib/shirudo/upatches):
+  NAME                      LOADED  TYPE    KIND  PAYLOAD
+  kernel-obs                yes     load    bpf   14cf75f311010c53..
+## an exec: /usr/bin/id
+uid=0(root) gid=0(root) groups=0(root)
+## a read of /etc/shadow
+read
+## a DNS lookup: upatch.dev, through the guest's resolver
+upatch.dev -> 216.150.1.1 216.150.1.193
+## a connection: 127.0.0.1:8080
+connected to 127.0.0.1:8080
+"HTTP/1.1 200"
+## a connection: upatch.dev:443
+connected to 216.150.1.1:443
+## shirudo upatch map kernel-obs exec --json
+2 records
+  {"caller_inferred":true,"euid":0,"exec_count":"4","interpreter":false,"name":"shirudo","path":"/run/shirudo/runtime/usr/bin/shirudo","pid":1001,"uid":0}
+  {"caller_inferred":true,"euid":0,"exec_count":"1","interpreter":false,"name":"gnuid","path":"/usr/bin/gnuid","pid":1000,"uid":0}
+## shirudo upatch map kernel-obs file --json
+1 records
+  {"count":"1","euid":0,"fs_magic":"61267","mode":"r","path":"/etc/shadow","pid":986,"rule":1}
+## shirudo upatch map kernel-obs dns --json
+2 records
+  {"address":"216.150.1.1","answer_count":"1","family":2,"names":[{"last_seen_unix_nano":"1795692620558333250","name":"upatch.dev","seen_count":"1"}]}
+  {"address":"216.150.1.193","answer_count":"1","family":2,"names":[{"last_seen_unix_nano":"1795692620558333250","name":"upatch.dev","seen_count":"1"}]}
+## shirudo upatch map kernel-obs net --json
+6 records
+  {"address":"10.0.2.3","count":"2","family":2,"pid":986,"port":53,"proto":"udp","rx_bytes":"240","rx_packets":"2","tx_bytes":"134","tx_packets":"2"}
+  {"address":"127.0.0.1","count":"1","family":2,"pid":986,"port":8080,"proto":"tcp","role":"initiator","rx_bytes":"11538","rx_packets":"4","tx_bytes":"338","tx_packets":"6"}
+  {"address":"127.0.0.1","count":"0","family":2,"pid":0,"port":0,"proto":"tcp","role":"listener","rx_bytes":"112","rx_packets":"2","tx_bytes":"60","tx_packets":"1"}
+  {"address":"0000:0000:0000:0000:0000:ffff:7f00:0001","count":"1","family":10,"pid":893,"port":0,"proto":"tcp","role":"acceptor","rx_bytes":"0","rx_packets":"0","tx_bytes":"0","tx_packets":"0"}
+  {"address":"127.0.0.1","count":"0","family":2,"pid":0,"port":0,"proto":"tcp","role":"acceptor","rx_bytes":"226","rx_packets":"4","tx_bytes":"11478","tx_packets":"3"}
+  {"address":"216.150.1.1","count":"1","family":2,"pid":986,"port":443,"proto":"tcp","role":"initiator","rx_bytes":"88","rx_packets":"2","tx_bytes":"140","tx_packets":"3"}
+## shirudo upatch map kernel-obs
+Pinned maps (9):
+  UPATCH                 MAP              TYPE               ENTRIES
+  kernel-obs             watch_stat       percpu_array       max=1  (per-cpu)
+  kernel-obs             file             array              max=1
+  kernel-obs             priv             array              max=1
+  kernel-obs             dns              array              max=1
+  kernel-obs             watch            array              max=1
+  kernel-obs             listen           array              max=1
+  kernel-obs             socket           array              max=1
+  kernel-obs             net              array              max=1
+  kernel-obs             exec             array              max=1
+## checks
+exec: /usr/bin/id (/usr/bin/gnuid) recorded
+file: /etc/shadow recorded
+dns: upatch.dev recorded
+net: a connection to 127.0.0.1:8080 recorded
+net: a connection to upatch.dev:443 recorded

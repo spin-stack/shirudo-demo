@@ -1,0 +1,177 @@
+version: '3'
+
+# Shirudo in a spin-machine guest, end to end (README). `go tool task` runs every step in order;
+# `go tool task <step>` runs one and what it needs. A step whose result is already there is
+# skipped, so a run can be repeated after a fix. cmd/demo does each host step and cmd/demo-guest
+# each guest step; what the guest printed lands in evidence/.
+
+run: once
+
+env:
+  WORK: '{{.WORK}}'
+
+vars:
+  WORK: '{{.WORK | default (print .ROOT_DIR "/work")}}'
+  OUT: '{{.WORK}}/out'
+  SRC: '{{.WORK}}/src/shirudo'
+  DEMO: go run ./cmd/demo
+
+tasks:
+  default:
+    desc: Every step, in order, then stop the machine.
+    cmds:
+      - task: init
+      - task: cve
+      - task: obs
+      - task: stop
+
+  check:
+    desc: The release tree has a TPM and passt, /dev/kvm is usable, docker and git are installed.
+    requires:
+      vars: [MACHINE_RELEASE]
+    cmds:
+      - '{{.DEMO}} check'
+
+  shirudo:
+    desc: Clone shirudo and the registry at versions.yaml's pins and build shirudo in its container, against the release kernel's BTF.
+    deps: [check]
+    sources: [versions.yaml]
+    generates:
+      - '{{.SRC}}/shirudo'
+      - '{{.SRC}}/shirudo-target'
+      - '{{.SRC}}/tools/shirudo-build/shirudo-build'
+    cmds:
+      - '{{.DEMO}} shirudo'
+
+  keys:
+    desc: shirudo genkey makes this run's ML-DSA-87 operator key in work/keys; never committed, new for each run.
+    deps: [shirudo]
+    status:
+      - test -s '{{.WORK}}/keys/cert.der'
+    cmds:
+      - '{{.DEMO}} keys'
+
+  images:
+    desc: The signed config image and the dm-verity runtime image, and the initrd's bootstrap file naming the runtime image's root hash.
+    deps: [keys]
+    sources:
+      - '{{.WORK}}/keys/cert.der'
+      - '{{.SRC}}/shirudo-target'
+    generates:
+      - '{{.OUT}}/images/runtime.roothash'
+      - '{{.OUT}}/images/initial.p7s'
+      - '{{.OUT}}/uki-bootstrap.conf'
+      - '{{.OUT}}/runtime-service.conf'
+    cmds:
+      - '{{.DEMO}} images'
+
+  initrd:
+    desc: shirudo-gen-initrd runs dracut with shirudo's module in Ubuntu 26.04's systemd, then checks the result.
+    deps: [images]
+    sources:
+      - initrd/Dockerfile
+      - versions.yaml
+      - '{{.OUT}}/uki-bootstrap.conf'
+      - '{{.SRC}}/shirudo-target'
+    generates:
+      - '{{.OUT}}/initrd.img'
+    cmds:
+      - '{{.DEMO}} initrd'
+
+  packages:
+    desc: The registry's tools/build builds and signs CVE-2025-24813's package; shirudo bpm build builds and signs kernel-obs.
+    deps: [keys]
+    sources:
+      - '{{.WORK}}/keys/cert.der'
+      - '{{.SRC}}/shirudo'
+    generates:
+      - '{{.OUT}}/packages/cve-2025-24813-1.0.0.bee'
+      - '{{.OUT}}/packages/kernel-obs-1.0.0.bee'
+    cmds:
+      - '{{.DEMO}} packages'
+
+  guest:
+    desc: cmd/demo-guest, static, for the guest.
+    sources:
+      - go.mod
+      - go.sum
+      - cmd/demo-guest/*.go
+    generates:
+      - '{{.OUT}}/guest/demo-guest'
+    env:
+      CGO_ENABLED: '0'
+      GOOS: linux
+      GOARCH: amd64
+    cmds:
+      - go build -trimpath -o '{{.OUT}}/guest/demo-guest' ./cmd/demo-guest
+
+  stage:
+    desc: The ext4 image the guest mounts at /opt/demo - shirudo's images and units, demo-guest, the packages, the registry's payloads and tools.
+    deps: [images, packages, guest]
+    sources:
+      - '{{.OUT}}/images/*'
+      - '{{.OUT}}/packages/*'
+      - '{{.OUT}}/guest/*'
+      - '{{.OUT}}/runtime-service.conf'
+    generates:
+      - '{{.OUT}}/stage.img'
+    cmds:
+      - '{{.DEMO}} stage'
+
+  provision:
+    desc: A new 8 GiB disk over the release's base image, booted without shirudo; demo-guest provision installs shirudo's images, units and Python.
+    deps: [stage]
+    sources:
+      - '{{.OUT}}/images/*'
+      - '{{.OUT}}/runtime-service.conf'
+      - '{{.SRC}}/shirudo-target'
+      - cmd/demo-guest/provision.go
+    generates:
+      - '{{.WORK}}/disk.qcow2'
+    cmds:
+      - '{{.DEMO}} provision'
+
+  boot:
+    desc: spin-machine boot --lockdown shirudo --tpm --initrd --net, its console on a socket; the stage disk at /opt/demo.
+    deps: [provision, initrd]
+    status:
+      - '{{.DEMO}} running'
+    cmds:
+      - '{{.DEMO}} boot'
+
+  init:
+    desc: The command line, lockdown, both shirudo init runs, shirudo status and image status; evidence/init.txt.
+    deps: [boot, stage]
+    cmds:
+      - '{{.DEMO}} init'
+
+  cve:
+    desc: The registry's setup, then payload, load, payload, unload, payload (0, 10, 0), then its tools/test; evidence/cve*.txt.
+    deps: [boot, stage]
+    cmds:
+      - '{{.DEMO}} cve'
+
+  obs:
+    desc: Load kernel-obs, run a program, read /etc/shadow, resolve a name, connect twice, read the tables back; evidence/obs.txt.
+    deps: [boot, stage]
+    cmds:
+      - '{{.DEMO}} obs'
+
+  stop:
+    desc: Power the guest off. work/disk.qcow2 and work/tpm stay, so `go tool task boot init` boots the same machine again.
+    cmds:
+      - '{{.DEMO}} stop'
+
+  clean:
+    desc: Stop the machine and remove work/, this run's key with it.
+    cmds:
+      - task: stop
+      - rm -rf '{{.WORK}}' .task
+
+  test:
+    desc: gofmt, vet and test the demo's Go, and build demo-guest for the guest.
+    cmds:
+      - test -z "$(gofmt -l .)"
+      - CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /dev/null ./cmd/demo-guest
+      - go vet ./...
+      - go test ./...

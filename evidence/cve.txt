@@ -1,0 +1,197 @@
+## setup, the registry's, unchanged
+Selecting previously unselected package ca-certificates-java.
+(Reading database… (Reading database… 5%(Reading database… 10%(Reading database… 15%(Reading database… 20%(Reading database… 25%(Reading database… 30%(Reading database… 35%(Reading database… 40%(Reading database… 45%(Reading database… 50%(Reading database… 55%(Reading database… 60%(Reading database… 65%(Reading database… 70%(Reading database… 75%(Reading database… 80%(Reading database… 85%(Reading database… 90%(Reading database… 95%(Reading database… 100%(Reading database… 13881 files and directories currently installed.)
+Preparing to unpack …/0-ca-certificates-java_20260311ubuntu0.26.04.2_all.deb…
+Unpacking ca-certificates-java (20260311ubuntu0.26.04.2)…
+Selecting previously unselected package java-common.
+Preparing to unpack …/1-java-common_0.77_all.deb…
+Unpacking java-common (0.77)…
+Selecting previously unselected package libjpeg-turbo8:amd64.
+Preparing to unpack …/2-libjpeg-turbo8_2.1.5-4ubuntu4_amd64.deb…
+Unpacking libjpeg-turbo8:amd64 (2.1.5-4ubuntu4)…
+Selecting previously unselected package libjpeg8:amd64.
+Preparing to unpack …/3-libjpeg8_8c-2ubuntu12_amd64.deb…
+Unpacking libjpeg8:amd64 (8c-2ubuntu12)…
+Selecting previously unselected package liblcms2-2:amd64.
+Preparing to unpack …/4-liblcms2-2_2.17-1ubuntu0.2_amd64.deb…
+Unpacking liblcms2-2:amd64 (2.17-1ubuntu0.2)…
+Selecting previously unselected package libnspr4:amd64.
+Preparing to unpack …/5-libnspr4_2%3a4.38.2-1ubuntu1_amd64.deb…
+Unpacking libnspr4:amd64 (2:4.38.2-1ubuntu1)…
+Selecting previously unselected package libnss3:amd64.
+Preparing to unpack …/6-libnss3_2%3a3.120-1ubuntu2.2_amd64.deb…
+Unpacking libnss3:amd64 (2:3.120-1ubuntu2.2)…
+Selecting previously unselected package libpcsclite1:amd64.
+Preparing to unpack …/7-libpcsclite1_2.4.1-1_amd64.deb…
+Unpacking libpcsclite1:amd64 (2.4.1-1)…
+Selecting previously unselected package openjdk-21-jre-headless:amd64.
+Preparing to unpack …/8-openjdk-21-jre-headless_21.0.13.1+2-1~26.04.1_amd64.deb…
+Unpacking openjdk-21-jre-headless:amd64 (21.0.13.1+2-1~26.04.1)…
+Setting up liblcms2-2:amd64 (2.17-1ubuntu0.2)…
+Setting up java-common (0.77)…
+Setting up libnspr4:amd64 (2:4.38.2-1ubuntu1)…
+Setting up libpcsclite1:amd64 (2.4.1-1)…
+Setting up libjpeg-turbo8:amd64 (2.1.5-4ubuntu4)…
+Setting up ca-certificates-java (20260311ubuntu0.26.04.2)…
+No JRE found. Skipping Java certificates setup.
+Setting up libjpeg8:amd64 (8c-2ubuntu12)…
+Setting up libnss3:amd64 (2:3.120-1ubuntu2.2)…
+Setting up openjdk-21-jre-headless:amd64 (21.0.13.1+2-1~26.04.1)…
+update-alternatives: using /usr/lib/jvm/java-21-openjdk-amd64/bin/java to provide /usr/bin/java (java) in auto mode
+update-alternatives: using /usr/lib/jvm/java-21-openjdk-amd64/bin/jpackage to provide /usr/bin/jpackage (jpackage) in auto mode
+update-alternatives: using /usr/lib/jvm/java-21-openjdk-amd64/bin/keytool to provide /usr/bin/keytool (keytool) in auto mode
+update-alternatives: using /usr/lib/jvm/java-21-openjdk-amd64/bin/rmiregistry to provide /usr/bin/rmiregistry (rmiregistry) in auto mode
+update-alternatives: using /usr/lib/jvm/java-21-openjdk-amd64/lib/jexec to provide /usr/bin/jexec (jexec) in auto mode
+Processing triggers for libc-bin (2.43-2ubuntu2.7)…
+Processing triggers for ca-certificates-java (20260311ubuntu0.26.04.2)…
+Adding debian:ACCVRAIZ1.pem
+Adding debian:AC_RAIZ_FNMT-RCM.pem
+Adding debian:AC_RAIZ_FNMT-RCM_SERVIDORES_SEGUROS.pem
+Adding debian:ANF_Secure_Server_Root_CA.pem
+Adding debian:Actalis_Authentication_Root_CA.pem
+Adding debian:Amazon_Root_CA_1.pem
+Adding debian:Amazon_Root_CA_2.pem
+Adding debian:Amazon_Root_CA_3.pem
+Adding debian:Amazon_Root_CA_4.pem
+Adding debian:Atos_TrustedRoot_Root_CA_ECC_TLS_2021.pem
+Adding debian:Atos_TrustedRoot_Root_CA_RSA_TLS_2021.pem
+Adding debian:Autoridad_de_Certificacion_Firmaprofesional_CIF_A62634068.pem
+Adding debian:BJCA_Global_Root_CA1.pem
+Adding debian:BJCA_Global_Root_CA2.pem
+Adding debian:Buypass_Class_2_Root_CA.pem
+Adding debian:Buypass_Class_3_Root_CA.pem
+Adding debian:CA_Disig_Root_R2.pem
+Adding debian:CFCA_EV_ROOT.pem
+Adding debian:COMODO_ECC_Certification_Authority.pem
+Adding debian:COMODO_RSA_Certification_Authority.pem
+Adding debian:Certainly_Root_E1.pem
+Adding debian:Certainly_Root_R1.pem
+Adding debian:Certigna_Root_CA.pem
+Adding debian:Certum_EC-384_CA.pem
+Adding debian:Certum_Trusted_Network_CA.pem
+Adding debian:Certum_Trusted_Network_CA_2.pem
+Adding debian:Certum_Trusted_Root_CA.pem
+Adding debian:D-TRUST_BR_Root_CA_1_2020.pem
+Adding debian:D-TRUST_BR_Root_CA_2_2023.pem
+Adding debian:D-TRUST_EV_Root_CA_1_2020.pem
+Adding debian:D-TRUST_EV_Root_CA_2_2023.pem
+Adding debian:D-TRUST_Root_Class_3_CA_2_2009.pem
+Adding debian:D-TRUST_Root_Class_3_CA_2_EV_2009.pem
+Adding debian:DigiCert_Assured_ID_Root_G2.pem
+Adding debian:DigiCert_Assured_ID_Root_G3.pem
+Adding debian:DigiCert_Global_Root_G2.pem
+Adding debian:DigiCert_Global_Root_G3.pem
+Adding debian:DigiCert_TLS_ECC_P384_Root_G5.pem
+Adding debian:DigiCert_TLS_RSA4096_Root_G5.pem
+Adding debian:DigiCert_Trusted_Root_G4.pem
+Adding debian:GDCA_TrustAUTH_R5_ROOT.pem
+Adding debian:GTS_Root_R1.pem
+Adding debian:GTS_Root_R3.pem
+Adding debian:GTS_Root_R4.pem
+Adding debian:GlobalSign_ECC_Root_CA_-_R4.pem
+Adding debian:GlobalSign_ECC_Root_CA_-_R5.pem
+Adding debian:GlobalSign_Root_CA_-_R3.pem
+Adding debian:GlobalSign_Root_CA_-_R6.pem
+Adding debian:GlobalSign_Root_E46.pem
+Adding debian:GlobalSign_Root_R46.pem
+Adding debian:Go_Daddy_Root_Certificate_Authority_-_G2.pem
+Adding debian:HARICA_TLS_ECC_Root_CA_2021.pem
+Adding debian:HARICA_TLS_RSA_Root_CA_2021.pem
+Adding debian:Hellenic_Academic_and_Research_Institutions_ECC_RootCA_2015.pem
+Adding debian:Hellenic_Academic_and_Research_Institutions_RootCA_2015.pem
+Adding debian:HiPKI_Root_CA_-_G1.pem
+Adding debian:Hongkong_Post_Root_CA_3.pem
+Adding debian:ISRG_Root_X1.pem
+Adding debian:ISRG_Root_X2.pem
+Adding debian:IdenTrust_Commercial_Root_CA_1.pem
+Adding debian:IdenTrust_Public_Sector_Root_CA_1.pem
+Adding debian:Izenpe.com.pem
+Adding debian:Microsec_e-Szigno_Root_CA_2009.pem
+Adding debian:Microsoft_ECC_Root_Certificate_Authority_2017.pem
+Adding debian:Microsoft_RSA_Root_Certificate_Authority_2017.pem
+Adding debian:NAVER_Global_Root_Certification_Authority.pem
+Adding debian:NetLock_Arany_=Class_Gold=_Főtanúsítvány.pem
+Adding debian:OISTE_Server_Root_ECC_G1.pem
+Adding debian:OISTE_Server_Root_RSA_G1.pem
+Adding debian:OISTE_WISeKey_Global_Root_GB_CA.pem
+Adding debian:OISTE_WISeKey_Global_Root_GC_CA.pem
+Adding debian:QuoVadis_Root_CA_1_G3.pem
+Adding debian:QuoVadis_Root_CA_2_G3.pem
+Adding debian:QuoVadis_Root_CA_3_G3.pem
+Adding debian:SECOM_TLS_ECC_Root_CA_2024.pem
+Adding debian:SECOM_TLS_RSA_Root_CA_2024.pem
+Adding debian:SSL.com_EV_Root_Certification_Authority_ECC.pem
+Adding debian:SSL.com_EV_Root_Certification_Authority_RSA_R2.pem
+Adding debian:SSL.com_Root_Certification_Authority_ECC.pem
+Adding debian:SSL.com_Root_Certification_Authority_RSA.pem
+Adding debian:SSL.com_TLS_ECC_Root_CA_2022.pem
+Adding debian:SSL.com_TLS_RSA_Root_CA_2022.pem
+Adding debian:SZAFIR_ROOT_CA2.pem
+Adding debian:Sectigo_Public_Server_Authentication_Root_E46.pem
+Adding debian:Sectigo_Public_Server_Authentication_Root_R46.pem
+Adding debian:SecureSign_Root_CA14.pem
+Adding debian:SecureSign_Root_CA15.pem
+Adding debian:Security_Communication_ECC_RootCA1.pem
+Adding debian:Security_Communication_RootCA2.pem
+Adding debian:Starfield_Root_Certificate_Authority_-_G2.pem
+Adding debian:Starfield_Services_Root_Certificate_Authority_-_G2.pem
+Adding debian:SwissSign_RSA_TLS_Root_CA_2022_-_1.pem
+Adding debian:T-TeleSec_GlobalRoot_Class_2.pem
+Adding debian:T-TeleSec_GlobalRoot_Class_3.pem
+Adding debian:TUBITAK_Kamu_SM_SSL_Kok_Sertifikasi_-_Surum_1.pem
+Adding debian:TWCA_CYBER_Root_CA.pem
+Adding debian:TWCA_Global_Root_CA.pem
+Adding debian:TWCA_Root_Certification_Authority.pem
+Adding debian:Telekom_Security_TLS_ECC_Root_2020.pem
+Adding debian:Telekom_Security_TLS_RSA_Root_2023.pem
+Adding debian:Telia_EC_TLS_Root_CA_v3.pem
+Adding debian:Telia_RSA_TLS_Root_CA_v3.pem
+Adding debian:Telia_Root_CA_v2.pem
+Adding debian:TrustAsia_Global_Root_CA_G3.pem
+Adding debian:TrustAsia_Global_Root_CA_G4.pem
+Adding debian:TrustAsia_TLS_ECC_Root_CA.pem
+Adding debian:TrustAsia_TLS_RSA_Root_CA.pem
+Adding debian:TunTrust_Root_CA.pem
+Adding debian:UCA_Extended_Validation_Root.pem
+Adding debian:UCA_Global_G2_Root.pem
+Adding debian:USERTrust_ECC_Certification_Authority.pem
+Adding debian:USERTrust_RSA_Certification_Authority.pem
+Adding debian:certSIGN_Root_CA_G2.pem
+Adding debian:e-Szigno_Root_CA_2017.pem
+Adding debian:e-Szigno_TLS_Root_CA_2023.pem
+Adding debian:emSign_ECC_Root_CA_-_C3.pem
+Adding debian:emSign_Root_CA_-_C1.pem
+Adding debian:emSign_Root_CA_-_G1.pem
+Adding debian:vTrus_ECC_Root_CA.pem
+Adding debian:vTrus_Root_CA.pem
+done.
+Tomcat started.
+TOMCAT_URL=http://127.0.0.1:8080
+TOMCAT_APP_WORK=/opt/upatch-payload/cve-2025-24813/apache-tomcat-9.0.98/work/Catalina/localhost/ROOT
+## payload, before the upatch
+reached: the partial PUT wrote .upatch-probe-157eaced4ce6.session in the work directory (HTTP 409); removed it
+payload exit 0
+## shirudo upatch load cve-2025-24813-tomcat-block.upatch
+upatch load: signed loader accepted, keyring 889801055, 226 instructions
+upatch load: loader ran, 1 maps and 2 programs
+upatch load: program 0 (lsm) pinned at /run/shirudo/bpffs/upatches/cve-2025-24813-tomcat-block/link_0
+upatch load: program 1 (lsm) pinned at /run/shirudo/bpffs/upatches/cve-2025-24813-tomcat-block/link_1
+upatch load: map 0 (refused) pinned at /run/shirudo/bpffs/upatches/cve-2025-24813-tomcat-block/maps/refused
+upatch load: cve-2025-24813-tomcat-block loaded, 2 programs, keyring 889801055
+upatch load: cve-2025-24813-tomcat-block measured, register 07d66f95bc28f79b80415ec62ef57aaf1918897c627d7e683b0450b2acd07ba9
+## shirudo upatch list
+Archived upatches (/var/lib/shirudo/upatches):
+  NAME                         LOADED  TYPE    KIND  PAYLOAD
+  cve-2025-24813-tomcat-block  yes     load    bpf   d5aef29045705862..
+## payload, upatch loaded
+blocked: the partial PUT failed with HTTP 500 and wrote no file
+payload exit 10
+## shirudo upatch unload cve-2025-24813-tomcat-block.unload.upatch
+upatch unload: signed loader accepted, keyring 889801055, 165 instructions
+upatch unload: cve-2025-24813-tomcat-block carries the directive's payload
+upatch unload: cve-2025-24813-tomcat-block measured, register ac39673868eb68aa68ddcff86f4cf34285b2a042b976b81967da66967b1ed314
+upatch unload: cve-2025-24813-tomcat-block detached and unpinned
+## payload, after the unload
+reached: the partial PUT wrote .upatch-probe-3490bc305b75.session in the work directory (HTTP 409); removed it
+payload exit 0
+## result: before=0 loaded=10 after=0

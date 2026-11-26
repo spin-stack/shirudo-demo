@@ -1,0 +1,44 @@
+- name: shirudo
+  kind: git
+  source: https://github.com/shirudo-dev/shirudo
+  version: main
+  pin: 2a560729814a9ac0ac702bb15d39c2145522c143
+  track: branch
+  note: >-
+    the shirudo the demo builds in its own container (testing/container) against the release
+    kernel's BTF, and whose genkey, gen-image, gen-runtime, gen-initrd, bpm and kernel-obs package
+    it uses. A bump is a whole run, `rm -rf work && go tool task`, since the kernel hooks the release
+    carries are this commit's.
+
+- name: upatch-registry
+  kind: git
+  source: https://github.com/copper-helm/upatch-registry
+  version: main
+  pin: 24e4f96d8751612f1c65820c87bc07b675ea5199
+  track: branch
+  note: >-
+    upatch.dev's registry: CVE-2025-24813's upatch, built and signed by its tools/build with this
+    run's key, and its payloads/ and tools/test, run unchanged in the guest. After the bump:
+    `go tool task packages stage cve`.
+
+- name: ubuntu
+  kind: image
+  source: mirror.gcr.io/library/ubuntu
+  version: '26.04'
+  pin: sha256:c098726dd9b9733f3e885f8de0ef375206a311b0a317eadc40d347b1115fb944
+  track: digest
+  note: >-
+    what initrd/Dockerfile is made on: its systemd and dracut make the initrd shirudo's init runs
+    in (README, "How the guest differs"). After the bump: `go tool task initrd`, then
+    `go tool task stop boot init`.
+
+- name: task
+  kind: download
+  source: https://github.com/go-task/task/releases/download/v{version}/task_{os}_{arch}.tar.gz
+  version: 3.54.0
+  pins:
+    linux/amd64: 680859dbb4d881a9c72d4d9a8f510825450849af8567deacd7302c01124416fb
+    linux/arm64: d7189d439d4a6058e39e1b2acd7c8b27acd4856691b408f23b242e4294e1df5b
+  track: github-release https://github.com/go-task/task
+  note: >-
+    The Task `go tool task` runs (go-tools' cmd/task): Taskfile.yml runs the demo's steps.
