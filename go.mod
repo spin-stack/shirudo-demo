@@ -3,7 +3,7 @@ module github.com/spin-stack/shirudo-demo
 go 1.27.3
 
 require (
-	github.com/spin-stack/go-tools v0.20261125.1
+	github.com/spin-stack/go-tools v0.20261127.3
 	golang.org/x/sys v0.50.0
 )
 
