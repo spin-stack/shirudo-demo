@@ -33,14 +33,3 @@
     upatch.dev's registry: CVE-2025-24813's upatch, built and signed by its tools/build with this
     run's key, and its payloads/ and tools/test, run unchanged in the guest. After the bump:
     `go tool task operator stage cve`.
-
-- name: task
-  kind: download
-  source: https://github.com/go-task/task/releases/download/v{version}/task_{os}_{arch}.tar.gz
-  version: 3.54.0
-  pins:
-    linux/amd64: 680859dbb4d881a9c72d4d9a8f510825450849af8567deacd7302c01124416fb
-    linux/arm64: d7189d439d4a6058e39e1b2acd7c8b27acd4856691b408f23b242e4294e1df5b
-  track: github-release https://github.com/go-task/task
-  note: >-
-    The Task `go tool task` runs (go-tools' cmd/task): Taskfile.yml runs the demo's steps.
