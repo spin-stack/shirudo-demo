@@ -197,30 +197,30 @@ Setting up binutils-x86-64-linux-gnu (2.46-3ubuntu2)…
 Setting up binutils (2.46-3ubuntu2)…
 Processing triggers for systemd (262.1-1ubuntu1+spin1)…
 Processing triggers for libc-bin (2.43-2ubuntu2.7)…
-shirudo (6eccbfe-rc0, "Social BPF Coding")
-version-id: 112fb3e2caeec5b91ae22ca1032358b1dce79811795d4def6de9f4ed0cdd052f
+shirudo (3a05b71-rc0, "Social BPF Coding")
+version-id: 350ad8bdb8a00f20a681c8da53f59fcbafc9948fd6fec6134b04037c6f47cb1a
 ## shirudo genkey: this run's operator key
 wrote /opt/demo/out/keys/signing_key.pem (ML-DSA-87, mode 0600)
 wrote /opt/demo/out/keys/cert.der (X.509 self-signed, no expiration date)
 genkey: created shirudo ML-DSA-87 signing material at /opt/demo/out/keys
-f727ad8324a49d51cb6219eaaeab2f45c1a87ba480d76c35f1ef5073a5bfe5c0
+c72c299073fd2b4059eccb467915cd12bc57e684bc45398def8f77f262de534c
 ## the signed config image and the dm-verity runtime image
-032563ddaa989c16f173530c8571067d1dac7af167403821d47dba153cb29e7b
-032563ddaa989c16f173530c8571067d1dac7af167403821d47dba153cb29e7b
-e591b18865d4152c812a7c9d95e5e8cd172598b5fa3a3062ff3f1c136cc75275
+f66572d82d468cb2fe422005a759bb3c1507fed888c8cff1ef35ac0c82d8b6bc
+f66572d82d468cb2fe422005a759bb3c1507fed888c8cff1ef35ac0c82d8b6bc
+9408ca2411a76d28b263eb2ac2be3f8e23b5da9f7e77cbf4b8fdfb44894e9b08
 Runtime invocation (after the authenticated image is mounted):
 /run/shirudo/runtime/usr/bin/shirudo init
 ## CVE-2025-24813's package, from the registry's tools/build
 1 entries checked, 0 problems
-wrote /opt/demo/tmp/shirudo-bpm-build.lsmZiE/0.upatch (insns=1808 sig=4853 data=43000 sections=2 maps=1 progs=2 decoders=0 name=cve-2025-24813-tomcat-block)
-wrote /opt/demo/tmp/shirudo-bpm-build.lsmZiE/0.unload.upatch (insns=1320 sig=4853 data=2808 sections=2 maps=1 progs=1 decoders=0 name=cve-2025-24813-tomcat-block UNLOAD)
+wrote /opt/demo/tmp/shirudo-bpm-build.ZpxzYX/0.upatch (insns=1808 sig=4853 data=43000 sections=2 maps=1 progs=2 decoders=0 name=cve-2025-24813-tomcat-block)
+wrote /opt/demo/tmp/shirudo-bpm-build.ZpxzYX/0.unload.upatch (insns=1320 sig=4853 data=2808 sections=2 maps=1 progs=1 decoders=0 name=cve-2025-24813-tomcat-block UNLOAD)
 /opt/demo/registry/build/packages/cve-2025-24813-1.0.0.bee
 /opt/demo/out/packages/cve-2025-24813-1.0.0.bee
 ## kernel-obs's package, the release's, from shirudo bpm build
-wrote /opt/demo/tmp/shirudo-bpm-build.NM1aDZ/0.upatch (insns=40024 sig=4853 data=781632 sections=3 maps=19 progs=35 decoders=9 name=kernel-obs)
-wrote /opt/demo/tmp/shirudo-bpm-build.NM1aDZ/0.unload.upatch (insns=1320 sig=4853 data=2808 sections=2 maps=1 progs=1 decoders=0 name=kernel-obs UNLOAD)
-wrote /opt/demo/tmp/shirudo-bpm-build.NM1aDZ/1.upatch (insns=1184 sig=4853 data=3216 sections=2 maps=1 progs=1 decoders=0 name=userns-unshare-counter)
-wrote /opt/demo/tmp/shirudo-bpm-build.NM1aDZ/1.unload.upatch (insns=1320 sig=4853 data=2808 sections=2 maps=1 progs=1 decoders=0 name=userns-unshare-counter UNLOAD)
+wrote /opt/demo/tmp/shirudo-bpm-build.SCrzM6/0.upatch (insns=40024 sig=4853 data=781632 sections=3 maps=19 progs=35 decoders=9 name=kernel-obs)
+wrote /opt/demo/tmp/shirudo-bpm-build.SCrzM6/0.unload.upatch (insns=1320 sig=4853 data=2808 sections=2 maps=1 progs=1 decoders=0 name=kernel-obs UNLOAD)
+wrote /opt/demo/tmp/shirudo-bpm-build.SCrzM6/1.upatch (insns=1184 sig=4853 data=3216 sections=2 maps=1 progs=1 decoders=0 name=userns-unshare-counter)
+wrote /opt/demo/tmp/shirudo-bpm-build.SCrzM6/1.unload.upatch (insns=1320 sig=4853 data=2808 sections=2 maps=1 progs=1 decoders=0 name=userns-unshare-counter UNLOAD)
 /opt/demo/out/packages/kernel-obs-1.0.0.bee
 ## the units and the systemd initrd
 shirudo-gen-initrd: running dracut for 7.4.0-rc4
@@ -230,20 +230,20 @@ shirudo-gen-initrd: the kernel command line must carry bpf.keyring_unsealed=1 fo
 shirudo-gen-initrd: the kernel command line must carry dm_verity.keyring_unsealed=1 for initrd key enrollment; this boot does not
 shirudo-gen-initrd: /opt/demo/out/initrd.img holds shirudo, the certificate and shirudo-initrd.service
 ## what the operator made
--rw-r--r--       1261 shirudo.service
 -rw-r--r--        170 runtime-service.conf
 -rw-------        133 uki-bootstrap.conf
--rw-r--r--         64 images/initial.roothash
--rw-r--r--     131072 images/runtime.verity
+-rw-r--r--      39122 packages/cve-2025-24813-1.0.0.bee
+-rw-r--r--     194863 packages/kernel-obs-1.0.0.bee
 -rw-r--r--         64 images/runtime.roothash
 -rw-r--r--    1048576 images/initial.img
 -rw-r--r--      16384 images/initial.verity
--rw-r--r--   15728640 images/runtime.img
 -rw-r--r--       4853 images/runtime.p7s
+-rw-r--r--         64 images/initial.roothash
 -rw-r--r--       4853 images/initial.p7s
--rw-r--r--       1697 shirudo-initrd.service
--rw-r--r--      39092 packages/cve-2025-24813-1.0.0.bee
--rw-r--r--     194857 packages/kernel-obs-1.0.0.bee
--rw-------   26706812 initrd.img
+-rw-r--r--     131072 images/runtime.verity
+-rw-r--r--   15728640 images/runtime.img
+-rw-------   26725917 initrd.img
 -rw-------       6774 keys/signing_key.pem
 -rw-------       7457 keys/cert.der
+-rw-r--r--       1697 shirudo-initrd.service
+-rw-r--r--       1261 shirudo.service
