@@ -25,23 +25,21 @@ Booting initrd of Ubuntu 26.04.1 LTS dracut-110-11ubuntu0.1 (Initramfs)...
 [  OK  ] Finished systemd-tmpfiles-setup-dev.service - Create Static Device Nodes in /dev.
 [  OK  ] Reached target local-fs-pre.target - Preparation for Local File Systems.
 [  OK  ] Reached target local-fs.target - Local File Systems.
-[  OK  ] Started systemd-journald.service - Journal Service.
-         Starting systemd-tmpfiles-setup.service - Create System Files and Directories...
 [  OK  ] Finished dracut-cmdline.service - dracut cmdline hook.
          Starting systemd-udevd.service - Rule-based Manager for Device Events and Files...
+[  OK  ] Started systemd-journald.service - Journal Service.
 [  OK  ] Finished systemd-pcrphase-initrd.service - TPM PCR Barrier (initrd).
+         Starting systemd-tmpfiles-setup.service - Create System Files and Directories...
 [  OK  ] Finished systemd-tmpfiles-setup.service - Create System Files and Directories.
 [  OK  ] Started systemd-udevd.service - Rule-based Manager for Device Events and Files.
          Starting systemd-udev-trigger.service - Coldplug All udev Devices...
 [  OK  ] Finished systemd-udev-trigger.service - Coldplug All udev Devices.
-         Expecting device dev-tpm0.device - /dev/tpm0...
 [  OK  ] Reached target sysinit.target - System Initialization.
 [  OK  ] Reached target basic.target - Basic System.
 [  OK  ] Found device dev-vda.device - /dev/vda.
 [  OK  ] Reached target initrd-root-device.target - Initrd Root Device.
-         Starting systemd-fsck-root.service - File System Check on /dev/vda...
-[  OK  ] Found device dev-tpm0.device - /dev/tpm0.
 [  OK  ] Reached target tpm2.target - Trusted Platform Module.
+         Starting systemd-fsck-root.service - File System Check on /dev/vda...
 [  OK  ] Finished systemd-fsck-root.service - File System Check on /dev/vda.
          Mounting sysroot.mount - /sysroot...
 [  OK  ] Mounted sysroot.mount - /sysroot.
@@ -78,8 +76,8 @@ Booting initrd of Ubuntu 26.04.1 LTS dracut-110-11ubuntu0.1 (Initramfs)...
 [  OK  ] Stopped target local-fs-pre.target - Preparation for Local File Systems.
 [  OK  ] Stopped systemd-udev-trigger.service - Coldplug All udev Devices.
          Stopping systemd-udevd.service - Rule-based Manager for Device Events and Files...
-[  OK  ] Finished initrd-cleanup.service - Cleaning Up and Shutting Down Daemons.
 [  OK  ] Stopped systemd-udevd.service - Rule-based Manager for Device Events and Files.
+[  OK  ] Finished initrd-cleanup.service - Cleaning Up and Shutting Down Daemons.
 [  OK  ] Closed systemd-udevd-varlink.socket - udev Varlink Socket.
          Starting initrd-udevadm-cleanup-db.service - Cleanup udev Database...
 [  OK  ] Stopped systemd-tmpfiles-setup-dev.service - Create Static Device Nodes in /dev.
@@ -104,11 +102,11 @@ Welcome to Ubuntu 26.04.1 LTS!
          Starting spin-machine-sshd-keygen.service - Generate SSH host keys for this VM...
 [  OK  ] Listening on systemd-logind-varlink.socket - User Login Management Varlink Socket.
 [  OK  ] Mounted tmp.mount - Temporary Directory /tmp.
+[  OK  ] Finished spin-machine-sshd-keygen.service - Generate SSH host keys for this VM.
+         Starting ssh.service - OpenBSD Secure Shell server...
          Starting systemd-logind.service - User Login Management...
 [  OK  ] Started dbus-broker.service - D-Bus System Message Bus.
 [  OK  ] Started systemd-journald.service - Journal Service.
-[  OK  ] Finished spin-machine-sshd-keygen.service - Generate SSH host keys for this VM.
-         Starting ssh.service - OpenBSD Secure Shell server...
 [  OK  ] Started ssh.service - OpenBSD Secure Shell server.
 [  OK  ] Started systemd-logind.service - User Login Management.
 [  OK  ] Created slice user-0.slice - User Slice of UID 0.
@@ -116,21 +114,21 @@ Welcome to Ubuntu 26.04.1 LTS!
 [  OK  ] Finished user-runtime-dir@0.service - User Runtime Directory /run/user/0.
          Starting user@0.service - User Manager for UID 0...
 [  OK  ] Started user@0.service - User Manager for UID 0.
-]3008;start=189c5c34103e4e9faa045c497f2c104a;user=root;hostname=localhost;machineid=10a51b0376544bce93333c8dd9c4a9da;bootid=80ac393703a043a8857020d6684a516d;pid=377;pidfdid=4174;comm=(agetty);servicename=serial-getty@ttyS0.service;invocationid=58d3bd8a2eb
+
 Ubuntu 26.04.1 LTS localhost ttyS0
 
 localhost login: root (automatic login)
 
-root@localhost:~# printf '%s\n' '@@B''72e51bed409d@@'; stty -echo 2>/dev/null; dmesg -n 1 2>/dev/null; true; printf '%s%s\n' '@@E''72e51bed409d@@' "$?"
-@@B72e51bed409d@@
-@@E72e51bed409d@@0
+root@localhost:~# printf '%s\n' '@@B''b9a4cff7d60b@@'; stty -echo 2>/dev/null; dmesg -n 1 2>/dev/null; true; printf '%s%s\n' '@@E''b9a4cff7d60b@@' "$?"
+@@Bb9a4cff7d60b@@
+@@Eb9a4cff7d60b@@0
 root@localhosst:~# 
-@@Bd26ef443f224@@
-@@Ed26ef443f224@@1
+@@Bbde7f66bcb0d@@
+@@Ebde7f66bcb0d@@1
 root@localhosst:~# 
-@@B2e1594dd24f7@@
-@@E2e1594dd24f7@@0
+@@Bef9a0bf562d7@@
+@@Eef9a0bf562d7@@0
 root@localhost:~# 
-@@B0086b6a58806@@
-@@E0086b6a58806@@0
-]3008;end=129fb96e-d52
+@@B4eb60ca19b34@@
+@@E4eb60ca19b34@@0
+]3008;end

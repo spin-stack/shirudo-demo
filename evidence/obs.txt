@@ -1,5 +1,5 @@
 ## shirudo upatch load kernel-obs.upatch
-upatch load: signed loader accepted, keyring 823016468, 5003 instructions
+upatch load: signed loader accepted, keyring 565203651, 5003 instructions
 upatch load: loader ran, 19 maps and 35 programs
 upatch load: serializer program 0 pinned at /run/shirudo/bpffs/upatches/kernel-obs/serializers/priv
 upatch load: serializer program 1 pinned at /run/shirudo/bpffs/upatches/kernel-obs/serializers/exec
@@ -46,8 +46,8 @@ upatch load: map 10 (dns) pinned at /run/shirudo/bpffs/upatches/kernel-obs/maps/
 upatch load: map 11 (priv) pinned at /run/shirudo/bpffs/upatches/kernel-obs/maps/priv
 upatch load: map 12 (file) pinned at /run/shirudo/bpffs/upatches/kernel-obs/maps/file
 upatch load: map 13 (watch_stat) pinned at /run/shirudo/bpffs/upatches/kernel-obs/maps/watch_stat
-upatch load: kernel-obs loaded, 35 programs, keyring 823016468
-upatch load: kernel-obs measured, register 4083b5d80d34f4c4b2b5640a962c8805d60a6a87981b17ccbf129bd19f6e7812
+upatch load: kernel-obs loaded, 35 programs, keyring 565203651
+upatch load: kernel-obs measured, register 97fb0da69ec4b792cfb4c75115a2b3791b86214a2beb7c5cf7fefb7476c4e892
 ## shirudo upatch list
 Archived upatches (/var/lib/shirudo/upatches):
   NAME                      LOADED  TYPE    KIND  PAYLOAD
@@ -57,31 +57,32 @@ uid=0(root) gid=0(root) groups=0(root)
 ## a read of /etc/shadow
 read
 ## a DNS lookup: upatch.dev, through the guest's resolver
-upatch.dev -> 216.150.1.1 216.150.1.65
+upatch.dev -> 216.150.16.1 216.150.16.65
 ## a connection: 127.0.0.1:8080
 connected to 127.0.0.1:8080
 "HTTP/1.1 200"
 ## a connection: upatch.dev:443
-connected to 216.150.1.1:443
+connected to 216.150.16.1:443
 ## shirudo upatch map kernel-obs exec --json
 2 records
-  {"caller_inferred":true,"euid":0,"exec_count":"4","interpreter":false,"name":"shirudo","path":"/run/shirudo/runtime/usr/bin/shirudo","pid":1006,"uid":0}
-  {"caller_inferred":true,"euid":0,"exec_count":"1","interpreter":false,"name":"gnuid","path":"/usr/bin/gnuid","pid":1005,"uid":0}
+  {"caller_inferred":true,"euid":0,"exec_count":"4","interpreter":false,"name":"shirudo","path":"/run/shirudo/runtime/usr/bin/shirudo","pid":1008,"uid":0}
+  {"caller_inferred":true,"euid":0,"exec_count":"1","interpreter":false,"name":"gnuid","path":"/usr/bin/gnuid","pid":1007,"uid":0}
 ## shirudo upatch map kernel-obs file --json
 1 records
-  {"count":"1","euid":0,"fs_magic":"61267","mode":"r","path":"/etc/shadow","pid":992,"rule":1}
+  {"count":"1","euid":0,"fs_magic":"61267","mode":"r","path":"/etc/shadow","pid":993,"rule":1}
 ## shirudo upatch map kernel-obs dns --json
 2 records
-  {"address":"216.150.1.1","answer_count":"1","family":2,"names":[{"last_seen_unix_nano":"1795735292387525632","name":"upatch.dev","seen_count":"1"}]}
-  {"address":"216.150.1.65","answer_count":"1","family":2,"names":[{"last_seen_unix_nano":"1795735292387525632","name":"upatch.dev","seen_count":"1"}]}
+  {"address":"216.150.16.1","answer_count":"1","family":2,"names":[{"last_seen_unix_nano":"1795737696476948395","name":"upatch.dev","seen_count":"1"}]}
+  {"address":"216.150.16.65","answer_count":"1","family":2,"names":[{"last_seen_unix_nano":"1795737696476948395","name":"upatch.dev","seen_count":"1"}]}
 ## shirudo upatch map kernel-obs net --json
-6 records
-  {"address":"10.0.2.3","count":"2","family":2,"pid":992,"port":53,"proto":"udp","rx_bytes":"240","rx_packets":"2","tx_bytes":"134","tx_packets":"2"}
-  {"address":"127.0.0.1","count":"1","family":2,"pid":992,"port":8080,"proto":"tcp","role":"initiator","rx_bytes":"11538","rx_packets":"4","tx_bytes":"338","tx_packets":"6"}
+7 records
+  {"address":"10.0.2.3","count":"1","family":2,"pid":993,"port":53,"proto":"udp","rx_bytes":"0","rx_packets":"0","tx_bytes":"0","tx_packets":"0"}
+  {"address":"10.0.2.3","count":"1","family":2,"pid":993,"port":53,"proto":"udp","rx_bytes":"240","rx_packets":"2","tx_bytes":"134","tx_packets":"2"}
+  {"address":"127.0.0.1","count":"1","family":2,"pid":993,"port":8080,"proto":"tcp","role":"initiator","rx_bytes":"11538","rx_packets":"4","tx_bytes":"338","tx_packets":"6"}
   {"address":"127.0.0.1","count":"0","family":2,"pid":0,"port":0,"proto":"tcp","role":"listener","rx_bytes":"112","rx_packets":"2","tx_bytes":"60","tx_packets":"1"}
-  {"address":"0000:0000:0000:0000:0000:ffff:7f00:0001","count":"1","family":10,"pid":905,"port":0,"proto":"tcp","role":"acceptor","rx_bytes":"0","rx_packets":"0","tx_bytes":"0","tx_packets":"0"}
+  {"address":"0000:0000:0000:0000:0000:ffff:7f00:0001","count":"1","family":10,"pid":907,"port":0,"proto":"tcp","role":"acceptor","rx_bytes":"0","rx_packets":"0","tx_bytes":"0","tx_packets":"0"}
   {"address":"127.0.0.1","count":"0","family":2,"pid":0,"port":0,"proto":"tcp","role":"acceptor","rx_bytes":"226","rx_packets":"4","tx_bytes":"11478","tx_packets":"3"}
-  {"address":"216.150.1.1","count":"1","family":2,"pid":992,"port":443,"proto":"tcp","role":"initiator","rx_bytes":"88","rx_packets":"2","tx_bytes":"140","tx_packets":"3"}
+  {"address":"216.150.16.1","count":"1","family":2,"pid":993,"port":443,"proto":"tcp","role":"initiator","rx_bytes":"88","rx_packets":"2","tx_bytes":"140","tx_packets":"3"}
 ## shirudo upatch map kernel-obs
 Pinned maps (9):
   UPATCH                 MAP              TYPE               ENTRIES

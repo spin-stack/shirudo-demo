@@ -2,20 +2,20 @@
 Ign:1 file:/opt/demo/spin-stack/shirudo-operator/debs ./ InRelease
 Ign:2 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Release
 Get:3 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Packages
-Ign:4 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en_US
-Ign:5 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en
-Ign:4 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en_US
-Ign:5 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en
-Ign:4 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en_US
-Ign:5 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en
-Ign:4 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en_US
-Ign:5 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en
-Ign:4 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en_US
-Ign:5 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en
-Ign:4 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en_US
-Ign:5 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en
-Ign:4 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en_US
-Ign:5 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en
+Ign:4 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en
+Ign:5 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en_US
+Ign:4 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en
+Ign:5 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en_US
+Ign:4 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en
+Ign:5 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en_US
+Ign:4 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en
+Ign:5 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en_US
+Ign:4 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en
+Ign:5 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en_US
+Ign:4 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en
+Ign:5 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en_US
+Ign:4 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en
+Ign:5 file:/opt/demo/spin-stack/shirudo-operator/debs ./ Translation-en_US
 Reading package lists...
 Reading package lists...
 Building dependency tree...
@@ -203,24 +203,24 @@ version-id: 112fb3e2caeec5b91ae22ca1032358b1dce79811795d4def6de9f4ed0cdd052f
 wrote /opt/demo/out/keys/signing_key.pem (ML-DSA-87, mode 0600)
 wrote /opt/demo/out/keys/cert.der (X.509 self-signed, no expiration date)
 genkey: created shirudo ML-DSA-87 signing material at /opt/demo/out/keys
-979a5e9dd7b8c871eeff2b9f99fd35fdf9fe9740a7812dce8e61cf8b733a9cdf
+f727ad8324a49d51cb6219eaaeab2f45c1a87ba480d76c35f1ef5073a5bfe5c0
 ## the signed config image and the dm-verity runtime image
-161eface193d97ee85bc37737f4d5940f457f76a350ddc9061c074dd451f4517
-161eface193d97ee85bc37737f4d5940f457f76a350ddc9061c074dd451f4517
-6d76b1fe1f5ab92f44831eb246f16253ac1fa60870f93c0fa62d85257fb931f7
+032563ddaa989c16f173530c8571067d1dac7af167403821d47dba153cb29e7b
+032563ddaa989c16f173530c8571067d1dac7af167403821d47dba153cb29e7b
+e591b18865d4152c812a7c9d95e5e8cd172598b5fa3a3062ff3f1c136cc75275
 Runtime invocation (after the authenticated image is mounted):
 /run/shirudo/runtime/usr/bin/shirudo init
 ## CVE-2025-24813's package, from the registry's tools/build
 1 entries checked, 0 problems
-wrote /opt/demo/tmp/shirudo-bpm-build.7nuuD0/0.upatch (insns=1808 sig=4853 data=43000 sections=2 maps=1 progs=2 decoders=0 name=cve-2025-24813-tomcat-block)
-wrote /opt/demo/tmp/shirudo-bpm-build.7nuuD0/0.unload.upatch (insns=1320 sig=4853 data=2808 sections=2 maps=1 progs=1 decoders=0 name=cve-2025-24813-tomcat-block UNLOAD)
+wrote /opt/demo/tmp/shirudo-bpm-build.lsmZiE/0.upatch (insns=1808 sig=4853 data=43000 sections=2 maps=1 progs=2 decoders=0 name=cve-2025-24813-tomcat-block)
+wrote /opt/demo/tmp/shirudo-bpm-build.lsmZiE/0.unload.upatch (insns=1320 sig=4853 data=2808 sections=2 maps=1 progs=1 decoders=0 name=cve-2025-24813-tomcat-block UNLOAD)
 /opt/demo/registry/build/packages/cve-2025-24813-1.0.0.bee
 /opt/demo/out/packages/cve-2025-24813-1.0.0.bee
 ## kernel-obs's package, the release's, from shirudo bpm build
-wrote /opt/demo/tmp/shirudo-bpm-build.TfXfya/0.upatch (insns=40024 sig=4853 data=781632 sections=3 maps=19 progs=35 decoders=9 name=kernel-obs)
-wrote /opt/demo/tmp/shirudo-bpm-build.TfXfya/0.unload.upatch (insns=1320 sig=4853 data=2808 sections=2 maps=1 progs=1 decoders=0 name=kernel-obs UNLOAD)
-wrote /opt/demo/tmp/shirudo-bpm-build.TfXfya/1.upatch (insns=1184 sig=4853 data=3216 sections=2 maps=1 progs=1 decoders=0 name=userns-unshare-counter)
-wrote /opt/demo/tmp/shirudo-bpm-build.TfXfya/1.unload.upatch (insns=1320 sig=4853 data=2808 sections=2 maps=1 progs=1 decoders=0 name=userns-unshare-counter UNLOAD)
+wrote /opt/demo/tmp/shirudo-bpm-build.NM1aDZ/0.upatch (insns=40024 sig=4853 data=781632 sections=3 maps=19 progs=35 decoders=9 name=kernel-obs)
+wrote /opt/demo/tmp/shirudo-bpm-build.NM1aDZ/0.unload.upatch (insns=1320 sig=4853 data=2808 sections=2 maps=1 progs=1 decoders=0 name=kernel-obs UNLOAD)
+wrote /opt/demo/tmp/shirudo-bpm-build.NM1aDZ/1.upatch (insns=1184 sig=4853 data=3216 sections=2 maps=1 progs=1 decoders=0 name=userns-unshare-counter)
+wrote /opt/demo/tmp/shirudo-bpm-build.NM1aDZ/1.unload.upatch (insns=1320 sig=4853 data=2808 sections=2 maps=1 progs=1 decoders=0 name=userns-unshare-counter UNLOAD)
 /opt/demo/out/packages/kernel-obs-1.0.0.bee
 ## the units and the systemd initrd
 shirudo-gen-initrd: running dracut for 7.4.0-rc4
@@ -230,20 +230,20 @@ shirudo-gen-initrd: the kernel command line must carry bpf.keyring_unsealed=1 fo
 shirudo-gen-initrd: the kernel command line must carry dm_verity.keyring_unsealed=1 for initrd key enrollment; this boot does not
 shirudo-gen-initrd: /opt/demo/out/initrd.img holds shirudo, the certificate and shirudo-initrd.service
 ## what the operator made
--rw-------   26706963 initrd.img
 -rw-r--r--       1261 shirudo.service
--rw-------       7457 keys/cert.der
--rw-------       6774 keys/signing_key.pem
 -rw-r--r--        170 runtime-service.conf
--rw-r--r--   15728640 images/runtime.img
+-rw-------        133 uki-bootstrap.conf
+-rw-r--r--         64 images/initial.roothash
 -rw-r--r--     131072 images/runtime.verity
 -rw-r--r--         64 images/runtime.roothash
--rw-r--r--      16384 images/initial.verity
--rw-r--r--         64 images/initial.roothash
--rw-r--r--       4853 images/runtime.p7s
 -rw-r--r--    1048576 images/initial.img
+-rw-r--r--      16384 images/initial.verity
+-rw-r--r--   15728640 images/runtime.img
+-rw-r--r--       4853 images/runtime.p7s
 -rw-r--r--       4853 images/initial.p7s
 -rw-r--r--       1697 shirudo-initrd.service
--rw-r--r--     194911 packages/kernel-obs-1.0.0.bee
--rw-r--r--      39126 packages/cve-2025-24813-1.0.0.bee
--rw-------        133 uki-bootstrap.conf
+-rw-r--r--      39092 packages/cve-2025-24813-1.0.0.bee
+-rw-r--r--     194857 packages/kernel-obs-1.0.0.bee
+-rw-------   26706812 initrd.img
+-rw-------       6774 keys/signing_key.pem
+-rw-------       7457 keys/cert.der

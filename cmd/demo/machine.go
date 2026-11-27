@@ -3,8 +3,10 @@
 package main
 
 import (
+	"bufio"
 	"errors"
 	"fmt"
+	"net"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -206,15 +208,16 @@ func (d *demo) record(con *console.Console, name, step string) error {
 	return nil
 }
 
-func (d *demo) shutdown(con *console.Console) error {
+// shutdown powers the guest off through ACPI, with no console open: a poweroff
+// typed at the console sometimes stalled the guest on its serial tty's hangup.
+func (d *demo) shutdown() error {
 	pid, ok := d.pid()
 	if !ok {
 		return nil
 	}
-	_, _, _ = con.Run("systemctl poweroff", time.Now().Add(20*time.Second))
-	// Unread, or closed, the console stops taking the UART's output and the
-	// guest's shutdown blocks writing its status; QEMU closes it as it exits.
-	_ = con.Drain(time.Now().Add(time.Minute))
+	if err := d.qmp("system_powerdown"); err != nil {
+		return err
+	}
 	for range 60 {
 		if syscall.Kill(pid, 0) != nil {
 			return os.Remove(d.pidFile())
@@ -267,7 +270,8 @@ func (d *demo) oneShot(name, root, size string, k disk) error {
 	if err := guest(con, "umount /opt/demo", time.Minute); err != nil {
 		return err
 	}
-	return d.shutdown(con)
+	con.Close()
+	return d.shutdown()
 }
 
 func (d *demo) operator() error {
@@ -351,10 +355,33 @@ func (d *demo) stop() error {
 		return nil
 	}
 	say("stopping the machine")
-	con, err := console.Dial(d.consoleSock(), time.Now().Add(10*time.Second))
+	return d.shutdown()
+}
+
+// qmp runs one QMP command on the running machine.
+func (d *demo) qmp(command string) error {
+	c, err := net.DialTimeout("unix", d.qmpSock(), 10*time.Second)
 	if err != nil {
 		return err
 	}
-	defer con.Close()
-	return d.shutdown(con)
+	defer c.Close()
+	r := bufio.NewReader(c)
+	if _, err := r.ReadString('\n'); err != nil {
+		return err
+	}
+	for _, cmd := range []string{"qmp_capabilities", command} {
+		if _, err := fmt.Fprintf(c, `{"execute":%q}`+"\n", cmd); err != nil {
+			return err
+		}
+		var reply string
+		for reply == "" || strings.Contains(reply, `"event"`) {
+			if reply, err = r.ReadString('\n'); err != nil {
+				return err
+			}
+		}
+		if !strings.Contains(reply, `"return"`) {
+			return fmt.Errorf("qmp %s: %s", cmd, strings.TrimSpace(reply))
+		}
+	}
+	return nil
 }
