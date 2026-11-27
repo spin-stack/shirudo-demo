@@ -1,0 +1,21 @@
+# Dependabot moves the Go modules, which go.sum holds. Everything else is versions.yaml's.
+version: 2
+updates:
+  - package-ecosystem: gomod
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: America/Argentina/Buenos_Aires
+    rebase-strategy: disabled
+    # A release a week old has had a week for anybody to find it was not what it said.
+    cooldown:
+      default-days: 7
+      # go-tools is ours: a release of it reaches every repository the week it is made, not a week later.
+      exclude: ["github.com/spin-stack/go-tools"]
+    groups:
+      go:
+        patterns: ["*"]
+    commit-message:
+      prefix: go
