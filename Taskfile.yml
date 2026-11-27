@@ -50,6 +50,19 @@ tasks:
         -C '{{.OUT}}' -czf '{{.OUT}}/shirudo-demo_linux_amd64.tar.gz' shirudo-demo
       - cd '{{.OUT}}' && sha256sum shirudo-demo_linux_amd64.tar.gz > checksums.txt
 
+  release:sign:
+    desc: Sign release:build's tarball with Sigstore, keyless, as the workflow IDENTITY names, and verify the bundle against that identity.
+    vars:
+      TARBALL: '{{.ROOT_DIR}}/_output/release/shirudo-demo_linux_amd64.tar.gz'
+    preconditions:
+      - sh: test -n "${IDENTITY:-}"
+        msg: 'IDENTITY is the signing workflow, <server>/<repo>/.github/workflows/release.yml@<ref>: release.yml sets it'
+    cmds:
+      - cosign sign-blob --yes --bundle '{{.TARBALL}}.sigstore.json' '{{.TARBALL}}'
+      - >-
+        cosign verify-blob --bundle '{{.TARBALL}}.sigstore.json' --certificate-identity "$IDENTITY"
+        --certificate-oidc-issuer https://token.actions.githubusercontent.com '{{.TARBALL}}'
+
   machine:
     desc: Download, verify (sha256, Sigstore) and unpack the pinned spin-machine release and shirudo-operator in work/machine.
     deps: [bin]
@@ -148,6 +161,12 @@ tasks:
       - if [ -x '{{.DIR}}/shirudo-demo/demo' ]; then cd '{{.DIR}}/shirudo-demo' && ./demo stop; fi
       - rm -rf '{{.DIR}}'
       - bash scripts/record.sh '{{.DIR}}'
+
+  lint:
+    desc: Every workflow step is one task and the common tasks are go-tools' (taskgate -common), and actionlint over the workflows (lint:workflows).
+    cmds:
+      - taskgate -common -task {{.TASK_EXE}}
+      - task: lint:workflows
 
   test:
     desc: gofmt, vet and test the demo's Go, and build the release's binaries.

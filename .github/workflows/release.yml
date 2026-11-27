@@ -42,11 +42,7 @@ jobs:
       - name: Sign the tarball
         env:
           IDENTITY: ${{ github.server_url }}/${{ github.repository }}/.github/workflows/release.yml@${{ github.ref }}
-        run: |
-          f=_output/release/shirudo-demo_linux_amd64.tar.gz
-          cosign sign-blob --yes --bundle "$f.sigstore.json" "$f"
-          cosign verify-blob --bundle "$f.sigstore.json" --certificate-identity "$IDENTITY" \
-            --certificate-oidc-issuer https://token.actions.githubusercontent.com "$f"
+        run: go tool task release:sign
 
       - name: The release
         env:
