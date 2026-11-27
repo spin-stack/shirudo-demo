@@ -31,5 +31,8 @@ jobs:
         with:
           go-version-file: go.mod
 
+      - name: Lint
+        run: go tool task lint
+
       - name: Test
         run: go tool task test
